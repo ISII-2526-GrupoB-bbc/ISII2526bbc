@@ -4,21 +4,18 @@ project:
   teamId: 'Team'
   identities: {}
   notifications:
-    email: 'member1@alu.uclm.es,member2@alu.uclm.es,member3@alu.uclm.es,member4@alu.uclm.es'
+    email: 'israel.amador@alu.uclm.es,josemaria.cascales@alu.uclm.es,gaspar.martinez1@alu.uclm.es'
   members:
     member1:
-      name: 'Name1'
-      surname: 'Surname1' 
-      githubUsername: 'Name1gitUserName1'
+      name: 'Israel'
+      surname: 'Amador' 
+      githubUsername: 'Isra393'
     member2:
-      name: 'Name2'
-      surname: 'Surname2' 
-      githubUsername: 'Name1gitUserName2'
+      name: 'Jose Maria'
+      surname: 'Cascales' 
+      githubUsername: 'Chemaa14'
     member3:
-      name: 'Name3'
-      surname: 'Surname3' 
+      name: 'Gaspar'
+      surname: 'Martinez' 
       githubUsername: 'Name1gitUserName3'
-    member4:
-      name: 'Name4'
-      surname: 'Surname4' 
-      githubUsername: 'Name1gitUserName4'
+    
