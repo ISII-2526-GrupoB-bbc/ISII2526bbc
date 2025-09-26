@@ -1,7 +1,7 @@
 project:
-  name: 'ISII-2526-GrupoX-Team'
-  owner: 'GrupoX'
-  teamId: 'Team'
+  name: 'ISII-2526-GrupoB-BBC'
+  owner: 'GrupoB'
+  teamId: 'BBC'
   identities: {}
   notifications:
     email: 'israel.amador@alu.uclm.es,josemaria.cascales@alu.uclm.es,gaspar.martinez1@alu.uclm.es'
