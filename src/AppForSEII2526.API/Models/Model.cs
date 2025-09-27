@@ -1,12 +1,17 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-//Clase de Model en el caso de uso de comprar un coche
+namespace AppForSEII2526.API.Models
+{
+    public class Model
+    {
+        [Key]
+        public int Id { get; set; }
 
-public class Model
+        [Required, StringLength(50)]
+        public string Name { get; set; }
 
-    public int Id { get; set; }
-
-    public Model()
-	{
-	}
+        // Relación 1:N → un modelo puede tener muchos coches
+        public List<Car> Cars { get; set; }
+    }
 }
