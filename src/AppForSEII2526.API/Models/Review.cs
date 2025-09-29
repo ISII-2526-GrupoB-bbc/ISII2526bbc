@@ -1,9 +1,20 @@
 ﻿using System;
 
-public class Class1
+public class Review
 {
-	public Class1()
-	{
-		//Clase de prueba
-	}
+    [Key]
+    public int Id { get; set; }
+
+    [Required, StringLength(50)]
+    public string UserName { get; set; }
+
+    [Required, StringLength(50)]
+    public string Country { get; set; }
+
+    [Required]
+    public string DriverType { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateTime Created { get; set; }
+
 }
