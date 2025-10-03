@@ -10,6 +10,7 @@ namespace AppForSEII2526.Models
 
         [Required, StringLength(50)]
         public string Name { get; set; }
+        public IList<Car> Cars { get; set; }
 
     }
 }
