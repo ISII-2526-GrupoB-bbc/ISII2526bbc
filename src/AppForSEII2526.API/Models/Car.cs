@@ -18,4 +18,9 @@ public class Car
     public int RentalIntems { get; set; }
     public int RentingPrice { get; set; }
     public int ReviewItems { get; set; }
+
+    public Model Model { get; set; }
+    public IList<RentalItem> RentalItems { get; set; }
+    public IList<PurchaseItem> PurchaseItems { get; set; }
+    public IList<ReviewItem> ReviewItems { get; set; }
 }
