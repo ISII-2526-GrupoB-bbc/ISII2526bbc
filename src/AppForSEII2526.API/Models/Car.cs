@@ -1,4 +1,5 @@
-public class Car{
+public class Car
+{
     [Key]
     public int Id { get; set; }
 
@@ -17,3 +18,4 @@ public class Car{
     public int RentalIntems { get; set; }
     public int RentingPrice { get; set; }
     public int ReviewItems { get; set; }
+}
