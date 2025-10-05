@@ -16,4 +16,7 @@ public class ReviewItem
 
     [DataType(DataType.Date)]
     public DateTime Reviewed { get; set; }
+
+    public Car Car { get; set; }
+    public Review Review { get; set; }
 }

@@ -16,5 +16,6 @@ public class Review
 
     [DataType(DataType.Date)]
     public DateTime Created { get; set; }
+    public IList<ReviewItem> ReviewItems { get; set; }
 
 }

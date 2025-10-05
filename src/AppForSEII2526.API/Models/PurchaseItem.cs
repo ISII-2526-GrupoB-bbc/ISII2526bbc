@@ -11,7 +11,10 @@ namespace AppForSEII2526.Models
         [Required]
         public int Quantity { get; set; }
 
-        //Faltarian las relaciones con las clases Car y con las clases Purchase 
-       
+        public Purchase PurchaseId { get; set; }
+        public Car CarId { get; set; }
+
+
+
     }
 }
