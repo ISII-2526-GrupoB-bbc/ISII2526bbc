@@ -26,5 +26,9 @@ namespace AppForSEII2526.Models
 
         [DataType(DataType.Currency)]
         public decimal PurchasingPrice { get; set; }
+
+        //Relacion con PurchaseItem
+        public Ilist<PurchaseItem> PurchaseItems {  get; set; }
+
     }
 }
