@@ -28,7 +28,7 @@ namespace AppForSEII2526.Models
         public decimal PurchasingPrice { get; set; }
 
         //Relacion con PurchaseItem
-        public Ilist<PurchaseItem> PurchaseItems {  get; set; }
+        public IList<PurchaseItem> PurchaseItems {  get; set; }
 
     }
 }
