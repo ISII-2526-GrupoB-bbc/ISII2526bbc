@@ -1,6 +1,7 @@
 ﻿using System;
 namespace AppForSEII2526.Models
 {
+
     public class Review
     {
         [Key]
@@ -21,3 +22,5 @@ namespace AppForSEII2526.Models
 
     }
 }
+
+
