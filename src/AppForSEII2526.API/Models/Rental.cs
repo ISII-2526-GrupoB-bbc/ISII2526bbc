@@ -1,3 +1,5 @@
+namespace AppForSEII2526.Models
+{
 public class Rental
 {
     [Key]
@@ -16,4 +18,8 @@ public class Rental
 
     public ApplicationUser User {  get; set; }
     public IList<RentalItem> RentalItems { get; set; }
+    }
 }
+
+
+
