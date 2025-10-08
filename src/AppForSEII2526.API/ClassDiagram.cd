@@ -1,1 +1,179 @@
-<?xml version="1.0" encoding="utf-8"?><ClassDiagram></ClassDiagram> 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AppForSEII2526.Models.Car">
+    <Position X="1" Y="3" Width="1.5" />
+    <AssociationLine Name="ReviewItems" Type="AppForSEII2526.Models.ReviewItem" FixedFromPoint="true">
+      <Path>
+        <Point X="2.5" Y="4" />
+        <Point X="2.827" Y="4" Type="JumpStart" />
+        <Point X="2.993" Y="4" Type="JumpEnd" />
+        <Point X="4.918" Y="4" Type="JumpStart" />
+        <Point X="5.218" Y="4" Type="JumpEnd" />
+        <Point X="6.75" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="PurchaseItems" Type="AppForSEII2526.Models.PurchaseItem" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.5" Y="4.375" />
+        <Point X="2.827" Y="4.375" Type="JumpStart" />
+        <Point X="2.993" Y="4.375" Type="JumpEnd" />
+        <Point X="4.918" Y="4.375" Type="JumpStart" />
+        <Point X="5.084" Y="4.375" Type="JumpEnd" />
+        <Point X="5.135" Y="4.375" />
+        <Point X="5.135" Y="3.237" />
+        <Point X="4.5" Y="3.237" />
+        <Point X="4.5" Y="1.988" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="RentalItems" Type="AppForSEII2526.Models.RentalItem" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.5" Y="5.25" />
+        <Point X="2.75" Y="5.25" />
+        <Point X="2.75" Y="6.938" />
+        <Point X="2.827" Y="6.937" Type="JumpStart" />
+        <Point X="2.993" Y="6.938" Type="JumpEnd" />
+        <Point X="3.278" Y="6.937" Type="JumpStart" />
+        <Point X="3.445" Y="6.938" Type="JumpEnd" />
+        <Point X="6.75" Y="6.938" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAgiCAgAAABgAAABAAACAACAAAAAAAAAAAgAABAAAAA=</HashCode>
+      <FileName>Models\Car.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Model" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReviewItems" />
+      <Property Name="PurchaseItems" />
+      <Property Name="RentalItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.Purchase">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAjAAAAAABAAAAQAAAAgAQABAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\Purchase.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="PurchaseItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.Model">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Model.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Cars" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAEAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Reviews" />
+      <Property Name="Rentals" />
+      <Property Name="Purchases" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.PurchaseItem">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <AssociationLine Name="car" Type="AppForSEII2526.Models.Car" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.094" Y="1.988" />
+        <Point X="4.094" Y="3.437" />
+        <Point X="5.001" Y="3.437" />
+        <Point X="5.001" Y="5" />
+        <Point X="2.993" Y="5" Type="JumpStart" />
+        <Point X="2.827" Y="5" Type="JumpEnd" />
+        <Point X="2.5" Y="5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.108" Y="0.098" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAABAAEBAAAAAAAAAAAAACAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Models\PurchaseItem.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="car" />
+      <Property Name="purchase" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.Rental">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADCAAAAAAAAAAQAAAAgAAgAAAAQAAAAAAAAEAAAAE=</HashCode>
+      <FileName>Models\Rental.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ApplicationUser" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="RentalItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.RentalItem">
+    <Position X="6.75" Y="6.5" Width="1.5" />
+    <AssociationLine Name="Car" Type="AppForSEII2526.Models.Car" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="6.594" />
+        <Point X="3.445" Y="6.594" Type="JumpStart" />
+        <Point X="3.278" Y="6.594" Type="JumpEnd" />
+        <Point X="2.993" Y="6.594" Type="JumpStart" />
+        <Point X="2.667" Y="6.594" Type="JumpEnd" />
+        <Point X="2.375" Y="6.594" />
+        <Point X="2.375" Y="5.45" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAACABAAACAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Models\RentalItem.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Car" />
+      <Property Name="Rental" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.Review">
+    <Position X="11.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAQAAAAAAAAAAIAAAQAAQAAABAAAAA=</HashCode>
+      <FileName>Models\Review.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReviewItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.Models.ReviewItem">
+    <Position X="6.75" Y="3.5" Width="1.5" />
+    <AssociationLine Name="Car" Type="AppForSEII2526.Models.Car" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="5.188" />
+        <Point X="6.375" Y="5.188" />
+        <Point X="6.375" Y="4.688" />
+        <Point X="5.084" Y="4.687" Type="JumpStart" />
+        <Point X="4.918" Y="4.688" Type="JumpEnd" />
+        <Point X="2.993" Y="4.687" Type="JumpStart" />
+        <Point X="2.827" Y="4.688" Type="JumpEnd" />
+        <Point X="2.5" Y="4.688" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQgAAAAAAAAAACAAAAAAAEAEACAAAEAAAA=</HashCode>
+      <FileName>Models\ReviewItem.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Car" />
+      <Property Name="Review" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
