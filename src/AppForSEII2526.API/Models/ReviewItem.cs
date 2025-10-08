@@ -1,5 +1,6 @@
 ﻿using System;
-
+namespace AppForSEII2526.Models
+{
 public class ReviewItem
 {
     [Key]
@@ -19,4 +20,8 @@ public class ReviewItem
 
     public Car Car { get; set; }
     public Review Review { get; set; }
+    }
 }
+
+
+
