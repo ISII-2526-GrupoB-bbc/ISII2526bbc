@@ -11,10 +11,10 @@ namespace AppForSEII2526.Models
         [Required]
         public int Quantity { get; set; }
 
-        public Purchase PurchaseId { get; set; }
-        public Car CarId { get; set; }
-
-
+        public int PurchaseId { get; set; }
+        public int CarId { get; set; }
+        public Purchase purchase { get; set; }
+        public Car car { get; set; }
 
     }
 }
