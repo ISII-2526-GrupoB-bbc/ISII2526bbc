@@ -10,6 +10,9 @@ public class ApplicationUser : IdentityUser {
 
     [Required, StringLength(30)]
     public string Surname { get; set; }
+
     public IList<Rental> Rentals { get; set; }
+    public IList<Purchase> Purchases { get; set; }
+    public IList<Review> Reviews { get; set; }
 
 }
