@@ -1,5 +1,7 @@
 ﻿using System;
 
+namespace AppForSEII2526.Models
+{
 public class Review
 {
     [Key]
@@ -18,4 +20,7 @@ public class Review
     public DateTime Created { get; set; }
     public IList<ReviewItem> ReviewItems { get; set; }
 
+    }
 }
+
+
