@@ -1,7 +1,8 @@
 ﻿using System;
 namespace AppForSEII2526.Models
 {
-public class ReviewItem
+    using System.ComponentModel.DataAnnotations;
+    public class ReviewItem
 {
     [Key]
     public int Id { get; set; }

@@ -1,6 +1,10 @@
+
+
 namespace AppForSEII2526.Models
 {
-public class Rental
+    using AppForSEII2526.API.Models;
+    using System.ComponentModel.DataAnnotations;
+    public class Rental
 {
     [Key]
     public int Id { get; set; }
