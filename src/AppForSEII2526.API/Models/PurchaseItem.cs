@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.Models
 {
+    [PrimaryKey(nameof(CarId), nameof(PurchaseId))]
     public class PurchaseItem
     {
-        [Key]
-        public int Id { get; set; }
+        
 
         [Required]
         public int Quantity { get; set; }
