@@ -2,7 +2,9 @@
 
 namespace AppForSEII2526.Models
 {
-public class Review
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    public class Review
 {
     [Key]
     public int Id { get; set; }
