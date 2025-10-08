@@ -20,7 +20,7 @@ namespace AppForSEII2526.Models
     [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
-    public ApplicationUser User {  get; set; }
+    public ApplicationUser ApplicationUser {  get; set; }
     public IList<RentalItem> RentalItems { get; set; }
     }
 }

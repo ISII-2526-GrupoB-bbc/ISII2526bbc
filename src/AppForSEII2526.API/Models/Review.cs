@@ -21,8 +21,9 @@ namespace AppForSEII2526.Models
     [DataType(DataType.Date)]
     public DateTime Created { get; set; }
     public IList<ReviewItem> ReviewItems { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 
-    }
+        }
 }
 
 
