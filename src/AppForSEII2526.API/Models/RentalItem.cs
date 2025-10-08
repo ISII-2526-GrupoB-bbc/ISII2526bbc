@@ -5,8 +5,10 @@ namespace AppForSEII2526.Models
 {
     public int Quatity { get; set; }
 
-    public Car CarId { get; set; }
-    public Rental RentalId { get; set; }
+    public Car Car { get; set; }
+    public Rental Rental { get; set; }
+    public int CarId { get; set; }
+    public int RentalId { get; set; }
     }
 }
 
