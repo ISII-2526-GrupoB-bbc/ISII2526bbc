@@ -1,6 +1,7 @@
 namespace AppForSEII2526.Models
 {
-public class RentalItem
+    [PrimaryKey(nameof(CarId), nameof(RentalId))]
+    public class RentalItem
 {
     public int Quatity { get; set; }
 
