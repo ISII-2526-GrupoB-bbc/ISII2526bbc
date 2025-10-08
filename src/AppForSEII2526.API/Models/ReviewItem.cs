@@ -2,15 +2,11 @@
 namespace AppForSEII2526.Models
 {
     using System.ComponentModel.DataAnnotations;
+    [PrimaryKey(nameof(CarId), nameof(ReviewId))]
     public class ReviewItem
 {
-    [Key]
-    public int Id { get; set; }
 
-    [Required]
-    public int CarId { get; set; }
-
-    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
     public int Rating { get; set; }
 
     [StringLength(200)]
@@ -21,7 +17,9 @@ namespace AppForSEII2526.Models
 
     public Car Car { get; set; }
     public Review Review { get; set; }
-    }
+    public int CarId { get; set; }
+    public int ReviewId { get; set; }
+        }
 }
 
 
