@@ -10,7 +10,6 @@ namespace AppForSEII2526.Models
     public int Id { get; set; }
 
     public string DeliveryCarDealer { get; set; }
-    public int PaymentMethod { get; set; }
     public int TotalPrice { get; set; }
 
     [DataType(DataType.Date)]
@@ -20,8 +19,18 @@ namespace AppForSEII2526.Models
     [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
+    [Display(Name = "Payment Method")]
+    public PaymentMethod PaymentMethod { get; set; }
+
     public ApplicationUser ApplicationUser {  get; set; }
     public IList<RentalItem> RentalItems { get; set; }
+    }
+
+    public enum PaymentMethod
+    {
+        CreditCard,
+        PayPal,
+        Cash
     }
 }
 
