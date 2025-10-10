@@ -14,10 +14,16 @@ namespace AppForSEII2526.Models
         [Required, StringLength(30)]
         public string Manufacturer { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "El precio de compra no puede ser negativo.")]
         public int PurchasingPrice { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "La cantidad para compra no puede ser negativa.")]
         public int QuantityForPurchasing { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "La cantidad para alquiler no puede ser negativa.")]
         public int QuantityForRenting { get; set; }
-    
+
+        [Range(0, int.MaxValue, ErrorMessage = "El precio de alquiler no puede ser negativo.")]
         public int RentingPrice { get; set; }
        
 
