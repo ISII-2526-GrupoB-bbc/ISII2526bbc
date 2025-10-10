@@ -8,8 +8,8 @@ namespace AppForSEII2526.Models
         [Required, StringLength(30)]
         public string CarClass { get; set; }
 
-        [Required, StringLength(50)]
-        public string Description { get; set; }
+        [StringLength(50)]
+        public string? Description { get; set; }
 
         [Required, StringLength(30)]
         public string Manufacturer { get; set; }
