@@ -10,7 +10,7 @@ namespace AppForSEII2526.Models
     public int Rating { get; set; }
 
     [StringLength(200)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime Reviewed { get; set; }
