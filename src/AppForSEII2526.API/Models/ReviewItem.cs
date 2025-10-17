@@ -1,19 +1,26 @@
 ﻿using System;
-
-public class ReviewItem
+namespace AppForSEII2526.Models
 {
-    [Key]
-    public int Id { get; set; }
+    using System.ComponentModel.DataAnnotations;
+    [PrimaryKey(nameof(CarId), nameof(ReviewId))]
+    public class ReviewItem
+{
 
-    [Required]
-    public int CarId { get; set; }
-
-    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
     public int Rating { get; set; }
 
     [StringLength(200)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime Reviewed { get; set; }
+
+    public Car Car { get; set; }
+    public Review Review { get; set; }
+    public int CarId { get; set; }
+    public int ReviewId { get; set; }
+        }
 }
+
+
+

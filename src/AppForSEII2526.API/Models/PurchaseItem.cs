@@ -3,15 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.Models
 {
+    [PrimaryKey(nameof(CarId), nameof(PurchaseId))]
     public class PurchaseItem
     {
-        [Key]
-        public int Id { get; set; }
+        
 
         [Required]
         public int Quantity { get; set; }
 
-        //Faltarian las relaciones con las clases Car y con las clases Purchase 
-       
+        public int PurchaseId { get; set; }
+        public int CarId { get; set; }
+        public Purchase purchase { get; set; }
+        public Car car { get; set; }
+
     }
 }

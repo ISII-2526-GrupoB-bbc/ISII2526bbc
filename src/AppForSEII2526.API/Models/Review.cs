@@ -1,6 +1,10 @@
 ﻿using System;
 
-public class Review
+namespace AppForSEII2526.Models
+{
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    public class Review
 {
     [Key]
     public int Id { get; set; }
@@ -16,5 +20,10 @@ public class Review
 
     [DataType(DataType.Date)]
     public DateTime Created { get; set; }
+    public IList<ReviewItem> ReviewItems { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 
+        }
 }
+
+

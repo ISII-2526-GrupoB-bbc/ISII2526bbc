@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace AppForSEII2526.Models
+﻿namespace AppForSEII2526.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     public class Purchase
     {
         [Key]
@@ -26,5 +25,10 @@ namespace AppForSEII2526.Models
 
         [DataType(DataType.Currency)]
         public decimal PurchasingPrice { get; set; }
+
+        //Relacion con PurchaseItem
+        public IList<PurchaseItem> PurchaseItems {  get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
     }
 }
