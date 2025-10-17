@@ -8,6 +8,12 @@ namespace AppForSEII2526.Models
         [Required, StringLength(30)]
         public string CarClass { get; set; }
 
+        [Required, StringLength(30)]
+        public string FuelType { get; set; }
+
+        [Required, StringLength(30)]
+        public string Color { get; set; }
+
         [StringLength(50)]
         public string? Description { get; set; }
 
