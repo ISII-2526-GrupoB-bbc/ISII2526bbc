@@ -39,7 +39,7 @@ namespace AppForSEII2526.API.Controllers
                         c.Id,
                         c.Model.Name,
                         c.Color,
-                        c.CarClass,
+                        c.FuelType,
                         c.Manufacturer,
                         c.PurchasingPrice
                     ))
