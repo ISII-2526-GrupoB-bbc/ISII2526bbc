@@ -94,6 +94,45 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest("Error al obtener los coches disponibles.");
             }
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IEnumerable<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<CocheParaAlquilarDTO>>> GetCars3(decimal? RentingPrice = null)
+        {
+            try
+            {
+                var query = _context.Cars.AsQueryable();
+
+                // Aplicar filtro SOLO por color (flujo alternativo)
+                if (RentingPrice.HasValue)
+                    query = query.Where(c => c.RentingPrice == RentingPrice.Value);
+                //Si quiero que me de los coches con precio menor o igual, cambiar "==" por "<="
+
+                var cars = await query
+                    .Select(c => new CocheParaAlquilarDTO(
+                        c.Id,
+                        c.Model.Name,
+                        c.FuelType,
+                        c.Manufacturer,
+                        c.RentingPrice,
+                        c.Color     
+                    ))
+                    .ToListAsync();
+
+                if (cars == null || !cars.Any())
+                    return NotFound("No se encontraron coches con ese precio de alquiler" +
+                        ".");
+
+                return Ok(cars);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Error en GetCars() - {ex.Message}");
+                return BadRequest("Error al obtener los coches disponibles.");
+            }
+        }
     }
 
 

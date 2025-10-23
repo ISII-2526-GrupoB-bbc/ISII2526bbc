@@ -9,14 +9,14 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
     public class CocheParaAlquilarDTO
     {
         // Constructor con parámetros
-        public CocheParaAlquilarDTO(int id, string model, string fuelType, string manufacturer, decimal rentalPrice, string color)
+        public CocheParaAlquilarDTO(int id, string model, string fuelType, string manufacturer, decimal rentingPrice, string color)
         {
             Id = id;
             ModelName = model;
             FuelType = fuelType;
-            Color = color;
             Manufacturer = manufacturer;
-            RentalPrice = rentalPrice;
+            RentingPrice = rentingPrice;
+            Color = color;
         }
 
         [Required]
@@ -44,6 +44,6 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         [Required(ErrorMessage = "El precio de alquiler es obligatorio.")]
         [Range(0, 200000, ErrorMessage = "El precio debe ser un valor positivo.")]
         [Display(Name = "Precio de alquiler (€)")]
-        public decimal RentalPrice { get; set; }
+        public decimal RentingPrice { get; set; }
     }
 }
