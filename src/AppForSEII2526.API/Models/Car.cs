@@ -30,7 +30,7 @@ namespace AppForSEII2526.Models
         public int QuantityForRenting { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "El precio de alquiler no puede ser negativo.")]
-        public int RentingPrice { get; set; }
+        public decimal RentingPrice { get; set; }
        
 
         public Model Model { get; set; }
