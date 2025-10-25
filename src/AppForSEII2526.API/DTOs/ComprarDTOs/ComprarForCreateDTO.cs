@@ -8,14 +8,14 @@ using AppForSEII2526.Models;
 
 namespace AppForSEII2526.API.DTOs.ComprarDTOs
 {
-    public class CocheForCreateDTO
+    public class ComprarForCreateDTO
     {
-        public CocheForCreateDTO(
+        public ComprarForCreateDTO(
         string name,
         string surname,
         string address,
         PaymentMethod paymentMethod,
-        IList<CocheForItemDTO> cochesComprados)
+        IList<ComprarForItemDTO> cochesComprados)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Surname = surname ?? throw new ArgumentNullException(nameof(surname));
@@ -25,9 +25,9 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
         }
 
 
-    public CocheForCreateDTO()
+    public ComprarForCreateDTO()
         {
-            CochesComprados = new List<CocheForItemDTO>();
+            CochesComprados = new List<ComprarForItemDTO>();
         }
 
         [Required(ErrorMessage = "El nombre del cliente es obligatorio.")]
@@ -52,7 +52,7 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
 
         [Required(ErrorMessage = "Debe indicar los coches comprados.")]
         [Display(Name = "Coches comprados")]
-        public IList<CocheForItemDTO> CochesComprados { get; set; }
+        public IList<ComprarForItemDTO> CochesComprados { get; set; }
 
         [Display(Name = "Precio total de la compra (€)")]
         [JsonPropertyName("TotalPrice")]
@@ -66,7 +66,7 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is CocheForCreateDTO dto &&
+            return obj is ComprarForCreateDTO dto &&
                    Name == dto.Name &&
                    Surname == dto.Surname &&
                    Address == dto.Address &&

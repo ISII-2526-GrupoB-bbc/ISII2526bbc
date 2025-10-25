@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppForSEII2526.API.DTOs.CochesDTO
 {
-    public class CocheForItemDTO
+    public class ComprarForItemDTO
     {
-        public CocheForItemDTO(int id, Model model, string color, decimal purchasingPrice, int quantity)
+        public ComprarForItemDTO(int id, Model model, string color, decimal purchasingPrice, int quantity)
         {
             Id = id;
             Model = model;
@@ -27,7 +27,7 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
 
         public override bool Equals(object? obj)
         {
-            return obj is CocheForItemDTO dto &&
+            return obj is ComprarForItemDTO dto &&
                    Id == dto.Id &&
                    Equals(Model, dto.Model) &&
                    Color == dto.Color &&
