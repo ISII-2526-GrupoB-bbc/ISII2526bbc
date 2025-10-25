@@ -53,11 +53,11 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 
         [Display(Name = "Total Price")]
         [JsonPropertyName("TotalPrice")]
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get
             {
-                return RentalItems.Sum(ri => ri.PriceForRenting * NumberOfDays);
+                return RentalItems.Sum(ri => ri.TotalPrice * ri.Quantity);
             }
         }
 

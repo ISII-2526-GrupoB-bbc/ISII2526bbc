@@ -1,4 +1,6 @@
-﻿namespace AppForMovies.API.DTOs.RentalDTOs
+﻿using AppForSEII2526.Models;
+
+namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
     public class RentalDetailDTO : RentalForCreateDTO
     {
@@ -9,7 +11,7 @@
             string customerName,
             string customerSurname,
             string deliveryAddress,
-            Rental.PaymentMethod paymentMethod,
+            PaymentMethod paymentMethod,
             DateTime rentalDateFrom,
             DateTime rentalDateTo,
             DateTime rentalDate,
