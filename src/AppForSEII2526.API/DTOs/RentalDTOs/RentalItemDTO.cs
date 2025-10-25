@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AppForSEII2526.API.DTOs.CochesDTO
+namespace AppForSEII2526.API.DTOs
 {
     public class RentalItemDTO
     {
