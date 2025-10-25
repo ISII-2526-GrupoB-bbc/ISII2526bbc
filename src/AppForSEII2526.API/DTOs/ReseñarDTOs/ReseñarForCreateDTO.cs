@@ -2,7 +2,7 @@
 {
     public class ReseñarForCreateDTO
     {
-        public ReseñarForCreateDTO(string username, string country, string drivertype, IList<ReseñarItemDTO> reseñados)
+        public ReseñarForCreateDTO(string username, string country, string drivertype, IList<ReseñarItemDTO> rentalitems)
         {
             username = username ?? throw new ArgumentNullException(nameof(username));
             country = country ?? throw new ArgumentNullException(nameof(country));
@@ -10,7 +10,7 @@
         }
         public ReseñarForCreateDTO()
         {
-            Reseñados = new List<ReseñarItemDTO>();
+            Rentalitems = new List<ReseñarItemDTO>();
         }
         [Required(ErrorMessage = "El nombre del usuario es obligatorio.")]
         public string UserName { get; set; }
@@ -21,7 +21,7 @@
         public string DriverType { get; set; }
         [Required(ErrorMessage = "Debe seleccionar al menos un coche para reseñar.")]
         [MinLength(1, ErrorMessage = "Debe incluir al menos una reseña de coche.")]
-        public IList<ReseñarItemDTO> Reseñados { get; set; }
+        public IList<ReseñarItemDTO> Rentalitems { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -29,7 +29,7 @@
                   UserName == dto.UserName &&
                   Country == dto.Country &&
                   DriverType == dto.DriverType &&
-                  Reseñados.SequenceEqual(dto.Reseñados);
+                 Rentalitems.SequenceEqual(dto.Rentalitems);
         }
 
     }
