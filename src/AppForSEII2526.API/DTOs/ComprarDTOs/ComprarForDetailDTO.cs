@@ -6,16 +6,16 @@ using AppForSEII2526.Models;
 
 namespace AppForSEII2526.API.DTOs.ComprarDTOs
 {
-    public class CocheDetailDTO : CocheForCreateDTO
+    public class ComprarDetailDTO : ComprarForCreateDTO
     {
-        public CocheDetailDTO(
+        public ComprarDetailDTO(
         int id,
         DateTime purchasingDate,
         string name,
         string surname,
         string address,
         PaymentMethod paymentMethod,
-        IList<CocheForItemDTO> cochesComprados)
+        IList<ComprarForItemDTO> cochesComprados)
         : base(name, surname, address, paymentMethod, cochesComprados)
         {
             Id = id;
@@ -23,7 +23,7 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
         }
 
 
-    public CocheDetailDTO() : base() { }
+        
 
         [Required]
         [Display(Name = "Identificador de la compra")]
@@ -49,7 +49,7 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is CocheDetailDTO dto &&
+            return obj is ComprarDetailDTO dto &&
                    base.Equals(obj) &&
                    Id == dto.Id &&
                    CompareDate(PurchasingDate, dto.PurchasingDate);
