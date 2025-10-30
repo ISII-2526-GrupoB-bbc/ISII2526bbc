@@ -23,9 +23,26 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             RentalDate = rentalDate;
             TotalPrice = totalPrice;
         }
+
+        public RentalDetailDTO(string name, string surname, string deliveryCarDealer, PaymentMethod paymentMethod, DateTime startDate, DateTime endDate, DateTime rentingDate, int totalPrice, List<RentalItemDTO> rentalItemDTOs)
+        {
+            Name = name;
+            Surname = surname;
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = paymentMethod;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentingDate = rentingDate;
+            TotalPrice = totalPrice;
+            RentalItemDTOs = rentalItemDTOs;
+        }
+
         public int Id { get; set; }
 
         public DateTime RentalDate { get; set; }
+        public string DeliveryCarDealer { get; }
+        public DateTime RentingDate { get; }
+        public List<RentalItemDTO> RentalItemDTOs { get; }
 
         public override bool Equals(object? obj)
         {
