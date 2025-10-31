@@ -43,7 +43,7 @@ namespace AppForSEII2526.API.Controllers
                  .Include(r => r.RentalItems) 
                     .ThenInclude(ri => ri.Car) 
                         .ThenInclude(c => c.Model)     
-             .Select(r => new RentalDetailDTO(r.ApplicationUser.Name, r.ApplicationUser.Surname, r.DeliveryCarDealer, r.PaymentMethod, r.StartDate, r.EndDate, r.RentingDate, r.TotalPrice, r.RentalItems
+             .Select(r => new RentalDetailDTO(r.ApplicationUser.Name, r.ApplicationUser.Surname, r.DeliveryCarDealer, r.PaymentMethod, r.StartDate, r.EndDate, r.RentingDate, r.RentingPrice, r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.CarId, ri.Car.Model, ri.Car.Manufacturer, ri.Car.RentingPrice, ri.Quantity)).ToList<RentalItemDTO>()))
              .FirstOrDefaultAsync();
 
@@ -87,7 +87,7 @@ namespace AppForSEII2526.API.Controllers
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
-            var carModels = rentalForCreate.RentalItems.Select(ri => ri.Model).ToList<string>();
+            var carModels = rentalForCreate.RentalItems.Select(ri => ri.Model.Name).ToList<string>();
 
             var cars = _context.Cars.Include(r => r.RentalItems)
                 .ThenInclude(ri => ri.Car)
@@ -103,9 +103,9 @@ namespace AppForSEII2526.API.Controllers
                             && ri.Rental.EndDate >= rentalForCreate.StartDate)
                 }
                 ).ToList();
-            Rental rental = new(rentalForCreate.DeliveryAddress, rentalForCreate.RentingDate, rentalForCreate.EndDate, rentalForCreate.PaymentMethod, rentalForCreate.StartDate, new List<RentalItem>(), user);
+            Rental rental = new Rental(rentalForCreate.DeliveryAddress, rentalForCreate.RentingDate, rentalForCreate.EndDate, rentalForCreate.PaymentMethod, rentalForCreate.StartDate, new List<RentalItem>(), user);
 
-            rental.TotalPrice = 0;
+            rental.RentingPrice = 0;
             var numDays = (rental.EndDate - rental.StartDate).TotalDays;
 
             foreach (var item in rentalForCreate.RentalItems)
@@ -120,8 +120,8 @@ namespace AppForSEII2526.API.Controllers
                 {
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
                     rental.RentalItems.Add(new RentalItem(car.Id, item.Quantity, rental));
-                    item.TotalPrice = car.RentingPrice;
-                    rental.TotalPrice += (float)(car.TotalPrice * item.Quantity * numDays);
+                    item.RentingPrice = car.RentingPrice;
+                    rental.RentingPrice += car.RentingPrice * item.Quantity * (decimal)numDays;
                 }
             }
 
@@ -145,7 +145,7 @@ namespace AppForSEII2526.API.Controllers
 
             }
 
-            var rentalDetail = new RentalDetailDTO(rental.ApplicationUser.Name, rental.ApplicationUser.Surname, rental.DeliveryCarDealer, rental.PaymentMethod, rental.StartDate, rental.EndDate, rental.RentingDate, rental.TotalPrice, rentalForCreate.RentalItems.ToList());
+            var rentalDetail = new RentalDetailDTO(rental.ApplicationUser.Name, rental.ApplicationUser.Surname, rental.DeliveryCarDealer, rental.PaymentMethod, rental.StartDate, rental.EndDate, rental.RentingDate, rental.RentingPrice, rentalForCreate.RentalItems.ToList());
 
             return CreatedAtAction("Get_Details_Rental", new { id = rental.Id }, rentalDetail);
         }
@@ -153,6 +153,6 @@ namespace AppForSEII2526.API.Controllers
     }
 
 }
-}
+
 
 

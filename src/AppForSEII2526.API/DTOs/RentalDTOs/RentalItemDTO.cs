@@ -11,7 +11,7 @@ namespace AppForSEII2526.API.DTOs
             Id = id;
             Model = model;
             Manufacturer = manufacturer;
-            TotalPrice = rentalPrice;
+            RentingPrice = rentalPrice;
             Quantity = quantity;
         }
 
@@ -19,7 +19,7 @@ namespace AppForSEII2526.API.DTOs
         public int Id { get; set; }
         public Model Model { get; set; }
         public string Manufacturer { get; set; }
-        public decimal TotalPrice { get; set; }
+        public decimal RentingPrice { get; set; }
         public int Quantity { get; set; }
 
         public override bool Equals(object? obj)
@@ -28,13 +28,13 @@ namespace AppForSEII2526.API.DTOs
                    Id == dto.Id &&
                    Equals(Model, dto.Model) &&
                    Manufacturer == dto.Manufacturer &&
-                   TotalPrice == dto.TotalPrice &&
+                   RentingPrice == dto.RentingPrice &&
                    Quantity == dto.Quantity;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Model, Manufacturer, TotalPrice, Quantity);
+            return HashCode.Combine(Id, Model, Manufacturer, RentingPrice, Quantity);
         }
     }
 }
