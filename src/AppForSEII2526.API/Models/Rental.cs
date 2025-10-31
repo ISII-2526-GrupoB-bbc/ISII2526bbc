@@ -3,14 +3,29 @@
 namespace AppForSEII2526.Models
 {
     using AppForSEII2526.API.Models;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     public class Rental
 {
-    [Key]
+        private string deliveryAddress;
+        private ApplicationUser? user;
+
+        public Rental(string deliveryAddress, DateTime rentingDate, DateTime endDate, PaymentMethod paymentMethod, DateTime startDate, List<RentalItem> rentalItems, ApplicationUser? user)
+        {
+            this.deliveryAddress = deliveryAddress;
+            RentingDate = rentingDate;
+            EndDate = endDate;
+            PaymentMethod = paymentMethod;
+            StartDate = startDate;
+            RentalItems = rentalItems;
+            this.user = user;
+        }
+
+        [Key]
     public int Id { get; set; }
 
     public string DeliveryCarDealer { get; set; }
-    public int TotalPrice { get; set; }
+    public decimal RentingPrice { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime EndDate { get; set; }

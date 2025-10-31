@@ -4,7 +4,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
     public class RentalDetailDTO : RentalForCreateDTO
     {
-        public decimal TotalPrice { get; set; }
+        public decimal RentingPrice { get; set; }
 
         public RentalDetailDTO(
             int id,
@@ -15,16 +15,16 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             DateTime rentalDateFrom,
             DateTime rentalDateTo,
             DateTime rentalDate,
-            decimal totalPrice,
+            decimal rentingPrice,
             IList<RentalItemDTO> rentalItems
         ) : base(customerName, customerSurname, deliveryAddress, paymentMethod, rentalDateFrom, rentalDateTo, rentalItems)
         {
             Id = id;
             RentalDate = rentalDate;
-            TotalPrice = totalPrice;
+            RentingPrice = rentingPrice;
         }
 
-        public RentalDetailDTO(string name, string surname, string deliveryCarDealer, PaymentMethod paymentMethod, DateTime startDate, DateTime endDate, DateTime rentingDate, int totalPrice, List<RentalItemDTO> rentalItemDTOs)
+        public RentalDetailDTO(string name, string surname, string deliveryCarDealer, PaymentMethod paymentMethod, DateTime startDate, DateTime endDate, DateTime rentingDate, decimal rentingPrice, List<RentalItemDTO> rentalItemDTOs)
         {
             Name = name;
             Surname = surname;
@@ -33,7 +33,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             StartDate = startDate;
             EndDate = endDate;
             RentingDate = rentingDate;
-            TotalPrice = totalPrice;
+            RentingPrice = rentingPrice;
             RentalItemDTOs = rentalItemDTOs;
         }
 
@@ -49,7 +49,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             if (obj is RentalDetailDTO dto)
             {
                 return base.Equals(obj) &&
-                   TotalPrice == dto.TotalPrice &&
+                   RentingPrice == dto.RentingPrice &&
                    Id == dto.Id &&
                    RentalDate.Date == dto.RentalDate.Date;
             }

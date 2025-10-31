@@ -4,6 +4,11 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
     public class RentalForCreateDTO
     {
+        private string customerName;
+        private string customerSurname;
+        private DateTime rentalDateFrom;
+        private DateTime rentalDateTo;
+
         public RentalForCreateDTO(string name, string surname, string address, PaymentMethod paymentMethod, DateTime rentalStartDate, DateTime rentalEndDate, DateTime rentingDate, IList<RentalItemDTO> rentalItems)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -20,6 +25,18 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
         {
             RentalItems = new List<RentalItemDTO>();
         }
+
+        public RentalForCreateDTO(string customerName, string customerSurname, string deliveryAddress, PaymentMethod paymentMethod, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentalItems)
+        {
+            this.customerName = customerName;
+            this.customerSurname = customerSurname;
+            DeliveryAddress = deliveryAddress;
+            PaymentMethod = paymentMethod;
+            this.rentalDateFrom = rentalDateFrom;
+            this.rentalDateTo = rentalDateTo;
+            RentalItems = rentalItems;
+        }
+
         public DateTime RentingDate { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -55,11 +72,11 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 
         [Display(Name = "Total Price")]
         [JsonPropertyName("TotalPrice")]
-        public decimal TotalPrice
+        public decimal RentingPrice
         {
             get
             {
-                return RentalItems.Sum(ri => ri.TotalPrice * ri.Quantity);
+                return RentalItems.Sum(ri => ri.RentingPrice * ri.Quantity);
             }
         }
 
@@ -78,7 +95,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
                    Surname == dTO.Surname &&
                    RentalItems.SequenceEqual(dTO.RentalItems) &&
                    PaymentMethod == dTO.PaymentMethod &&
-                   TotalPrice == dTO.TotalPrice;
+                   RentingPrice == dTO.RentingPrice;
         }
     }
 }
