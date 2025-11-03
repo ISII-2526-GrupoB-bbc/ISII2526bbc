@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
-using TodoApi.Logging;
+using AppForSEII2526.API.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
