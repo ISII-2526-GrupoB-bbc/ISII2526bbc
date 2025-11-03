@@ -3,6 +3,7 @@ namespace AppForSEII2526.Models
     [PrimaryKey(nameof(CarId), nameof(RentalId))]
     public class RentalItem
     {
+        protected RentalItem() { }
         public RentalItem(int id, int quantity, Rental rental)
         {
             Quantity = quantity;

@@ -1,5 +1,6 @@
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
+using TodoApi.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,8 @@ switch (connection2Database) {
             options.UseSqlServer(connectionString));
         break;
 }
+
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 //Add Identity services to the container
 builder.Services.AddAuthorization();
