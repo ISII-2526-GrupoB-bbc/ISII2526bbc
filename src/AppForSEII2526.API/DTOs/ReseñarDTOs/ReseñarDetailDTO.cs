@@ -1,5 +1,7 @@
 ﻿using AppForSEII2526.Models;
+using System;
 using System.Drawing;
+using AppForSEII2526.API.DTOs.ReviewDTO;
 
 namespace AppForSEII2526.API.DTOs.ReseñarDTOs
 
