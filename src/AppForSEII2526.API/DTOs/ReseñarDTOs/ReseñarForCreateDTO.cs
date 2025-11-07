@@ -1,36 +1,38 @@
-﻿namespace AppForSEII2526.API.DTOs.ReseñarDTOs
+﻿using AppForSEII2526.API.DTOs.ReseñarDTOs;
+
+namespace AppForSEII2526.API.DTOs.ReviewDTO
 {
     public class ReseñarForCreateDTO
     {
-        public ReseñarForCreateDTO(string username, string country, string drivertype, IList<ReseñarItemDTO> rentalitems)
-        {
-            username = username ?? throw new ArgumentNullException(nameof(username));
-            country = country ?? throw new ArgumentNullException(nameof(country));
-            drivertype = drivertype ?? throw new ArgumentNullException(nameof(drivertype));
-        }
-        public ReseñarForCreateDTO()
-        {
-            Rentalitems = new List<ReseñarItemDTO>();
-        }
-        [Required(ErrorMessage = "El nombre del usuario es obligatorio.")]
+        [StringLength(20, ErrorMessage = "Name cannot be any longer than 20 characters, neither shorter than 2.", MinimumLength = 2)]
+        public string Name { get; set; }
+
         public string UserName { get; set; }
-        [Required(ErrorMessage = "El país es obligatorio.")]
+
+        [StringLength(30, ErrorMessage = "Country cannot be any longer than 30 characters, neither shorter than 3.", MinimumLength = 3)]
         public string Country { get; set; }
-        [Required(ErrorMessage = "El tipo de conductor es obligatorio.")]
-        [RegularExpression("^(?i)(novato|experto)$", ErrorMessage = "El tipo de conductor debe ser 'novato' o 'experto'.")]
+
+        [StringLength(30, ErrorMessage = "DriverType cannot be any longer than 30 characters, neither shorter than 3.", MinimumLength = 3)]
         public string DriverType { get; set; }
-        [Required(ErrorMessage = "Debe seleccionar al menos un coche para reseñar.")]
-        [MinLength(1, ErrorMessage = "Debe incluir al menos una reseña de coche.")]
-        public IList<ReseñarItemDTO> Rentalitems { get; set; }
+
+        public IList<ReseñarItemDTO> ReviewItems { get; set; }
+
+
+        public ReseñarForCreateDTO(string name, string country, string driverType, IList<ReseñarItemDTO> reviewItems)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(Name));
+            Country = country ?? throw new ArgumentNullException(nameof(Country));
+            DriverType = driverType ?? throw new ArgumentNullException(nameof(DriverType));
+            ReviewItems = reviewItems ?? throw new ArgumentNullException(nameof(ReviewItems));
+        }
 
         public override bool Equals(object? obj)
         {
-           return obj is ReseñarForCreateDTO dto &&
-                  UserName == dto.UserName &&
-                  Country == dto.Country &&
-                  DriverType == dto.DriverType &&
-                 Rentalitems.SequenceEqual(dto.Rentalitems);
+            return obj is ReseñarForCreateDTO dTO &&
+                   Name == dTO.Name &&
+                   Country == dTO.Country &&
+                   DriverType == dTO.DriverType &&
+                   ReviewItems.SequenceEqual(dTO.ReviewItems);
         }
-
     }
 }
