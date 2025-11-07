@@ -15,4 +15,14 @@ public class ApplicationUser : IdentityUser {
     public IList<Purchase> Purchases { get; set; }
     public IList<Review> Reviews { get; set; }
 
+    public ApplicationUser() { }
+    public ApplicationUser(string name, string surname, IList<Rental> rentals, IList<Purchase> purchases, IList<Review> reviews)
+    {
+        Name = name;
+        Surname = surname;
+        Rentals = rentals;
+        Purchases = purchases;
+        Reviews = reviews;
+    }
+
 }
