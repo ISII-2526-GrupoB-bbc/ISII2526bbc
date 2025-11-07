@@ -1,16 +1,17 @@
-﻿using System.Text;
+﻿/*
+using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 // Alias para desambiguar IModel (RabbitMQ) vs IModel (EF Core)
-using RmqModel = RabbitMQ.Client.IModel;
+//using RmqModel = RabbitMQ.Client.IModel;
 using RmqConnection = RabbitMQ.Client.IConnection;
 
 namespace AppForSEII2526.API; // <-- usa tu namespace
 
 public sealed class Subscriber : IDisposable
-{
+{ 
     private readonly string _host;
     private readonly int _port;
     private readonly string _user;
@@ -80,3 +81,4 @@ public sealed class Subscriber : IDisposable
         _conn?.Dispose();
     }
 }
+*/
