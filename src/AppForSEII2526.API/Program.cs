@@ -1,7 +1,12 @@
+using AppForSEII2526.API;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
+using TodoApi.Logging;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
@@ -118,3 +123,28 @@ app.Run();
 
 //Expose the implicitly defined Program class to the test project by doing:
 public partial class Program { }
+
+
+namespace AppForSEII2526.API
+{
+    internal class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var host = Environment.GetEnvironmentVariable("RABBIT_HOST") ?? "localhost";
+            var port = int.TryParse(Environment.GetEnvironmentVariable("RABBIT_PORT"), out var p) ? p : 5672;
+            var user = Environment.GetEnvironmentVariable("RABBIT_USER") ?? "guest";
+            var pass = Environment.GetEnvironmentVariable("RABBIT_PASS") ?? "guest";
+            var exch = Environment.GetEnvironmentVariable("RABBIT_EXCHANGE") ?? "logs";
+
+            using var sub = new Subscriber(host, port, user, pass, exch);
+            sub.Start();
+
+            // Mantener el proceso vivo
+            await Task.Delay(Timeout.InfiniteTimeSpan);
+            
+           
+        }
+    }
+}
+
