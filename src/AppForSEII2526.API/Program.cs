@@ -1,12 +1,12 @@
 using AppForSEII2526.API;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
-using TodoApi.Logging;
+///using TodoApi.Logging;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+//builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
@@ -137,8 +137,8 @@ namespace AppForSEII2526.API
             var pass = Environment.GetEnvironmentVariable("RABBIT_PASS") ?? "guest";
             var exch = Environment.GetEnvironmentVariable("RABBIT_EXCHANGE") ?? "logs";
 
-            using var sub = new Subscriber(host, port, user, pass, exch);
-            sub.Start();
+            //using var sub = new Subscriber(host, port, user, pass, exch);
+            //sub.Start();
 
             // Mantener el proceso vivo
             await Task.Delay(Timeout.InfiniteTimeSpan);
