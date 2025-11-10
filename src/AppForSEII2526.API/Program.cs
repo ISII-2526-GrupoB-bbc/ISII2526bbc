@@ -1,8 +1,10 @@
+using AppForSEII2526.API;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
 using AppForSEII2526.API.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
@@ -70,6 +72,7 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 
+
 var app = builder.Build();
 
 
@@ -94,6 +97,7 @@ using (var scope = app.Services.CreateScope()) {
 
         //it sees the database
         //SeedData.Initialize(db, scope.ServiceProvider, logger);
+        SeedData.Initialize(db, scope.ServiceProvider, logger);
     }
     catch (Exception ex) {
         logger.LogError(ex, "An error occurred seeding the DB.");

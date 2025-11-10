@@ -6,7 +6,7 @@ namespace AppForSEII2526.Models
     public class ReviewItem
 {
 
-        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
     public int Rating { get; set; }
 
     [StringLength(200)]
@@ -19,7 +19,17 @@ namespace AppForSEII2526.Models
     public Review Review { get; set; }
     public int CarId { get; set; }
     public int ReviewId { get; set; }
+        public ReviewItem() { }
+        public ReviewItem(int rating, string? description, DateTime reviewed, Car car, Review review) { 
+            Rating = rating;
+            Description = description;
+            Reviewed = reviewed;
+            Car = car;
+            Review = review;
+            CarId = car.Id;
+            ReviewId = review.Id;
         }
+    }
 }
 
 
