@@ -18,6 +18,7 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+            _logger.LogInformation("CarsController initialized.");
         }
 
         [HttpGet]
@@ -26,15 +27,19 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<IEnumerable<CocheParaComprarDTO>>> GetCars(string? color = null)
         {
+            _logger.LogInformation("Petición GET /api/Cars/GetCars iniciada.");
             try
             {
                 var query = _context.Cars.AsQueryable();
 
                 // Aplicar filtro SOLO por color (flujo alternativo)
                 if (!string.IsNullOrEmpty(color))
+                {
+                    _logger.LogDebug("Aplicando filtro de color: {color}", color);
                     query = query.Where(c => c.Color.Contains(color));
+                }
 
-                var cars = await query
+                    var cars = await query
                     .Select(c => new CocheParaComprarDTO(
                         c.Id,
                         c.Model.Name,
@@ -46,9 +51,13 @@ namespace AppForSEII2526.API.Controllers
                     .ToListAsync();
 
                 if (cars == null || !cars.Any())
+                {
+                    _logger.LogWarning("No se encontraron coches con el color especificado: {color}", color);
                     return NotFound("No se encontraron coches con ese color.");
+                }
 
-                return Ok(cars);
+                    _logger.LogInformation("Se recuperaron {count} coches correctamente.", cars.Count);
+                    return Ok(cars);
             }
             catch (Exception ex)
             {
