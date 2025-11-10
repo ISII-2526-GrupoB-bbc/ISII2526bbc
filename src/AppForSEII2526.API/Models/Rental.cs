@@ -10,6 +10,7 @@ namespace AppForSEII2526.Models
         private string deliveryAddress;
         private ApplicationUser? user;
 
+        protected Rental() { }
         public Rental(string deliveryAddress, DateTime rentingDate, DateTime endDate, PaymentMethod paymentMethod, DateTime startDate, List<RentalItem> rentalItems, ApplicationUser? user)
         {
             this.deliveryAddress = deliveryAddress;

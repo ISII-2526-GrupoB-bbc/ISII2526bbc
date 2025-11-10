@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppForSEII2526.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251008141221_CreateIdentitySchema")]
+    [Migration("20251103080331_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />
@@ -112,10 +112,19 @@ namespace AppForSEII2526.API.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Color")
                         .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Description")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FuelType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -134,8 +143,8 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("QuantityForRenting")
                         .HasColumnType("int");
 
-                    b.Property<int>("RentingPrice")
-                        .HasColumnType("int");
+                    b.Property<decimal>("RentingPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -247,11 +256,11 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<DateTime>("RentingDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("RentingPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("TotalPrice")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -268,7 +277,7 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("RentalId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quatity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("CarId", "RentalId");
@@ -322,7 +331,6 @@ namespace AppForSEII2526.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
