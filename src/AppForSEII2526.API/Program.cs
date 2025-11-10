@@ -4,7 +4,7 @@ using System.Data.Common;
 using AppForSEII2526.API.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 

@@ -20,15 +20,7 @@ namespace AppForSEII2526.Models
     public int CarId { get; set; }
     public int ReviewId { get; set; }
         public ReviewItem() { }
-        public ReviewItem(int rating, string? description, DateTime reviewed, Car car, Review review) { 
-            Rating = rating;
-            Description = description;
-            Reviewed = reviewed;
-            Car = car;
-            Review = review;
-            CarId = car.Id;
-            ReviewId = review.Id;
-        }
+        
     }
 }
 
