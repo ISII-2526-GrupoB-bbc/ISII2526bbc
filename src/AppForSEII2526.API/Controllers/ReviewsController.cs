@@ -95,7 +95,14 @@ namespace AppForSEII2526.API.Controllers
                 })
                 .ToList();
 
-            Review review = new Review(reseñaForCreate.Country, DateTime.Now, reseñaForCreate.DriverType, new List<ReviewItem>(), user);
+            Review review = new Review
+            {
+                Country = reseñaForCreate.Country,
+                Created = DateTime.Now,
+                DriverType = reseñaForCreate.DriverType,
+                ReviewItems = new List<ReviewItem>(),
+                UserName = user.UserName,
+            };
 
             foreach (var item in reseñaForCreate.ReviewItems)
             {
@@ -107,7 +114,13 @@ namespace AppForSEII2526.API.Controllers
                 }
                 else
                 {
-                    review.ReviewItems.Add(new ReviewItem(car.Id, item.Description, item.Rating, review));
+                    review.ReviewItems.Add(new ReviewItem
+                    {
+                        CarId = car.Id,
+                        Description = item.Description,
+                        Rating = item.Rating,
+                        Review = review
+                    });
                 }
             }
 
