@@ -6,9 +6,9 @@ using AppForSEII2526.Models;
 
 namespace AppForSEII2526.API.DTOs.ComprarDTOs
 {
-    public class ComprarDetailDTO : ComprarForCreateDTO
+    public class ComprarForDetailDTO : ComprarForCreateDTO
     {
-        public ComprarDetailDTO(
+        public ComprarForDetailDTO(
         int id,
         DateTime purchasingDate,
         string name,
@@ -49,7 +49,7 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is ComprarDetailDTO dto &&
+            return obj is ComprarForDetailDTO dto &&
                    base.Equals(obj) &&
                    Id == dto.Id &&
                    CompareDate(PurchasingDate, dto.PurchasingDate);

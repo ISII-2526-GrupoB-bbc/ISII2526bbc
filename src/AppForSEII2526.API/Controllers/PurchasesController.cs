@@ -26,7 +26,7 @@ namespace AppForSEII2526.API.Controllers
         // -----------------------------------------------------------
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(ComprarDetailDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ComprarForDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> Get_Details_Purchase(int id)
         {
@@ -86,7 +86,7 @@ namespace AppForSEII2526.API.Controllers
                 pm = default; // En caso de valor inesperado, cae al valor por defecto del enum.
 
             // Construimos el DTO de detalle usando el constructor que definiste
-            var detail = new ComprarDetailDTO(
+            var detail = new ComprarForDetailDTO(
                 id: purchase.Id,
                 purchasingDate: purchase.PurchasingDate,
                 name: purchase.Name,
@@ -105,7 +105,7 @@ namespace AppForSEII2526.API.Controllers
         // -----------------------------------------------------------
         [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(typeof(ComprarDetailDTO), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ComprarForDetailDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> Create_Purchase(ComprarForCreateDTO compra)
@@ -236,7 +236,7 @@ namespace AppForSEII2526.API.Controllers
             // En la respuesta podemos devolver el enum directamente (lo traemos del DTO de entrada)
             var pm = compra.PaymentMethod;
 
-            var detail = new ComprarDetailDTO(
+            var detail = new ComprarForDetailDTO(
                 id: purchase.Id,
                 purchasingDate: purchase.PurchasingDate,
                 name: purchase.Name,
