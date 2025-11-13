@@ -108,15 +108,21 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(IEnumerable<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+
         public async Task<ActionResult<IEnumerable<CocheParaAlquilarDTO>>> GetCars3(decimal? RentingPrice = null)
         {
+            _logger.LogInformation("Petición GET /api/Cars/GetCars3 iniciada.");    //Log de inicio de la petición
+
             try
             {
                 var query = _context.Cars.AsQueryable();
 
-                // Aplicar filtro SOLO por color (flujo alternativo)
+                // Aplico filtro por RentingPrice (precio de alquiler)
                 if (RentingPrice.HasValue)
+                {
+                    _logger.LogDebug("Aplicando filtro de RentingPrice: {price}", RentingPrice.Value);  //Log para depurar el valor del filtro
                     query = query.Where(c => c.RentingPrice == RentingPrice.Value);
+                }
                 //Si quiero que me de los coches con precio menor o igual, cambiar "==" por "<="
 
                 var cars = await query
@@ -131,14 +137,17 @@ namespace AppForSEII2526.API.Controllers
                     .ToListAsync();
 
                 if (cars == null || !cars.Any())
-                    return NotFound("No se encontraron coches con ese precio de alquiler" +
-                        ".");
+                {
+                    _logger.LogWarning("No se encontraron coches con RentingPrice = {price}", RentingPrice);
+                    return NotFound("No se encontraron coches con ese precio de alquiler.");
+                }
 
+                _logger.LogInformation("Se recuperaron {count} coches correctamente.", cars.Count);
                 return Ok(cars);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Error en GetCars() - {ex.Message}");
+                _logger.LogError($"{DateTime.Now}: Error en GetCars3() - {ex.Message}");
                 return BadRequest("Error al obtener los coches disponibles.");
             }
         }
