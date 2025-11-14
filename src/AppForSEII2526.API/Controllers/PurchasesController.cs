@@ -19,7 +19,6 @@ namespace AppForSEII2526.API.Controllers
             _context = context;
             _logger = logger;
         }
-
         // -----------------------------------------------------------
         // GET api/purchases/get_details_purchase?id=123
         // Devuelve el detalle completo de una compra existente.
@@ -30,69 +29,78 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> Get_Details_Purchase(int id)
         {
-            // Validación defensiva: comprobar que existe el DbSet
+            // Primero compruebo que el DbSet de Purchases está disponible.
+            // Si no, lo considero un error grave de configuración y devuelvo 404.
             if (_context.Purchases == null)
             {
                 _logger.LogError("Error: Purchases table does not exist");
                 return NotFound();
             }
-
-            // Cargamos la compra + sus líneas (PurchaseItems).
-            // OJO: en tu modelo PurchaseItem no hay navegación a Car,
-            // por eso NO hay ThenInclude(pi => pi.Car) aquí.
+        
+            // Busco en base de datos la compra cuyo Id coincide con el parámetro.
+            // Incluyo también sus líneas (PurchaseItems) porque las necesito para el detail.
             var purchase = await _context.Purchases
                 .Where(p => p.Id == id)
                 .Include(p => p.PurchaseItems)
                 .FirstOrDefaultAsync();
-
+        
+            // Si no encuentro ninguna compra con ese Id, registro el error y devuelvo 404.
             if (purchase == null)
             {
                 _logger.LogError($"Error: Purchase with id {id} does not exist");
                 return NotFound();
             }
-
-            // Reunimos los Ids de coches presentes en las líneas
-            // (si tu FK se llamara 'Card', cambia pi.CarId por pi.Card).
+        
+            // A partir de las líneas de compra, obtengo los Ids de los coches comprados.
+            // Uso Distinct para no repetir Ids si el mismo coche aparece en varias líneas.
             var carIds = purchase.PurchaseItems
-                .Select(pi => pi.CarId /* o pi.Card */)
+                .Select(pi => pi.CarId)
                 .Distinct()
                 .ToList();
-
-            // Traemos esos coches con su Model para poder proyectar al DTO
+        
+            // Cargo desde base de datos todos los coches involucrados en la compra,
+            // incluyendo su Model para poder mostrar esa información en el DTO.
             var cars = await _context.Cars
                 .Include(c => c.Model)
                 .Where(c => carIds.Contains(c.Id))
                 .ToListAsync();
-
-            // Diccionario para resolver rápido un coche por Id
+        
+            // Creo un diccionario para acceder a los coches por su Id de forma rápida (O(1)).
             var carById = cars.ToDictionary(c => c.Id);
-
-            // Proyección de cada línea de compra a ComprarForItemDTO
+        
+            // Recorro cada línea de compra y la transformo en un ComprarForItemDTO.
+            // De esta forma construyo la lista de "cochesComprados" que irán dentro del detalle.
             var items = purchase.PurchaseItems.Select(pi =>
             {
-                var car = carById[pi.CarId /* o pi.Card */];
+                // Recupero el coche asociado a esta línea a partir del diccionario.
+                var car = carById[pi.CarId];
+        
+                // Con los datos del coche y la cantidad de la línea construyo el DTO del item.
                 return new ComprarForItemDTO(
                     id: car.Id,
-                    model: car.Model,         // Pasamos el Model completo porque así lo pide tu DTO
+                    model: car.Model,                 // Incluyo el Model del coche (ya filtrado por JSON).
                     color: car.Color,
-                    purchasingPrice: car.PurchasingPrice, // Precio actual del coche
-                    quantity: pi.Quantity
+                    purchasingPrice: car.PurchasingPrice, // Precio unitario actual del coche.
+                    quantity: pi.Quantity                 // Cantidad comprada de ese coche.
                 );
             }).ToList();
-
-            // Construimos el DTO de detalle usando el constructor que definiste
+        
+            // Construyo el DTO de detalle de la compra a partir de la entidad Purchase
+            // y de la lista de items que acabo de generar.
             var detail = new ComprarForDetailDTO(
                 id: purchase.Id,
                 purchasingDate: purchase.PurchasingDate,
                 name: purchase.Name,
                 surname: purchase.Surname,
                 address: purchase.DeliveryCarDealer,
-                paymentMethod: purchase.PaymentMethod,
+                paymentMethod: purchase.PaymentMethod, // Enum PaymentMethod ya guardado en la entidad.
                 cochesComprados: items
             );
-
+        
+            // Devuelvo 200 OK junto con el DTO de detalle de la compra.
             return Ok(detail);
         }
+                
 
         
         // -----------------------------------------------------------
