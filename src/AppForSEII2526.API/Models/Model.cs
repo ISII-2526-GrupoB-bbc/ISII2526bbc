@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 
 namespace AppForSEII2526.Models
 {
@@ -10,6 +12,7 @@ namespace AppForSEII2526.Models
 
         [Required, StringLength(50)]
         public string Name { get; set; }
+        [JsonIgnore]
         public IList<Car> Cars { get; set; } = new List<Car>();
 
     }

@@ -80,11 +80,6 @@ namespace AppForSEII2526.API.Controllers
                 );
             }).ToList();
 
-            // La entidad Purchase guarda PaymentMethod como string.
-            // Convertimos a enum para encajar con el DTO.
-            if (!Enum.TryParse<PaymentMethod>(purchase.PaymentMethod, ignoreCase: true, out var pm))
-                pm = default; // En caso de valor inesperado, cae al valor por defecto del enum.
-
             // Construimos el DTO de detalle usando el constructor que definiste
             var detail = new ComprarForDetailDTO(
                 id: purchase.Id,
@@ -92,13 +87,14 @@ namespace AppForSEII2526.API.Controllers
                 name: purchase.Name,
                 surname: purchase.Surname,
                 address: purchase.DeliveryCarDealer,
-                paymentMethod: pm,
+                paymentMethod: purchase.PaymentMethod,
                 cochesComprados: items
             );
 
             return Ok(detail);
         }
 
+        
         // -----------------------------------------------------------
         // POST api/purchases/create_purchase
         // Crea una nueva compra a partir de los coches seleccionados.
@@ -146,7 +142,7 @@ namespace AppForSEII2526.API.Controllers
                 Name = compra.Name,
                 Surname = compra.Surname,
                 DeliveryCarDealer = compra.Address,          // Dirección de entrega
-                PaymentMethod = compra.PaymentMethod.ToString(), // Guardamos como string en la entidad
+                PaymentMethod = compra.PaymentMethod, // Guardamos el metodo de pago
                 PurchasingDate = DateTime.Now,               // Momento de la compra
                 PurchasingPrice = 0m,                        // Se calcula más abajo
                 PurchaseItems = new List<PurchaseItem>()
@@ -223,7 +219,8 @@ namespace AppForSEII2526.API.Controllers
             // Reproyectamos las líneas con los datos “congelados” del momento de la compra
             var detailItems = purchase.PurchaseItems.Select(pi =>
             {
-                var car = cars.First(c => c.Id == pi.CarId /* o pi.Card */);
+                var car = cars.First(c => c.Id == pi.CarId); /* o pi.Card */ //);
+        
                 return new ComprarForItemDTO(
                     id: car.Id,
                     model: car.Model,
@@ -248,6 +245,10 @@ namespace AppForSEII2526.API.Controllers
 
             // 201 Created con ubicación GET y el cuerpo del detalle
             return CreatedAtAction(nameof(Get_Details_Purchase), new { id = purchase.Id }, detail);
+
+
         }
+
+        
     }
 }
