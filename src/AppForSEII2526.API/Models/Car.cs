@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization;
+
+
 namespace AppForSEII2526.Models
 {
     public class Car
@@ -35,6 +38,7 @@ namespace AppForSEII2526.Models
         [JsonIgnore] // Evita el bucle infinito al serializar
         public Model Model { get; set; }
         public IList<RentalItem> RentalItems { get; set; }
+        [JsonIgnore]
         public IList<PurchaseItem> PurchaseItems { get; set; }
         public IList<ReviewItem> ReviewItems { get; set; }
     }

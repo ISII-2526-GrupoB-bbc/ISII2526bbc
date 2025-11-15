@@ -1,9 +1,14 @@
-﻿using System;
+﻿using AppForSEII2526.API.Controllers;
+using AppForSEII2526.API.DTOs.CochesDTO;
+using AppForSEII2526.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AppForSEII2526.Models;
+
+
+//PRUEBA DEL MÉTODO GetCars3 -> Filtro por precio de alquiler
 
 namespace AppForSEII2526.UT.CarsController_test
 {
@@ -12,8 +17,10 @@ namespace AppForSEII2526.UT.CarsController_test
         public GetCocheParaAlquilar_test()
         {
             // Creacion de modelos para las pruebas
-            var model1 = new Model { Id = 1, Name = "Nissan Qashqai" };
-            var model2 = new Model { Id = 2, Name = "Audi R8" };
+            var model1 = new Model { Id = 1, Name = "Qashqai" };
+            var model2 = new Model { Id = 2, Name = "R8" };
+            var model3 = new Model { Id = 3, Name = "Model S" };
+            var model4 = new Model { Id = 4, Name = "Mustang" };
 
             // Creacion de coches para las pruebas
             var car1 = new Car
@@ -21,13 +28,13 @@ namespace AppForSEII2526.UT.CarsController_test
                 Id = 1,
                 CarClass = "Todoterreno",
                 FuelType = "Eléctrico",
-                Color = "Negro",
+                Color = "Blanco",
                 Description = "Coche premium eléctrico",
-                Manufacturer = "Tesla",
-                PurchasingPrice = 75000,
+                Manufacturer = "Nissan",
+                PurchasingPrice = 75000m,
                 QuantityForPurchasing = 3,
                 QuantityForRenting = 1,
-                RentingPrice = 300,
+                RentingPrice = 35000m,
                 Model = model1
             };
 
@@ -37,19 +44,141 @@ namespace AppForSEII2526.UT.CarsController_test
                 CarClass = "Deportivo",
                 FuelType = "Gasolina",
                 Color = "Rojo",
-                Description = "Deportivo aleman",
-                Manufacturer = "Ford",
-                PurchasingPrice = 40000,
+                Description = "Deportivo",
+                Manufacturer = "Audi",
+                PurchasingPrice = 40000m,
                 QuantityForPurchasing = 2,
                 QuantityForRenting = 1,
-                RentingPrice = 5500,
+                RentingPrice = 55000m,
                 Model = model2
             };
 
-            _context.Cars.AddRange(car1, car2);
+            var car3 = new Car
+            {
+                Id = 3,
+                CarClass = "Sedan",
+                FuelType = "Eléctrico",
+                Color = "Blanco",
+                Description = "Coche premium eléctrico",
+                Manufacturer = "Tesla",
+                PurchasingPrice = 75000m,
+                QuantityForPurchasing = 3,
+                QuantityForRenting = 1,
+                RentingPrice = 30000m,
+                Model = model3
+            };
+
+            var car4 = new Car
+            {
+                Id = 4,
+                CarClass = "Deportivo",
+                FuelType = "Gasolina",
+                Color = "Rojo",
+                Description = "Clásico americano potente",
+                Manufacturer = "Ford",
+                PurchasingPrice = 55000m,
+                QuantityForPurchasing = 2,
+                QuantityForRenting = 1,
+                RentingPrice = 25000m,
+                Model = model4
+            };
+
+
+            _context.Cars.AddRange(car1, car2, car3, car4); //Inserto los coches
 
             //Guardo los datos en SQLite
             _context.SaveChanges();
         }
+
+        //====== Test para getCars3 ======
+
+        // Estos son los casos de prueba con éxito
+        public static IEnumerable<object[]> GetCars3_OK_Cases()  //Este metodo prepara los datos de entrada y salida esperados
+        {
+            // Construyo los DTOs esperados tal y como los proyecta el action GetCars (mismo orden de parámetros).
+            var nissan = new CocheParaAlquilarDTO(1, "Qashqai", "Eléctrico", "Nissan", 35000, "Blanco");
+            var audi = new CocheParaAlquilarDTO(2, "R8", "Gasolina", "Audi", 55000, "Rojo");
+            var tesla = new CocheParaAlquilarDTO(3, "Model S", "Eléctrico", "Tesla", 30000, "Blanco");
+            var ford = new CocheParaAlquilarDTO(4, "Mustang", "Gasolina", "Ford", 25000, "Rojo");
+
+            //Creo una lista con los coches esperados, ordenada por Id
+            //Esta lista representa lo que debe devolver el controlador sin aplicar ningun filtro
+            var all = new List<CocheParaAlquilarDTO> { nissan, audi, tesla, ford }.OrderBy(d => d.Id).ToList(); 
+
+            //Esta lista contiene solo el coche Ford, el unico con precio 25000
+            //Esta lista es el resultado esperado de aplicar un filtro de 25000
+            var only25000 = new List<CocheParaAlquilarDTO> { ford };
+
+            return new List<object[]>
+            {
+                new object[] { null, all },         //Si no aplico ningun filtro (null), devuelvo todos (all)
+                new object[] { 25000m, only25000 }, //Si aplico filtro 25000, devuelve el Ford (only25000)
+            };
+        }
+
+
+
+
+        //TEST PARAMETRIZADO: 200 OK + Lista Esperada
+
+        //Este metodo comprueba que GetCars3:
+            //Devuelve 200 OK cuando todo va bien
+            //Devuelve la lista esperada de coches según el filtro
+            //Los datos de salida coinciden campo por campo con lo esperado
+
+        [Theory]
+        [MemberData(nameof(GetCars3_OK_Cases))]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+
+        //Este es el metodo del test
+        public async Task GetCars3_OK_test(decimal? rentingPrice, IList<CocheParaAlquilarDTO> expected)
+        {
+            var logger = new Mock<ILogger<CarsControllers>>().Object;
+            var controller = new CarsControllers(_context, logger);             //Se instancia el controlado real para simular una ejecución real
+
+            var result = await controller.GetCars3(rentingPrice);               //Llamo a GetCars3 con el parámetro de filtro -> result puede ser Ok, NotFound...
+
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            var actual = Assert.IsType<List<CocheParaAlquilarDTO>>(ok.Value);
+
+            // Ordenamos por Id para comparación determinista
+            actual = actual.OrderBy(x => x.Id).ToList();
+
+            Assert.Equal(expected.Count, actual.Count);     //Comprueba que el numero de coches devueltos sea igual al esperado
+
+            //Recorro la listas y comparo CAMPO POR CAMPO -> Si cualquiera falla, el test falla
+            for (int i = 0; i < expected.Count; i++)
+            {
+                Assert.Equal(expected[i].Id, actual[i].Id);
+                Assert.Equal(expected[i].ModelName, actual[i].ModelName);
+                Assert.Equal(expected[i].FuelType, actual[i].FuelType);
+                Assert.Equal(expected[i].Manufacturer, actual[i].Manufacturer);
+                Assert.Equal(expected[i].RentingPrice, actual[i].RentingPrice);
+                Assert.Equal(expected[i].Color, actual[i].Color);
+            }
+        }
+
+        // Test NotFound: cuando no hay coincidencias por precio
+        [Fact]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetCars3_NotFound_test()
+        {
+            var logger = new Mock<ILogger<CarsControllers>>().Object;
+            var controller = new CarsControllers(_context, logger);
+
+            var result = await controller.GetCars3(99999m);
+
+            var notFound = Assert.IsType<NotFoundObjectResult>(result.Result);
+            Assert.Equal("No se encontraron coches con ese precio de alquiler.", notFound.Value);
+        }
     }
 }
+
+
+
+
+
+
+
