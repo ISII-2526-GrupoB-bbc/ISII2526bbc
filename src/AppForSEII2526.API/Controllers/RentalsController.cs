@@ -1,10 +1,8 @@
-﻿using AppForSEII2526.API.DTOs;
-using AppForSEII2526.API.DTOs.CochesDTO;
+﻿using AppForSEII2526.API.DTOs.CochesDTO;
 using AppForSEII2526.API.DTOs.RentalDTOs;
-using AppForSEII2526.Models;           // Entidades de dominio: Car, Model, Purchase, PurchaseItem, PaymentMethod
+using AppForSEII2526.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Net;
 
 
@@ -24,27 +22,39 @@ namespace AppForSEII2526.API.Controllers
         }
 
 
-        //Devuelve todos los detalles de un alquiler:
+        //Devuelve todos los detalles de un alquiler: METODO DETAILS
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult> Get_Details_Rental(int id)
-        {
-            if (_context.Rentals == null)
-            {
-                _logger.LogError("Error: Rental table does not exist");
-                return NotFound();
-            }
 
+        public async Task<ActionResult> Get_Details_Rental(int id)  //Se elige el alquiler por su ID
+        {
             var rental = await _context.Rentals
-             .Where(r => r.Id == id)
-                 .Include(r => r.ApplicationUser) 
-                 .Include(r => r.RentalItems) 
+                .Where(r => r.Id == id)
+                .Include(r => r.ApplicationUser) 
+                .Include(r => r.RentalItems) 
                     .ThenInclude(ri => ri.Car) 
                         .ThenInclude(c => c.Model)     
-             .Select(r => new RentalDetailDTO(r.ApplicationUser.Name, r.ApplicationUser.Surname, r.DeliveryCarDealer, r.PaymentMethod, r.StartDate, r.EndDate, r.RentingDate, r.RentingPrice, r.RentalItems
-                        .Select(ri => new RentalItemDTO(ri.CarId, ri.Car.Model, ri.Car.Manufacturer, ri.Car.RentingPrice, ri.Quantity)).ToList<RentalItemDTO>()))
+                .Select(r => new RentalDetailDTO(
+                    r.Id, 
+                    r.ApplicationUser.Name, 
+                    r.ApplicationUser.Surname, 
+                    r.DeliveryCarDealer, 
+                    r.PaymentMethod, 
+                    r.StartDate, 
+                    r.EndDate, 
+                    r.RentingDate,
+                    r.RentingPrice,
+                    r.RentalItems.Select(ri => 
+                        new RentalItemDTO(
+                            ri.CarId, 
+                            ri.Car.Model.Id, 
+                            ri.Car.Model.Name,
+                            ri.Car.Manufacturer, 
+                            ri.Car.RentingPrice, 
+                            ri.Quantity))
+                    .ToList<RentalItemDTO>()))
              .FirstOrDefaultAsync();
 
 
@@ -59,7 +69,7 @@ namespace AppForSEII2526.API.Controllers
         }
 
 
-        //Crea un nuevo alquiler a partir de los coches seleccionados:
+        //METODO POST: Crear un nuevo alquiler
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.Created)]
@@ -67,8 +77,9 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> Create_Rental(RentalForCreateDTO rentalForCreate)
         {
-            //Compruebo que la fecha de inicio es posterior a hoy
-            if (rentalForCreate.StartDate <= DateTime.Today)
+            //VALIDACIONES BÁSICAS
+            //Compruebo que la fecha de inicio es posterior a la de hoy
+            if (rentalForCreate.EndDate <= DateTime.Today)
                 ModelState.AddModelError("RentalDateFrom", "Error! Your rental date must start later than today");
 
             //Compruebo que la fecha de fin del alquiler es posterior a la de inicio
@@ -79,48 +90,58 @@ namespace AppForSEII2526.API.Controllers
             if (rentalForCreate.RentalItems.Count == 0)
                 ModelState.AddModelError("RentalItems", "Error! You must include at least one car to be rented");
 
-            //if (!_context.ApplicationUser.Any(au=>au.UserName == rentalFromCreate.CustomerUserName))
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == rentalForCreate.Name);
+            var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == rentalForCreate.CustomerName);
             if (user == null)
-                ModelState.AddModelError("RentalAplicationUser", "Error! UserName is not registered");
+                ModelState.AddModelError("RentalAplicationUser", "Error! El nombre de usuario no está registrado");
 
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
-            var carModels = rentalForCreate.RentalItems.Select(ri => ri.Model.Name).ToList<string>();
 
-            var cars = _context.Cars.Include(r => r.RentalItems)
-                .ThenInclude(ri => ri.Car)
-                .ThenInclude(c => c.Model)
-                .Where(r => carModels.Contains(r.Model.Name))
+            //LISTA DE MODELOS SOLICITADOS PARA ALQUILAR
+            var carModelNames = rentalForCreate.RentalItems.Select(ri => ri.ModelName).ToList();
+
+            var cars = _context.Cars
+                .Include(c => c.RentalItems)
+                .ThenInclude(ri => ri.Rental)
+                .Where(c => carModelNames.Contains(c.Model.Name))
                 .Select(c => new
                 {
                     c.Id,
-                    c.Model.Name,
+                    ModelId = c.Model.Id,
+                    ModelName = c.Model.Name,
                     c.RentingPrice,
                     c.QuantityForRenting,
-                    NumberOfRentedItems = c.RentalItems.Count(ri => ri.Rental.StartDate <= rentalForCreate.EndDate
+                    NumberOfRentedItems = c.RentalItems.Count(ri => 
+                        ri.Rental.StartDate <= rentalForCreate.EndDate
                             && ri.Rental.EndDate >= rentalForCreate.StartDate)
-                }
-                ).ToList();
-            Rental rental = new Rental(rentalForCreate.DeliveryAddress, rentalForCreate.RentingDate, rentalForCreate.EndDate, rentalForCreate.PaymentMethod, rentalForCreate.StartDate, new List<RentalItem>(), user);
+                }).ToList();
 
-            rental.RentingPrice = 0;
+
+            var rental = new Rental(
+                rentalForCreate.DeliveryCarDealer, 
+                rentalForCreate.RentingDate, 
+                rentalForCreate.EndDate, 
+                rentalForCreate.PaymentMethod, 
+                rentalForCreate.StartDate, 
+                new List<RentalItem>(), 
+                user);
+
             var numDays = (rental.EndDate - rental.StartDate).TotalDays;
 
+
+            //PROCESAR CADA COCHE SELECCIONADO
             foreach (var item in rentalForCreate.RentalItems)
             {
-                var car = cars.FirstOrDefault(c => c.Name == item.Model.Name);
-                //Comprobar si hay cantidad suficiente para alquilar
+                var car = cars.FirstOrDefault(c => c.ModelName == item.ModelName);
+
                 if ((car == null) || ((car.NumberOfRentedItems + item.Quantity) >= car.QuantityForRenting))
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Car '{item.Model}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
+                    ModelState.AddModelError("RentalItems", $"Error! Car '{item.ModelName}' is not available.");
                 }
                 else
                 {
-                    // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
                     rental.RentalItems.Add(new RentalItem(car.Id, item.Quantity, rental));
-                    item.RentingPrice = car.RentingPrice;
                     rental.RentingPrice += car.RentingPrice * item.Quantity * (decimal)numDays;
                 }
             }
@@ -130,28 +151,33 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
-            _context.Add(rental);
+            _context.Rentals.Add(rental);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                //we store in the database both rental and its rentalitems
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ModelState.AddModelError("Rental", $"Error! There was an error while saving your rental, plese, try again later");
-                return Conflict("Error" + ex.Message);
-
-            }
-
-            var rentalDetail = new RentalDetailDTO(rental.ApplicationUser.Name, rental.ApplicationUser.Surname, rental.DeliveryCarDealer, rental.PaymentMethod, rental.StartDate, rental.EndDate, rental.RentingDate, rental.RentingPrice, rentalForCreate.RentalItems.ToList());
-
+            //CREAR EL DTO QUE DEVUELVE LA API
+            var rentalDetail = new RentalDetailDTO(
+                rental.Id,
+                rental.ApplicationUser.Name,
+                rental.ApplicationUser.Surname,
+                rental.DeliveryCarDealer,
+                rental.PaymentMethod,
+                rental.StartDate,
+                rental.EndDate,
+                rental.RentingDate,
+                rental.RentingPrice,
+                rental.RentalItems.Select(ri =>
+                    new RentalItemDTO(
+                        ri.CarId,
+                        ri.Car.Model.Id,
+                        ri.Car.Model.Name,
+                        ri.Car.Manufacturer,
+                        ri.Car.RentingPrice,
+                        ri.Quantity
+                    )).ToList()
+            );
             return CreatedAtAction("Get_Details_Rental", new { id = rental.Id }, rentalDetail);
         }
-
     }
-
 }
 
 
