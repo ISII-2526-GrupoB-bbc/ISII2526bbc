@@ -4,16 +4,17 @@ namespace AppForSEII2526.Models
     public class RentalItem
     {
         protected RentalItem() { }
-        public RentalItem(int id, int quantity, Rental rental)
+        public RentalItem(int carId, int quantity, Rental rental)
         {
+            CarId = carId;
             Quantity = quantity;
             Rental = rental;
         }
 
         public int Quantity { get; set; }
-
         public Car Car { get; set; }
         public Rental Rental { get; set; }
+
         public int CarId { get; set; }
         public int RentalId { get; set; }
     }
