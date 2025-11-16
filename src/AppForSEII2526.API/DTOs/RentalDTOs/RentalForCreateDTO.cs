@@ -1,101 +1,59 @@
 ﻿using AppForSEII2526.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
     public class RentalForCreateDTO
     {
-        private string customerName;
-        private string customerSurname;
-        private DateTime rentalDateFrom;
-        private DateTime rentalDateTo;
-
-        public RentalForCreateDTO(string name, string surname, string address, PaymentMethod paymentMethod, DateTime rentalStartDate, DateTime rentalEndDate, DateTime rentingDate, IList<RentalItemDTO> rentalItems)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Surname = surname ?? throw new ArgumentNullException(nameof(surname));
-            DeliveryAddress = address ?? throw new ArgumentNullException(nameof(address));
-            PaymentMethod = paymentMethod;
-            RentingDate = rentingDate;
-            StartDate = rentalStartDate;
-            EndDate = rentalEndDate;
-            RentalItems = rentalItems ?? throw new ArgumentNullException(nameof(rentalItems));
-        }
-
-        public RentalForCreateDTO()
-        {
-            RentalItems = new List<RentalItemDTO>();
-        }
-
-        public RentalForCreateDTO(string customerName, string customerSurname, string deliveryAddress, PaymentMethod paymentMethod, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentalItems)
-        {
-            this.customerName = customerName;
-            this.customerSurname = customerSurname;
-            DeliveryAddress = deliveryAddress;
-            PaymentMethod = paymentMethod;
-            this.rentalDateFrom = rentalDateFrom;
-            this.rentalDateTo = rentalDateTo;
-            RentalItems = rentalItems;
-        }
-
-        public DateTime RentingDate { get; set; }
-
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-
-
-        [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
-        [Display(Name = "Delivery Address")]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = "Delivery address must have at least 10 characters")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
-        public string DeliveryAddress { get; set; }
-
-        [EmailAddress]
         [Required]
-        public string Name { get; set; }
+        [StringLength(50, MinimumLength = 2)]
+        public string CustomerName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name and Surname")]
-        [StringLength(50, MinimumLength = 10, ErrorMessage = "Name and Surname must have at least 10 characters")]
-        public string Surname { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 2)]
+        public string CustomerSurname { get; set; }
 
-        public IList<RentalItemDTO> RentalItems { get; set; }
+        [Required]
+        [StringLength(150, MinimumLength = 10)]
+        public string DeliveryCarDealer { get; set; }
+
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
 
-        private int NumberOfDays
-        {
-            get
-            {
-                return (EndDate - StartDate).Days;
-            }
-        }
+        [Required]
+        public DateTime StartDate { get; set; }
 
-        [Display(Name = "Total Price")]
+        [Required]
+        public DateTime EndDate { get; set; }
+
+        public DateTime RentingDate { get; set; }
+
+        public IList<RentalItemDTO> RentalItems { get; set; } = new List<RentalItemDTO>();
+
         [JsonPropertyName("TotalPrice")]
-        public decimal RentingPrice
-        {
-            get
-            {
-                return RentalItems.Sum(ri => ri.RentingPrice * ri.Quantity);
-            }
-        }
+        public decimal RentingPrice =>
+            RentalItems.Sum(ri => ri.RentingPrice * ri.Quantity);
 
-        protected bool CompareDate(DateTime date1, DateTime date2)
-        {
-            return (date1.Subtract(date2) < new TimeSpan(0, 1, 0));
-        }
+        public RentalForCreateDTO() { }
 
-        public override bool Equals(object? obj)
+        public RentalForCreateDTO(
+            string customerName,
+            string customerSurname,
+            string deliveryCarDealer,
+            PaymentMethod paymentMethod,
+            DateTime startDate,
+            DateTime endDate,
+            IList<RentalItemDTO> rentalItems)
         {
-            return obj is RentalForCreateDTO dTO &&
-                   CompareDate(StartDate, dTO.StartDate) &&
-                   CompareDate(EndDate, dTO.EndDate) &&
-                   DeliveryAddress == dTO.DeliveryAddress &&
-                   Name == dTO.Name &&
-                   Surname == dTO.Surname &&
-                   RentalItems.SequenceEqual(dTO.RentalItems) &&
-                   PaymentMethod == dTO.PaymentMethod &&
-                   RentingPrice == dTO.RentingPrice;
+            CustomerName = customerName;
+            CustomerSurname = customerSurname;
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = paymentMethod;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentalItems = rentalItems ?? new List<RentalItemDTO>();
         }
     }
 }
+

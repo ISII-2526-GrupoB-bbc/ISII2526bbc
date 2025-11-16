@@ -1,25 +1,19 @@
-﻿using AppForSEII2526.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Formats.Asn1;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AppForSEII2526.API.DTOs.CochesDTO
 {
     public class CocheParaAlquilarDTO
     {
-        // Constructor con parámetros
-        public CocheParaAlquilarDTO(int id, string model, string fuelType, string manufacturer, decimal rentingPrice, string color)
+        public CocheParaAlquilarDTO(int id, string modelName, string fuelType, string manufacturer, decimal rentingPrice, string color)
         {
             Id = id;
-            ModelName = model;
+            ModelName = modelName;
             FuelType = fuelType;
             Manufacturer = manufacturer;
             RentingPrice = rentingPrice;
             Color = color;
         }
 
-        [Required]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El modelo del coche es obligatorio.")]
@@ -32,8 +26,8 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         [Display(Name = "Color del coche")]
         public string Color { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El tipo de gasoil es obligatorio")]
-        [Display(Name = "Tipo de gasoil ")]
+        [Required(ErrorMessage = "El tipo de combustible es obligatorio.")]
+        [Display(Name = "Tipo de combustible")]
         public string FuelType { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El fabricante es obligatorio.")]
@@ -47,3 +41,4 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         public decimal RentingPrice { get; set; }
     }
 }
+
