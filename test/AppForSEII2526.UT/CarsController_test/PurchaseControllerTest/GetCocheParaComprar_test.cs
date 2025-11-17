@@ -1,8 +1,8 @@
 ﻿using AppForSEII2526.API.Controllers;          // Importo el namespace del controlador que voy a testear (CarsControllers).
 using AppForSEII2526.API.DTOs.CochesDTO;       // Importo los DTOs que devuelve el endpoint (CocheParaComprarDTO).
-using AppForSEII2526.Models;                   // Importo mis entidades de dominio (Car, Model, etc.).
+using AppForSEII2526.Models;
 
-namespace AppForSEII2526.UT.CarsController_test
+namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
 {
     // Defino la clase de tests y heredo de mi fixture SQLite en memoria para tener un DbContext limpio por test.
     public class GetCocheParaComprar_test : AppForSEII25264SqliteUT

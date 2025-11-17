@@ -38,7 +38,7 @@ namespace AppForSEII2526.API.Controllers
                         .ThenInclude(c => c.Model)     
                 .Select(r => new RentalDetailDTO(
                     r.Id, 
-                    r.ApplicationUser.Name, 
+                    r.ApplicationUser.UserName, 
                     r.ApplicationUser.Surname, 
                     r.DeliveryCarDealer, 
                     r.PaymentMethod, 
