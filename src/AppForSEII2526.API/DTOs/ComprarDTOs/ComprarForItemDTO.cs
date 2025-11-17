@@ -29,7 +29,8 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         {
             return obj is ComprarForItemDTO dto &&
                    Id == dto.Id &&
-                   Equals(Model, dto.Model) &&
+                   Model?.Id == dto.Model?.Id &&
+                   Model?.Name == dto.Model?.Name &&
                    Color == dto.Color &&
                    PurchasingPrice == dto.PurchasingPrice &&
                    Quantity == dto.Quantity;
@@ -37,7 +38,8 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Model, Color, PurchasingPrice, Quantity);
+            return HashCode.Combine(Id, Model?.Id, Model?.Name, Color, PurchasingPrice, Quantity);
         }
+
     }
 }

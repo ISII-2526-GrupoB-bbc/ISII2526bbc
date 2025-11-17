@@ -50,9 +50,13 @@ namespace AppForSEII2526.API.DTOs.ComprarDTOs
         public override bool Equals(object? obj)
         {
             return obj is ComprarForDetailDTO dto &&
-                   base.Equals(obj) &&
                    Id == dto.Id &&
-                   CompareDate(PurchasingDate, dto.PurchasingDate);
+                   Name == dto.Name &&
+                   Surname == dto.Surname &&
+                   Address == dto.Address &&
+                   PaymentMethod == dto.PaymentMethod &&
+                   CompareDate(PurchasingDate, dto.PurchasingDate) &&
+                   CochesComprados.SequenceEqual(dto.CochesComprados);
         }
 
         public override int GetHashCode()
