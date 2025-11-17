@@ -45,8 +45,20 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         [Display(Name = "Precio de compra (€)")]
         public decimal PurchasingPrice { get; set; }
 
-
-
+         public override bool Equals(object? obj)
+          {
+                    return obj is CocheParaComprarDTO dto &&
+                           Id == dto.Id &&
+                           ModelName == dto.ModelName &&
+                           Color == dto.Color &&
+                           FuelType == dto.FuelType &&
+                           Manufacturer == dto.Manufacturer &&
+                           PurchasingPrice == dto.PurchasingPrice;
+                }
+      
 
     }
-}
+
+   
+
+    }

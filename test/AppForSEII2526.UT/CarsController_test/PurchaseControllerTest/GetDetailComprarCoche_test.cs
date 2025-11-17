@@ -1,6 +1,7 @@
 ﻿using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.DTOs.ComprarDTOs;   
 using AppForSEII2526.API.DTOs.CochesDTO;   
+using AppForSEII2526.API.DTOs.ComprarDTOs;   
+using AppForSEII2526.API.DTOs.RentalDTOs;
 using AppForSEII2526.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -131,36 +132,25 @@ namespace AppForSEII2526.UT.PurchasesController_test
             var ok = Assert.IsType<OkObjectResult>(result);
 
             // Extraigo el valor del OkObjectResult y verifico que sea del tipo DTO de detalle de compra.
-            var detail = Assert.IsType<ComprarForDetailDTO>(ok.Value);
+            var actual = Assert.IsType<ComprarForDetailDTO>(ok.Value);
 
-            // ---- Compruebo los datos básicos de la compra ----
-            Assert.Equal(1, detail.Id);                            // El Id de la compra debe ser 1.
-            Assert.Equal("Juan", detail.Name);                     // El nombre debe coincidir con el seed.
-            Assert.Equal("Pérez", detail.Surname);                 // El apellido también.
-            Assert.Equal("Concesionario Centro", detail.Address);  // Dirección de entrega.
-            Assert.Equal(PaymentMethod.CreditCard, detail.PaymentMethod); // Método de pago.
-            Assert.Equal(new DateTime(2024, 3, 10), detail.PurchasingDate); // Fecha de compra.
+            var expected = new ComprarForDetailDTO(     //Creo el objeto EXPECTED para compararlo en el equals
+               id: 1,
+               purchasingDate: new DateTime(2024, 3, 10),
+               name:"Juan",
+               surname:"Pérez",
+               address:"Concesionario Centro",
+               paymentMethod: PaymentMethod.CreditCard,
+               cochesComprados: new List<ComprarForItemDTO>
+               {
+                    new ComprarForItemDTO(1, new Model { Id = 1, Name = "Model S" }, "Negro", 75000m, 2),
+                    new ComprarForItemDTO(2, new Model { Id = 2, Name = "Mustang" }, "Rojo", 55000m, 1)
+               });
 
-            // ---- Compruebo los coches comprados ----
-            // Espero dos coches en la lista (line1 y line2).
-            Assert.Equal(2, detail.CochesComprados.Count);
+            actual.CochesComprados = actual.CochesComprados.OrderBy(ri => ri.Id).ToList();      //Ordeno las listas de RentalItems para compararlas
+            expected.CochesComprados = expected.CochesComprados.OrderBy(ri => ri.Id).ToList();
 
-            // Ordeno los items por Id para que la comparación sea estable.
-            var items = detail.CochesComprados.OrderBy(i => i.Id).ToList();
-
-            // Primer coche (car1)
-            Assert.Equal(1, items[0].Id);                   // Id del coche.
-            Assert.Equal("Model S", items[0].Model.Name);   // Nombre del modelo asociado.
-            Assert.Equal("Negro", items[0].Color);          // Color del coche.
-            Assert.Equal(75000m, items[0].PurchasingPrice); // Precio de compra que esperé.
-            Assert.Equal(2, items[0].Quantity);             // Cantidad comprada (la de line1).
-
-            // Segundo coche (car2)
-            Assert.Equal(2, items[1].Id);
-            Assert.Equal("Mustang", items[1].Model.Name);
-            Assert.Equal("Rojo", items[1].Color);
-            Assert.Equal(55000m, items[1].PurchasingPrice);
-            Assert.Equal(1, items[1].Quantity);
+            Assert.Equal(expected, actual); //Comprobación final con el equals de RentalDetailDTO
         }
 
         // ========= CASO NotFound: la compra NO existe =========
