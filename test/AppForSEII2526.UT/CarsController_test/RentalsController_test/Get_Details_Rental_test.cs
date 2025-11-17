@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AppForSEII2526.UT.RentalsController_test
+namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 {
     public class Get_Details_Rental_test : AppForSEII25264SqliteUT
     {
@@ -103,40 +103,29 @@ namespace AppForSEII2526.UT.RentalsController_test
 
             var result = await controller.Get_Details_Rental(1);
 
-            // 200 OK
             var ok = Assert.IsType<OkObjectResult>(result);
-            var detail = Assert.IsType<RentalDetailDTO>(ok.Value);
+            var actual = Assert.IsType<RentalDetailDTO>(ok.Value);
 
-            // CAMPOS BÁSICOS
-            Assert.Equal(1, detail.Id);
-            Assert.Equal("juanUser", detail.CustomerName);
-            Assert.Equal("García", detail.CustomerSurname);
-            Assert.Equal("ConcesionarioCentro", detail.DeliveryCarDealer);
-            Assert.Equal(PaymentMethod.PayPal, detail.PaymentMethod);
-            Assert.Equal(new DateTime(2024, 3, 16), detail.StartDate);
-            Assert.Equal(new DateTime(2024, 3, 20), detail.EndDate);
-            Assert.Equal(new DateTime(2024, 3, 15), detail.RentingDate);
+            var expected = new RentalDetailDTO(     //Creo el objeto EXPECTED para compararlo en el equals
+                id: 1,
+                customerName: "juanUser",
+                customerSurname: "García",
+                deliveryCarDealer: "ConcesionarioCentro",
+                paymentMethod: PaymentMethod.PayPal,
+                startDate: new DateTime(2024, 3, 16),
+                endDate: new DateTime(2024, 3, 20),
+                rentingDate: new DateTime(2024, 3, 15),
+                rentingPrice: 0m,
+                rentalItems: new List<RentalItemDTO>
+                {
+                    new RentalItemDTO(1, 1, "Model S", "Tesla", 300m, 2),
+                    new RentalItemDTO(2, 2, "Mustang", "Ford", 250m, 1)
+                });
 
-            // RENTAL ITEMS
-            Assert.Equal(2, detail.RentalItems.Count);
+            actual.RentalItems = actual.RentalItems.OrderBy(ri => ri.Id).ToList();      //Ordeno las listas de RentalItems para compararlas
+            expected.RentalItems = expected.RentalItems.OrderBy(ri => ri.Id).ToList();
 
-            var items = detail.RentalItems.OrderBy(i => i.Id).ToList();
-
-            // ITEM 1 (Car 1)
-            Assert.Equal(1, items[0].Id);
-            Assert.Equal(1, items[0].ModelId);
-            Assert.Equal("Model S", items[0].ModelName);
-            Assert.Equal("Tesla", items[0].Manufacturer);
-            Assert.Equal(300m, items[0].RentingPrice);
-            Assert.Equal(2, items[0].Quantity);
-
-            // ITEM 2 (Car 2)
-            Assert.Equal(2, items[1].Id);
-            Assert.Equal(2, items[1].ModelId);
-            Assert.Equal("Mustang", items[1].ModelName);
-            Assert.Equal("Ford", items[1].Manufacturer);
-            Assert.Equal(250m, items[1].RentingPrice);
-            Assert.Equal(1, items[1].Quantity);
+            Assert.Equal(expected, actual); //Comprobación final con el equals de RentalDetailDTO
         }
 
         // =========== TEST NOT FOUND ===========
