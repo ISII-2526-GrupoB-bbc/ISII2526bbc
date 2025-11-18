@@ -1,9 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+// DTO usado para mostrar los coches disponibles para alquilar
+
+using System.ComponentModel.DataAnnotations;
 
 namespace AppForSEII2526.API.DTOs.CochesDTO
 {
     public class CocheParaAlquilarDTO
     {
+        //Constructor princial (se usa en consultas SELECT)
+        //Crea un objeto con los datos que queremos obtener
         public CocheParaAlquilarDTO(int id, string modelName, string fuelType, string manufacturer, decimal rentingPrice, string color)
         {
             Id = id;
@@ -40,6 +45,8 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         [Display(Name = "Precio de alquiler (€)")]
         public decimal RentingPrice { get; set; }
 
+
+        //Equals -> Para pruebas unitarias
         public override bool Equals(object? obj)
         {
             return obj is CocheParaAlquilarDTO dto &&
@@ -56,5 +63,5 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
             return HashCode.Combine(Id, ModelName, FuelType, Manufacturer, RentingPrice, Color);
         }
     }
-    }
+}
 

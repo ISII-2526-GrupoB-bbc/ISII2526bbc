@@ -1,4 +1,8 @@
-﻿using AppForSEII2526.Models;
+﻿
+// DTO que representa los DETALLES de un alquiler
+// Es el que sse devuelve en el GetDetails y también después del Post
+
+using AppForSEII2526.Models;
 
 namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
@@ -13,8 +17,9 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
         public DateTime EndDate { get; set; }
         public DateTime RentingDate { get; set; }
         public decimal RentingPrice { get; set; }
-        public IList<RentalItemDTO> RentalItems { get; set; }
+        public IList<RentalItemDTO> RentalItems { get; set; }   // Lista de coches alquilados, cada uno con su cantidad y precio (lista de RentalItemDTO)
 
+        // Constructor principal -> El controlador lo usa para devolver esta estructura
         public RentalDetailDTO(
             int id,
             string customerName,
@@ -40,6 +45,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             RentalItems = rentalItems;
         }
 
+        // Equals -> Importante para los test unitarios que usan: Assert.Equal(expected, actual);
         public override bool Equals(object? obj)
         {
             if (obj is not RentalDetailDTO other)
