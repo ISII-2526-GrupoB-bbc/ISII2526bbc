@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 //PRUEBA DEL MÉTODO GetCars3 -> Filtro por precio de alquiler
 
-namespace AppForSEII2526.UT.CarsController_test
+namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 {
     public class GetCocheParaAlquilar_test: AppForSEII25264SqliteUT
     {
@@ -144,19 +144,9 @@ namespace AppForSEII2526.UT.CarsController_test
 
             // Ordenamos por Id para comparación determinista
             actual = actual.OrderBy(x => x.Id).ToList();
+            expected = expected.OrderBy(x => x.Id).ToList();
 
-            Assert.Equal(expected.Count, actual.Count);     //Comprueba que el numero de coches devueltos sea igual al esperado
-
-            //Recorro la listas y comparo CAMPO POR CAMPO -> Si cualquiera falla, el test falla
-            for (int i = 0; i < expected.Count; i++)
-            {
-                Assert.Equal(expected[i].Id, actual[i].Id);
-                Assert.Equal(expected[i].ModelName, actual[i].ModelName);
-                Assert.Equal(expected[i].FuelType, actual[i].FuelType);
-                Assert.Equal(expected[i].Manufacturer, actual[i].Manufacturer);
-                Assert.Equal(expected[i].RentingPrice, actual[i].RentingPrice);
-                Assert.Equal(expected[i].Color, actual[i].Color);
-            }
+            Assert.Equal(expected, actual);     //Comprobacion usando el EQUALS de CocheParaAlquilarDTO
         }
 
         // Test NotFound: cuando no hay coincidencias por precio

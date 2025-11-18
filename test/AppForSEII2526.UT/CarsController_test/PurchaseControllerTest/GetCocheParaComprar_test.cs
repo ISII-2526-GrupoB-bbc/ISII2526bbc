@@ -117,15 +117,7 @@ namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
             // Comparo tamaño de listas.
             Assert.Equal(expected.Count, actual.Count);
             // Comparo elemento a elemento todos los campos relevantes del DTO.
-            for (int i = 0; i < expected.Count; i++)
-            {
-                Assert.Equal(expected[i].Id, actual[i].Id);
-                Assert.Equal(expected[i].ModelName, actual[i].ModelName);
-                Assert.Equal(expected[i].Color, actual[i].Color);
-                Assert.Equal(expected[i].FuelType, actual[i].FuelType);
-                Assert.Equal(expected[i].Manufacturer, actual[i].Manufacturer);
-                Assert.Equal(expected[i].PurchasingPrice, actual[i].PurchasingPrice);
-            }
+            Assert.Equal(expected, actual);
         }
 
         // Test para el caso en que no hay coincidencias y el endpoint debe devolver NotFound.

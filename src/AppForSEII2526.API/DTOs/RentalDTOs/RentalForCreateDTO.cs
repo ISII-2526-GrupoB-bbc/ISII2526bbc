@@ -29,6 +29,9 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 
         public DateTime RentingDate { get; set; }
 
+        [Required]
+        public string UserName { get; set; }
+
         public IList<RentalItemDTO> RentalItems { get; set; } = new List<RentalItemDTO>();
 
         [JsonPropertyName("TotalPrice")]

@@ -39,6 +39,22 @@ namespace AppForSEII2526.API.DTOs.CochesDTO
         [Range(0, 200000, ErrorMessage = "El precio debe ser un valor positivo.")]
         [Display(Name = "Precio de alquiler (€)")]
         public decimal RentingPrice { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is CocheParaAlquilarDTO dto &&
+               Id == dto.Id &&
+               ModelName == dto.ModelName &&
+               FuelType == dto.FuelType &&
+               Manufacturer == dto.Manufacturer &&
+               RentingPrice == dto.RentingPrice &&
+               Color == dto.Color;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ModelName, FuelType, Manufacturer, RentingPrice, Color);
+        }
     }
-}
+    }
 
