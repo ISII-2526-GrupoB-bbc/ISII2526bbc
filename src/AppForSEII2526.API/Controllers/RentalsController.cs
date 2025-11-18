@@ -79,7 +79,7 @@ namespace AppForSEII2526.API.Controllers
         {
             //VALIDACIONES BÁSICAS
             //Compruebo que la fecha de inicio es posterior a la de hoy
-            if (rentalForCreate.EndDate <= DateTime.Today)
+            if (rentalForCreate.StartDate <= DateTime.Today)
                 ModelState.AddModelError("RentalDateFrom", "Error! Your rental date must start later than today");
 
             //Compruebo que la fecha de fin del alquiler es posterior a la de inicio
@@ -90,12 +90,20 @@ namespace AppForSEII2526.API.Controllers
             if (rentalForCreate.RentalItems.Count == 0)
                 ModelState.AddModelError("RentalItems", "Error! You must include at least one car to be rented");
 
-            var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == rentalForCreate.CustomerName);
-            if (user == null)
-                ModelState.AddModelError("RentalAplicationUser", "Error! El nombre de usuario no está registrado");
-
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
+
+            var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == rentalForCreate.CustomerName);
+            if (user == null)
+            {
+                var problemDetails = new ValidationProblemDetails();
+                problemDetails.Errors.Add("RentalAplicationUser",
+                    new string[] { "Error! El nombre de usuario no está registrado" });
+
+                return BadRequest(problemDetails);
+            }
+
+
 
 
             //LISTA DE MODELOS SOLICITADOS PARA ALQUILAR
@@ -157,7 +165,7 @@ namespace AppForSEII2526.API.Controllers
             //CREAR EL DTO QUE DEVUELVE LA API
             var rentalDetail = new RentalDetailDTO(
                 rental.Id,
-                rental.ApplicationUser.Name,
+                rental.ApplicationUser.UserName,
                 rental.ApplicationUser.Surname,
                 rental.DeliveryCarDealer,
                 rental.PaymentMethod,

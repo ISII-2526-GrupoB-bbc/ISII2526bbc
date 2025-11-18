@@ -1,5 +1,3 @@
-
-
 namespace AppForSEII2526.Models
 {
     using AppForSEII2526.API.Models;
@@ -7,31 +5,41 @@ namespace AppForSEII2526.Models
     using System.ComponentModel.DataAnnotations;
     public class Rental
 {
-        private string deliveryAddress;
-        private ApplicationUser? user;
+
 
         protected Rental() { }
-        public Rental(string deliveryAddress, DateTime rentingDate, DateTime endDate, PaymentMethod paymentMethod, DateTime startDate, List<RentalItem> rentalItems, ApplicationUser? user)
+        public Rental(
+            string deliveryCarDealer,
+            DateTime rentingDate,
+            DateTime endDate,
+            PaymentMethod paymentMethod,
+            DateTime startDate,
+            List<RentalItem> rentalItems,
+            ApplicationUser? user)
         {
-            this.deliveryAddress = deliveryAddress;
+            DeliveryCarDealer = deliveryCarDealer;
             RentingDate = rentingDate;
             EndDate = endDate;
             PaymentMethod = paymentMethod;
             StartDate = startDate;
             RentalItems = rentalItems;
-            this.user = user;
+            ApplicationUser = user;
         }
 
         [Key]
     public int Id { get; set; }
-
+    private string DeliveryAddress { get; set; }
+    private ApplicationUser? User { get; set; }
     public string DeliveryCarDealer { get; set; }
+
     public decimal RentingPrice { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime EndDate { get; set; }
+
     [DataType(DataType.Date)]
     public DateTime RentingDate { get; set; }
+
     [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
