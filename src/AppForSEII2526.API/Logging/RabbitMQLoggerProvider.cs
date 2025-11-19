@@ -1,3 +1,5 @@
+/*
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -39,3 +41,5 @@ public class RabbitMQLoggerProvider : ILoggerProvider
         _loggers.Clear();
     }
 }
+
+*/
