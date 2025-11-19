@@ -64,17 +64,20 @@ namespace AppForSEII2526.API.Controllers
             if (reseñaForCreate.ReviewItems.Count == 0) //compruebo que he seleccionado algún coche para comprar.
             {
                 ModelState.AddModelError("ReviewItems", "Error! You must include at least one car to be reviewed");
+                _logger.LogError($"ReviewsController || Error! You must include at least one car to be reviewed");
             }
 
             if (reseñaForCreate.DriverType != "Novato" && reseñaForCreate.DriverType != "Experto") //compruebo que el tipo de conductor es correcto
             {
                 ModelState.AddModelError("DriverType", "Error! DriverType must be 'Novato' or 'Experto'");
+                _logger.LogError($"ReviewsController || Error! DriverType must be 'Novato' or 'Experto'");
             }
 
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == reseñaForCreate.Name); //compruebo que el usuario que compra existe en la base de datos
-            if (user == null)
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reseñaForCreate.UserName); //compruebo que el usuario que compra existe en la base de datos
+            if (user == null)  //si el usuario no existe lanzo un error
             {
                 ModelState.AddModelError("ReviewApplicationUser", "Error! UserName is not registered");
+                _logger.LogError($"ReviewsController || Error! UserName is not registered'");
             }
 
             if (ModelState.ErrorCount > 0) //si tengo algún error acumulado, devuelve BadRequest
@@ -82,7 +85,8 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
-            var reviewCars = reseñaForCreate.ReviewItems.Select(pi => pi.Model).ToList<string>();
+            var reviewCars = reseñaForCreate.ReviewItems.Select(pi => pi.Model).ToList<string>(); //hago una lista con los modelos de los coches que le he pasado
+
 
             var cars = _context.Cars
                 .Include(c => c.Model)
@@ -100,6 +104,7 @@ namespace AppForSEII2526.API.Controllers
                 Created = DateTime.Now,
                 DriverType = reseñaForCreate.DriverType,
                 ReviewItems = new List<ReviewItem>(),
+                ApplicationUser = user,
                 UserName = user.UserName,
             };
 
@@ -110,6 +115,7 @@ namespace AppForSEII2526.API.Controllers
                 if (car == null)
                 {
                     ModelState.AddModelError("ReviewItems", $"Error! The car {item.Model} does not exist, so you cannot create a review for this car");
+                    _logger.LogError($"ReviewsController || Error! The car {item.Model} does not exist, so you cannot create a review for this car");
                 }
                 else
                 {
@@ -136,8 +142,8 @@ namespace AppForSEII2526.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 ModelState.AddModelError("Review", $"Error! There was an error while saving your review, plese, try again later");
+                _logger.LogError($"ReviewsController || Error! {ex.Message}");
                 return Conflict("Error" + ex.Message);
             }
 
