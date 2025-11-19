@@ -81,15 +81,18 @@ namespace AppForSEII2526.API.Controllers
 
             // 1. Fehca de inicio debe ser después a hoy
             if (rentalForCreate.StartDate <= DateTime.Today)
-                ModelState.AddModelError("RentalDateFrom", "Error! El alquiler debe empezar despues de hoy.");
+                ModelState.AddModelError("RentalDateFrom",
+            "Error! Your rental date must start later than today");
 
             // 2. Compruebo que la fecha de fin del alquiler es posterior a la de inicio
             if (rentalForCreate.StartDate >= rentalForCreate.EndDate)
-                ModelState.AddModelError("RentalDateFrom&RentalDateTo", "Error! El fin del alquiler debe ser posterior al inicio.");
+                ModelState.AddModelError("RentalDateFrom&RentalDateTo",
+            "Error! Your rental must end later than it starts");
 
             // 3. Compruebo que hay al menos un coche seleccionado para alquilar
             if (rentalForCreate.RentalItems.Count == 0)
-                ModelState.AddModelError("RentalItems", "Error! No hay coches selecccionados.");
+                ModelState.AddModelError("RentalItems",
+            "Error! You must include at least one car to be rented");
 
             // Si hay errores -> devolver BadRequest
             if (ModelState.ErrorCount > 0)
