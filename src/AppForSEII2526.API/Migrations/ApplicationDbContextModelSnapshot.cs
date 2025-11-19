@@ -30,6 +30,10 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -131,14 +135,14 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PurchasingPrice")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PurchasingPrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("QuantityForPurchasing")
-                        .HasColumnType("int");
+                    b.Property<decimal>("QuantityForPurchasing")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("QuantityForRenting")
-                        .HasColumnType("int");
+                    b.Property<decimal>("QuantityForRenting")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("RentingPrice")
                         .HasColumnType("decimal(18,2)");
@@ -189,9 +193,8 @@ namespace AppForSEII2526.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PurchasingDate")
                         .HasColumnType("datetime2");
@@ -333,9 +336,6 @@ namespace AppForSEII2526.API.Migrations
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Reviewed")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("CarId", "ReviewId");
 

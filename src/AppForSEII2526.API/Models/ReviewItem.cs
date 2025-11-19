@@ -12,9 +12,6 @@ namespace AppForSEII2526.Models
     [StringLength(200)]
     public string? Description { get; set; }
 
-    [DataType(DataType.Date)]
-    public DateTime Reviewed { get; set; }
-
     public Car Car { get; set; }
     public Review Review { get; set; }
     public int CarId { get; set; }

@@ -1,4 +1,8 @@
-﻿using AppForSEII2526.Models;
+﻿
+// DTO usado solo para crear nuevos alquileres
+// Es el que recibe el metodo POST en el controlador
+
+using AppForSEII2526.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -32,11 +36,11 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
         [Required]
         public string UserName { get; set; }
 
-        public IList<RentalItemDTO> RentalItems { get; set; } = new List<RentalItemDTO>();
+        public IList<RentalItemDTO> RentalItems { get; set; } = new List<RentalItemDTO>();  //Lista de coches que el cliente quiere alquilar
 
         [JsonPropertyName("TotalPrice")]
         public decimal RentingPrice =>
-            RentalItems.Sum(ri => ri.RentingPrice * ri.Quantity);
+            RentalItems.Sum(ri => ri.RentingPrice * ri.Quantity);   //Precio total: cantidaad x precio
 
         public RentalForCreateDTO() { }
 
