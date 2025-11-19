@@ -32,6 +32,7 @@ namespace AppForSEII2526.API.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -180,7 +181,7 @@ namespace AppForSEII2526.API.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DeliveryCarDealer = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     PurchasingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -252,9 +253,9 @@ namespace AppForSEII2526.API.Migrations
                     Color = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Manufacturer = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    PurchasingPrice = table.Column<int>(type: "int", nullable: false),
-                    QuantityForPurchasing = table.Column<int>(type: "int", nullable: false),
-                    QuantityForRenting = table.Column<int>(type: "int", nullable: false),
+                    PurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    QuantityForPurchasing = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    QuantityForRenting = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     RentingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -326,8 +327,7 @@ namespace AppForSEII2526.API.Migrations
                     CarId = table.Column<int>(type: "int", nullable: false),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Reviewed = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
