@@ -1,6 +1,5 @@
 ﻿using AppForSEII2526.API.DTOs.CochesDTO;
 using AppForSEII2526.API.DTOs.ReseñarDTOs;
-using AppForSEII2526.API.DTOs.ReviewDTO;
 using AppForSEII2526.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +19,7 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+            _logger.LogInformation("Controller 'ReviewsController' inicializado");
         }
 
         [HttpGet]
@@ -40,12 +40,11 @@ namespace AppForSEII2526.API.Controllers
                  .Include(p => p.ReviewItems) //join table ReviewItem
                     .ThenInclude(pi => pi.Car) //then join table Car
                         .ThenInclude(c => c.Model) //then join table Model     
-             .Select(p => new ReseñarDetailDTO(p.ApplicationUser.Name, p.Country, p.DriverType, p.ReviewItems
-                        .Select(pi => new ReseñarItemDTO(pi.Car.Model.Name, pi.Car.Manufacturer, pi.Car.Color, pi.Rating, pi.Description)).ToList<ReseñarItemDTO>(), p.Created))
+             .Select(p => new ReseñarDetailDTO(p.ApplicationUser.Name, p.ApplicationUser.Surname, p.Country, p.DriverType, p.Created, p.ReviewItems
+                        .Select(pi => new ReseñarItemDTO(pi.Car.Model.Name, pi.Car.Manufacturer, pi.Car.Color, pi.Rating, pi.Description)).ToList<ReseñarItemDTO>()))
              .FirstOrDefaultAsync();
 
-
-            if (review == null)
+            if (review == null) //Si el id de la review no existe lanzo un error
             {
                 _logger.LogError($"Error: Review with id {id} does not exist");
                 return NotFound();
@@ -83,7 +82,7 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
-            var reviewCars = reseñaForCreate.ReviewItems.Select(pi => pi.Modelo).ToList<string>();
+            var reviewCars = reseñaForCreate.ReviewItems.Select(pi => pi.Model).ToList<string>();
 
             var cars = _context.Cars
                 .Include(c => c.Model)
@@ -106,11 +105,11 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var item in reseñaForCreate.ReviewItems)
             {
-                var car = cars.FirstOrDefault(c => c.Name == item.Modelo);
+                var car = cars.FirstOrDefault(c => c.Name == item.Model);
 
                 if (car == null)
                 {
-                    ModelState.AddModelError("ReviewItems", $"Error! The car {item.Modelo} does not exist, so you cannot create a review for this car");
+                    ModelState.AddModelError("ReviewItems", $"Error! The car {item.Model} does not exist, so you cannot create a review for this car");
                 }
                 else
                 {
@@ -142,7 +141,7 @@ namespace AppForSEII2526.API.Controllers
                 return Conflict("Error" + ex.Message);
             }
 
-            var reviewDetail = new ReseñarDetailDTO(review.ApplicationUser.Name,review.Country, review.DriverType, reseñaForCreate.ReviewItems,review.Created);
+            var reviewDetail = new ReseñarDetailDTO(review.ApplicationUser.Name,review.ApplicationUser.Surname,review.Country, review.DriverType,review.Created, reseñaForCreate.ReviewItems);
 
             return CreatedAtAction("Get_Details_Review", new { id = review.Id }, reviewDetail);
         }

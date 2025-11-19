@@ -18,11 +18,13 @@ namespace AppForSEII2526.Models
     [Required]
     public string DriverType { get; set; }
 
-    [DataType(DataType.Date)]
+    [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime Created { get; set; }
+
     public IList<ReviewItem> ReviewItems { get; set; }
     public ApplicationUser ApplicationUser { get; set; }
-        public Review() { }
+    public Review() { }
      
 
         }
