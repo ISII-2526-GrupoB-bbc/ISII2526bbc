@@ -40,3 +40,15 @@ INSERT INTO [dbo].[PurchaseItems] ([PurchaseId], [CarId], [Quantity]) VALUES (3,
 INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity]) VALUES (1, 1, 3)
 INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity]) VALUES (2, 2, 4)
 INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity]) VALUES (4, 3, 2)
+
+-- REVIEWS
+SET IDENTITY_INSERT [dbo].[Reviews] ON
+INSERT INTO [dbo].[Reviews] ([Id], [UserName], [Country], [DriverType], [Created], [ApplicationUserId]) VALUES (14, N'pedroleon', N'España', N'Novato', N'2020-10-22 00:00:00', NULL)
+INSERT INTO [dbo].[Reviews] ([Id], [UserName], [Country], [DriverType], [Created], [ApplicationUserId]) VALUES (16, N'isabelcastejon', N'España', N'Experto', N'2024-11-19 00:00:00', NULL)
+INSERT INTO [dbo].[Reviews] ([Id], [UserName], [Country], [DriverType], [Created], [ApplicationUserId]) VALUES (17, N'javiersanchez', N'Francia', N'Novato', N'2023-12-22 00:00:00', NULL)
+SET IDENTITY_INSERT [dbo].[Reviews] OFF
+
+-- REVIEW ITEMS
+INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Rating], [Description]) VALUES (1, 14, 5, NULL)
+INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Rating], [Description]) VALUES (2, 16, 3, NULL)
+INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Rating], [Description]) VALUES (4, 17, 4, NULL)
