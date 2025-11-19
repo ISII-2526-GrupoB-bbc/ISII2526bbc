@@ -19,9 +19,9 @@ SET IDENTITY_INSERT [dbo].[Cars] OFF
 
 --PURCHASES
 SET IDENTITY_INSERT [dbo].[Purchases] ON
-INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (1, N'Javier ', N'Sanchez', N'Concesionrio PEPI', 0, N'2026-12-15 00:00:00', CAST(10000.00 AS Decimal(18, 2)), NULL)
-INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (2, N'Isabel ', N'Castejon ', N'Concesionrio JUAN', 0, N'2026-10-08 00:00:00', CAST(12000.00 AS Decimal(18, 2)), NULL)
-INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (3, N'Pedro ', N'Leon ', N'Concesionario PEPE', 1, N'2025-12-14 00:00:00', CAST(15000.00 AS Decimal(18, 2)), NULL)
+INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (1, N'Javier ', N'Sanchez', N'Concesionrio PEPI', 0, N'2026-12-15 00:00:00', CAST(70000.00 AS Decimal(18, 2)), NULL)
+INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (2, N'Isabel ', N'Castejon ', N'Concesionrio JUAN', 0, N'2026-10-08 00:00:00', CAST(35000.00 AS Decimal(18, 2)), NULL)
+INSERT INTO [dbo].[Purchases] ([Id], [Name], [Surname], [DeliveryCarDealer], [PaymentMethod], [PurchasingDate], [PurchasingPrice], [ApplicationUserId]) VALUES (3, N'Pedro ', N'Leon ', N'Concesionario PEPE', 1, N'2025-12-14 00:00:00', CAST(50000.00 AS Decimal(18, 2)), NULL)
 SET IDENTITY_INSERT [dbo].[Purchases] OFF
 
 -- RENTALS
