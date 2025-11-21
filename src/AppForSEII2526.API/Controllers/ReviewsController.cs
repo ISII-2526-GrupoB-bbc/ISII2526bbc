@@ -72,6 +72,15 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("DriverType", "Error! DriverType must be 'Novato' or 'Experto'");
                 _logger.LogError($"ReviewsController || Error! DriverType must be 'Novato' or 'Experto'");
             }
+            foreach (var item in reseñaForCreate.ReviewItems)
+            {
+                if (item.Description != null && !item.Description.StartsWith("Reseña para"))
+                {
+                    ModelState.AddModelError("Description", "Error! Si la descripcion no es nula debe empezar por Reseña para");
+                    _logger.LogError($"Description || Error! Si la descripcion no es nula debe empezar por Reseña para");
+                }
+
+            }
 
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reseñaForCreate.UserName); //compruebo que el usuario que compra existe en la base de datos
             if (user == null)  //si el usuario no existe lanzo un error
