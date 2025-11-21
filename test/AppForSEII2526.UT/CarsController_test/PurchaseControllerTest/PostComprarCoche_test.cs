@@ -196,5 +196,43 @@ namespace AppForSEII2526.UT.PurchasesController_test
             // Debe haber error asociado a "Quantity"
             Assert.True(problem.Errors.ContainsKey("Quantity"));
         }
+
+
+        // ========= CASO BadRequest: sin coches en la compra =========
+
+        [Fact]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task Create_Purchase_NumeroDecoches_es2()
+        {
+            // Arrange
+            var logger = new Mock<ILogger<PurchasesController>>().Object;
+            var controller = new PurchasesController(_context, logger);
+
+            var itemsDto = new List<ComprarForItemDTO>
+            {
+                
+                new ComprarForItemDTO(_car1.Id, _model1, "Negro", 0m, 2)
+            };
+
+
+            var compraDto = new ComprarForCreateDTO(
+                name: "Juan",
+                surname: "Pérez",
+                address: "Concesionario Centro",
+                paymentMethod: PaymentMethod.CreditCard,
+                cochesComprados: itemsDto 
+            );
+
+            // Act
+            var result = await controller.Create_Purchase(compraDto);
+
+            // Assert
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            var problem = Assert.IsType<ValidationProblemDetails>(badRequest.Value);
+
+            // Debe haber error asociado a CochesComprados
+            Assert.True(problem.Errors.ContainsKey(nameof(compraDto.CochesComprados)));
+        }
     }
 }
