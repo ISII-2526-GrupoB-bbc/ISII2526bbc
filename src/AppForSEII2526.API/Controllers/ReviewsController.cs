@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -71,6 +72,15 @@ namespace AppForSEII2526.API.Controllers
             {
                 ModelState.AddModelError("DriverType", "Error! DriverType must be 'Novato' or 'Experto'");
                 _logger.LogError($"ReviewsController || Error! DriverType must be 'Novato' or 'Experto'");
+            }
+            foreach (var item in reseñaForCreate.ReviewItems)
+            {
+                if (item.Description != null && !item.Description.StartsWith("Reseña para"))
+                {
+                    ModelState.AddModelError("Description", "Error! La reseña debe empezar por Reseña para");
+                    _logger.LogError($"Description || Error! La reseña debe empezar por Reseña para");
+                }
+
             }
 
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reseñaForCreate.UserName); //compruebo que el usuario que compra existe en la base de datos

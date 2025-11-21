@@ -70,7 +70,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             var line1 = new ReviewItem
             {
                 Rating = 5,
-                Description = "Coche para test",
+                Description = "Reseña para",
                 Car = car1,
                 Review = review,
                 CarId = car1.Id,
@@ -79,7 +79,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             var line2 = new ReviewItem
             {
                 Rating = 4,
-                Description = "Coche para test",
+                Description = "Reseña para",
                 Car = car2,
                 Review = review,
                 CarId = car2.Id,
@@ -99,11 +99,13 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             public static IEnumerable<object[]> TestCasesFor_CreateReviews()
         {
             var reviewNoITem = new ReseñarForCreateDTO("Juan", "García", "juanUser", "España", "Novato", new List<ReseñarItemDTO>());
-            var reviewItems = new List<ReseñarItemDTO>() { new ReseñarItemDTO("Model S", "Tesla", "Negro", 5, "Coche para test") };
+            var reviewItems = new List<ReseñarItemDTO>() { new ReseñarItemDTO("Model S", "Tesla", "Negro", 5, "Reseña para") };
             var reviewDriverType = new ReseñarForCreateDTO("Juan", "García", "juanUser", "España", "Sin Carnet", reviewItems);
             var reviewApplicationUser = new ReseñarForCreateDTO("Juan", "García", "usuarioInexistente", "España", "Novato", reviewItems);
             var reviewCarNotExist = new ReseñarForCreateDTO("Juan", "García", "juanUser", "España", "Novato",
-                new List<ReseñarItemDTO>() { new ReseñarItemDTO("Citroen C15", "MarcaX", "Azul", 4, "Coche para test") });
+                new List<ReseñarItemDTO>() { new ReseñarItemDTO("Citroen C15", "MarcaX", "Azul", 4, "Reseña para") });
+            var reviewCarDescriptionfailed = new ReseñarForCreateDTO("Juan", "García", "juanUser", "España", "Novato",
+               new List<ReseñarItemDTO>() { new ReseñarItemDTO("Citroen C15", "MarcaX", "Azul", 4, "Coche para test") });
 
             var allTests = new List<object[]>()
             {
@@ -111,6 +113,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 new object[] { reviewDriverType, "Error! DriverType must be 'Novato' or 'Experto'", },
                 new object[] { reviewApplicationUser, "Error! UserName is not registered", },
                 new object[] { reviewCarNotExist, "Error! The car Citroen C15 does not exist, so you cannot create a review for this car", },
+                new object[] { reviewCarDescriptionfailed, "Error! La reseña debe empezar por Reseña para" }
             };
             return allTests;
 
@@ -160,13 +163,13 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 "Novato",
                 new List<ReseñarItemDTO>()
                 {
-                    new ReseñarItemDTO(_model1, "Tesla", "Negro", 5, "Coche para test")
+                    new ReseñarItemDTO(_model1, "Tesla", "Negro", 5, "Reseña para")
                 });
 
             //Me creo el reviewDetail esperado
             var expectedReviewDetailDTO = new ReseñarDetailDTO("Juan", "García", "España", "Novato", DateTime.Now, reviewItems: new List<ReseñarItemDTO>
                 {
-                    new ReseñarItemDTO("Model S", "Tesla", "Negro", 5, "Coche para test"),
+                    new ReseñarItemDTO("Model S", "Tesla", "Negro", 5, "Reseña para"),
                 });
 
             // Act
