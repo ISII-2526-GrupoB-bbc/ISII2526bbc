@@ -211,6 +211,16 @@ namespace AppForSEII2526.API.Controllers
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
+
+            //Nueva validacion, al no tener Descripcion pongo solo la cantidad:
+            var totalCoches = compra.CochesComprados.Sum(i => i.Quantity);
+            if ( totalCoches == 2)
+            {
+                ModelState.AddModelError("CochesComprados","Estas comprando demasiados coches ");
+                return BadRequest(new ValidationProblemDetails(ModelState));
+            }
+
+
             // --- Persistencia (compra + decremento de stock de coches) ---
 
             // Añado la nueva compra al DbContext para que EF Core la rastree.
