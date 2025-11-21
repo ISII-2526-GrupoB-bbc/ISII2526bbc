@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -76,8 +77,8 @@ namespace AppForSEII2526.API.Controllers
             {
                 if (item.Description != null && !item.Description.StartsWith("Reseña para"))
                 {
-                    ModelState.AddModelError("Description", "Error! Si la descripcion no es nula debe empezar por Reseña para");
-                    _logger.LogError($"Description || Error! Si la descripcion no es nula debe empezar por Reseña para");
+                    ModelState.AddModelError("Description", "Error! La reseña debe empezar por Reseña para");
+                    _logger.LogError($"Description || Error! La reseña debe empezar por Reseña para");
                 }
 
             }

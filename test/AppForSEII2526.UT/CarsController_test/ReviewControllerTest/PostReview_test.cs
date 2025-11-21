@@ -113,7 +113,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 new object[] { reviewDriverType, "Error! DriverType must be 'Novato' or 'Experto'", },
                 new object[] { reviewApplicationUser, "Error! UserName is not registered", },
                 new object[] { reviewCarNotExist, "Error! The car Citroen C15 does not exist, so you cannot create a review for this car", },
-                new object[] { reviewCarDescriptionfailed, "Error! Si la descripcion no es nula debe empezar por Reseña para" }
+                new object[] { reviewCarDescriptionfailed, "Error! La reseña debe empezar por Reseña para" }
             };
             return allTests;
 
