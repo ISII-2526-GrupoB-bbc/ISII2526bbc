@@ -30,6 +30,14 @@ namespace AppForSEII2526.API.Controllers
 
         public async Task<ActionResult> Get_Details_Rental(int id)  //Se elige el alquiler por su ID
         {
+
+            //MODIFICACION EN EL EXAMEN: Si el id es menor que 0, devuelvo NotFound
+            if (id < 0)
+            {
+                return NotFound("ERROR: El id no puede ser menor que 0");
+            }
+
+
             var rental = await _context.Rentals         //1. Busco el alquiler por ID, con todas las relaciones necesarias
                 .Where(r => r.Id == id)
                 .Include(r => r.ApplicationUser) 
