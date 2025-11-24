@@ -1,5 +1,3 @@
-/*
-
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
@@ -124,5 +122,3 @@ public class RabbitMQLogger : ILogger, IDisposable
         GC.SuppressFinalize(this);
     }
 }
-
-*/
