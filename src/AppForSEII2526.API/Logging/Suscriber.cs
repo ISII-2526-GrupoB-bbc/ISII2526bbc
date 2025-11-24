@@ -1,6 +1,4 @@
-﻿/*
-
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -82,5 +80,3 @@ public sealed class Subscriber : IDisposable
         _conn?.Dispose();
     }
 }
-
-*/

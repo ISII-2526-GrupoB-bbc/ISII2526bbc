@@ -1,5 +1,3 @@
-/*
-
 namespace AppForSEII2526.API.Logging;
 
 public class RabbitMQLoggerConfiguration
@@ -12,5 +10,3 @@ public class RabbitMQLoggerConfiguration
     public string ExchangeType { get; set; } = null!;
     public bool Durable { get; set; }
 }
-
-*/

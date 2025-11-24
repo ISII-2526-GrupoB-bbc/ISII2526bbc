@@ -1,12 +1,12 @@
 using AppForSEII2526.API;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
-//SITEMAS DISTRIBUIDOS: using AppForSEII2526.API.Logging;
+using AppForSEII2526.API.Logging;
 using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
-//SISTEMAS DISTRIBUIDOS: builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
@@ -48,7 +48,7 @@ switch (connection2Database) {
         break;
 }
 
-//SITEMAS DISTRIBUIDOS: builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 //Add Identity services to the container
 builder.Services.AddAuthorization();
