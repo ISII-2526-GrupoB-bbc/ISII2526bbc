@@ -142,6 +142,21 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
             // NotFound
             var notFound = Assert.IsType<NotFoundResult>(result);
         }
+
+        // =========== TEST NOT FOUND (ID < 0) ===========      MODIFICACION PARA EL EXAMEN
+        [Fact]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task Get_Details_Rental_NotFound_IdNegativo_test()
+        {
+            var logger = new Mock<ILogger<RentalsController>>().Object;
+            var controller = new RentalsController(_context, logger);
+
+            var result = await controller.Get_Details_Rental(-1);
+
+            // NotFound
+            var notFoundNegativo = Assert.IsType<NotFoundObjectResult>(result);
+        }
     }
 }
   
