@@ -80,6 +80,7 @@ namespace AppForSEII2526.API.Controllers
                     id: car.Id,
                     model: car.Model,                 // Incluyo el Model del coche (ya filtrado por JSON).
                     color: car.Color,
+                    description: car.Description,
                     purchasingPrice: car.PurchasingPrice, // Precio unitario actual del coche.
                     quantity: pi.Quantity                 // Cantidad comprada de ese coche.
                 );
@@ -254,6 +255,7 @@ namespace AppForSEII2526.API.Controllers
                     id: car.Id,
                     model: car.Model,
                     color: car.Color,
+                    description: car.Description,
                     purchasingPrice: car.PurchasingPrice,
                     quantity: pi.Quantity
                 );
