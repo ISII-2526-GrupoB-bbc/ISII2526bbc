@@ -143,8 +143,8 @@ namespace AppForSEII2526.UT.PurchasesController_test
                paymentMethod: PaymentMethod.CreditCard,
                cochesComprados: new List<ComprarForItemDTO>
                {
-                    new ComprarForItemDTO(1, new Model { Id = 1, Name = "Model S" }, "Negro", 75000m, 2),
-                    new ComprarForItemDTO(2, new Model { Id = 2, Name = "Mustang" }, "Rojo", 55000m, 1)
+                    new ComprarForItemDTO(1, new Model { Id = 1, Name = "Model S" }, "Negro","Coche premium eléctrico" ,75000m, 2),
+                    new ComprarForItemDTO(2, new Model { Id = 2, Name = "Mustang" }, "Rojo","Clásico americano potente" ,55000m, 1)
                });
 
             actual.CochesComprados = actual.CochesComprados.OrderBy(ri => ri.Id).ToList();      //Ordeno las listas de RentalItems para compararlas
