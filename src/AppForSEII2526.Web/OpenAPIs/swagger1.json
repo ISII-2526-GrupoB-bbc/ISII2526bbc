@@ -1,0 +1,1280 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "AppForMovies.API",
+    "description": "This API provides services for renting and purchasing movies",
+    "contact": {
+      "name": "Software Engineering II Team",
+      "email": "isii@on.uclm.es"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/license/mit/"
+    },
+    "version": "v1"
+  },
+  "paths": {
+    "/api/CarsControllers/GetCars": {
+      "get": {
+        "tags": [
+          "CarsControllers"
+        ],
+        "operationId": "GetCars",
+        "parameters": [
+          {
+            "name": "color",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaComprarDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaComprarDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaComprarDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CarsControllers/GetCars2": {
+      "get": {
+        "tags": [
+          "CarsControllers"
+        ],
+        "operationId": "GetCars2",
+        "parameters": [
+          {
+            "name": "FuelType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaReviewDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaReviewDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaReviewDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CarsControllers/GetCars3": {
+      "get": {
+        "tags": [
+          "CarsControllers"
+        ],
+        "operationId": "GetCars3",
+        "parameters": [
+          {
+            "name": "RentingPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaAlquilarDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaAlquilarDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CocheParaAlquilarDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchases/Get_Details_Purchase": {
+      "get": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "Get_Details_Purchase",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchases/Create_Purchase": {
+      "post": {
+        "tags": [
+          "Purchases"
+        ],
+        "operationId": "Create_Purchase",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComprarForCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComprarForCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComprarForCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprarForDetailDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Rentals/Get_Details_Rental": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Get_Details_Rental",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Rentals/Create_Rental": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Create_Rental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RentalForCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RentalForCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RentalForCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalDetailDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reviews/Get_Details_Review": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "operationId": "Get_Details_Review",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reviews/Create_Review": {
+      "post": {
+        "tags": [
+          "Reviews"
+        ],
+        "operationId": "Create_Review",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReseñarForCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReseñarForCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReseñarForCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReseñarDetailDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CocheParaAlquilarDTO": {
+        "required": [
+          "color",
+          "fuelType",
+          "manufacturer",
+          "modelName",
+          "rentingPrice"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "color": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fuelType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "manufacturer": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "rentingPrice": {
+            "maximum": 200000,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CocheParaComprarDTO": {
+        "required": [
+          "color",
+          "fuelType",
+          "id",
+          "manufacturer",
+          "modelName",
+          "purchasingPrice"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "color": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fuelType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "manufacturer": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "purchasingPrice": {
+            "maximum": 200000,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CocheParaReviewDTO": {
+        "required": [
+          "carClass",
+          "color",
+          "fuelType",
+          "id",
+          "manufacturer",
+          "modelName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "color": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fuelType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "manufacturer": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "carClass": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComprarForCreateDTO": {
+        "required": [
+          "address",
+          "cochesComprados",
+          "name",
+          "paymentMethod",
+          "surname"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "surname": {
+            "maxLength": 80,
+            "minLength": 2,
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 100,
+            "minLength": 10,
+            "type": "string"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "cochesComprados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComprarForItemDTO"
+            }
+          },
+          "TotalPrice": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComprarForDetailDTO": {
+        "required": [
+          "address",
+          "cochesComprados",
+          "id",
+          "name",
+          "paymentMethod",
+          "purchasingDate",
+          "surname"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "surname": {
+            "maxLength": 80,
+            "minLength": 2,
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 100,
+            "minLength": 10,
+            "type": "string"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "cochesComprados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComprarForItemDTO"
+            }
+          },
+          "TotalPrice": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchasingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantityForPurchasing": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComprarForItemDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "model": {
+            "$ref": "#/components/schemas/Model"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchasingPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Model": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethod": {
+        "enum": [
+          "CreditCard",
+          "PayPal",
+          "Cash"
+        ],
+        "type": "string"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "RentalDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerSurname": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryCarDealer": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentingPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "rentalItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RentalItemDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RentalForCreateDTO": {
+        "required": [
+          "customerName",
+          "customerSurname",
+          "deliveryCarDealer",
+          "endDate",
+          "paymentMethod",
+          "startDate",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "customerSurname": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "deliveryCarDealer": {
+            "maxLength": 150,
+            "minLength": 10,
+            "type": "string"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rentalItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RentalItemDTO"
+            },
+            "nullable": true
+          },
+          "TotalPrice": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RentalItemDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modelName": {
+            "type": "string",
+            "nullable": true
+          },
+          "manufacturer": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentingPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReseñarDetailDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 20,
+            "minLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "maxLength": 100,
+            "minLength": 4,
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "driverType": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date"
+          },
+          "reviewItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReseñarItemDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReseñarForCreateDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 20,
+            "minLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "maxLength": 100,
+            "minLength": 4,
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "driverType": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "reviewItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReseñarItemDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReseñarItemDTO": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "fuelType": {
+            "maxLength": 15,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "manufacturer": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "color": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "rating": {
+            "maximum": 5,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    }
+  }
+}

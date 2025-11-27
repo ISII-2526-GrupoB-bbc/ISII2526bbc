@@ -76,8 +76,8 @@ namespace AppForSEII2526.UT.PurchasesController_test
             // DTO de entrada con dos coches: 2 unidades del car1 y 1 del car2.
             var itemsDto = new List<ComprarForItemDTO>
             {
-                new ComprarForItemDTO(_car1.Id, _model1, "Negro", 0m, 2),
-                new ComprarForItemDTO(_car2.Id, _model2, "Rojo", 0m, 1)
+                new ComprarForItemDTO(_car1.Id, _model1, "Negro",_car1.Description ,0m, 2),
+                new ComprarForItemDTO(_car2.Id, _model2, "Rojo",_car2.Description ,0m, 1)
             };
 
             var compraDto = new ComprarForCreateDTO(
@@ -102,8 +102,8 @@ namespace AppForSEII2526.UT.PurchasesController_test
             // Construyo el DTO esperado usando el Id y la fecha que ha generado el propio método
             var expectedItems = new List<ComprarForItemDTO>
             {
-                new ComprarForItemDTO(_car1.Id, _model1, "Negro", 75000m, 2),
-                new ComprarForItemDTO(_car2.Id, _model2, "Rojo", 55000m, 1)
+                new ComprarForItemDTO(_car1.Id, _model1, "Negro",_car1.Description, 75000m, 2),
+                new ComprarForItemDTO(_car2.Id, _model2, "Rojo", _car2.Description, 55000m, 1)
             };
 
             var expected = new ComprarForDetailDTO(
@@ -175,7 +175,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             var itemsDto = new List<ComprarForItemDTO>
             {
                 // Cantidad 0 → debe disparar error de validación
-                new ComprarForItemDTO(_car1.Id, _model1, "Negro", 0m, 0)
+                new ComprarForItemDTO(_car1.Id, _model1, "Negro",_car1.Description ,0m, 0)
             };
 
             var compraDto = new ComprarForCreateDTO(
@@ -212,7 +212,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             var itemsDto = new List<ComprarForItemDTO>
             {
                 
-                new ComprarForItemDTO(_car1.Id, _model1, "Negro", 0m, 2)
+                new ComprarForItemDTO(_car1.Id, _model1, "Negro",_car1.Description ,0m, 2)
             };
 
 

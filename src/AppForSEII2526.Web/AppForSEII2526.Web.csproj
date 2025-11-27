@@ -8,8 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
-      <SourceUri>https://localhost:7067/swagger/v1/swagger.json</SourceUri>
+    <None Include="OpenAPIs\swagger.json" ClassName="AppForSEII2526APIClient" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\swagger1.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
+      <SourceUri>https://appforseii2526-bbc-d6gcgwgsfucrg4dv.switzerlandnorth-01.azurewebsites.net/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
 
@@ -19,7 +23,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.17" />
-    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.2">
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.21">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,6 +33,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
     <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
   </ItemGroup>
 
