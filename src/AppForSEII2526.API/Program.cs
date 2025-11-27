@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+//DISTRIBUIDOS: builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
@@ -48,7 +48,7 @@ switch (connection2Database) {
         break;
 }
 
-builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+//DISTRIBUIDOS: builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 //Add Identity services to the container
 builder.Services.AddAuthorization();
