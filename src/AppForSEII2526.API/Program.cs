@@ -108,14 +108,13 @@ using (var scope = app.Services.CreateScope()) {
     }
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI(c => {
-        //this facilitates to generate unique ids for the operations
-        c.DisplayOperationId();
-    });
-}
+// Enable Swagger always (including Azure Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.DisplayOperationId();
+});
+
 
 app.UseHttpsRedirection();
 
