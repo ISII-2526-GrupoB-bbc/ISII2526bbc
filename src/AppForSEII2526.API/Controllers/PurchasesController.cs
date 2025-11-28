@@ -27,7 +27,7 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(ComprarForDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult> Get_Details_Purchase(int id)
+        public async Task<ActionResult> GetDetailsPurchase(int id)
         {
             // Primero compruebo que el DbSet de Purchases está disponible.
             // Si no, lo considero un error grave de configuración y devuelvo 404.
@@ -112,7 +112,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(ComprarForDetailDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
-        public async Task<ActionResult> Create_Purchase(ComprarForCreateDTO compra)
+        public async Task<ActionResult> CreatePurchase(ComprarForCreateDTO compra)
         {
             // --- Validaciones de entrada (además de DataAnnotations) ---
 
@@ -277,7 +277,7 @@ namespace AppForSEII2526.API.Controllers
 
             // Devuelvo 201 Created, indicando además la ruta para consultar el detalle
             // de esta misma compra (Get_Details_Purchase) y el cuerpo del DTO de detalle.
-            return CreatedAtAction(nameof(Get_Details_Purchase), new { id = purchase.Id }, detail);
+            return CreatedAtAction(nameof(GetDetailsPurchase), new { id = purchase.Id }, detail);
         }
 
 
