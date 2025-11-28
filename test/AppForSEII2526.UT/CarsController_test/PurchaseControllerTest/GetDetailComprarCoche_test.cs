@@ -115,7 +115,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task Get_Details_Purchase_OK_test()
+        public async Task GetDetailsPurchaseOKtest()
         {
             // Arrange
             // Creo un logger falso (mock) para no depender de un logger real.
@@ -125,7 +125,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
 
             // Act
             // Llamo al método que quiero probar, pidiendo el detalle de la compra con id=1.
-            var result = await controller.Get_Details_Purchase(1);
+            var result = await controller.GetDetailsPurchase(1);
 
             // Assert
             // Compruebo que la respuesta sea un OkObjectResult (HTTP 200).
@@ -160,7 +160,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task Get_Details_Purchase_NotFound_test()
+        public async Task GetDetailsPurchaseNotFoundtest()
         {
             // Arrange
             // Igual que antes: logger simulado y controlador con el contexto de pruebas.
@@ -168,7 +168,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             var controller = new PurchasesController(_context, logger);
 
             // Act: uso un id que NO está en el seed (999).
-            var result = await controller.Get_Details_Purchase(999);
+            var result = await controller.GetDetailsPurchase(999);
 
             // Assert: el controlador debe devolver un NotFoundResult.
             var notFound = Assert.IsType<NotFoundResult>(result);

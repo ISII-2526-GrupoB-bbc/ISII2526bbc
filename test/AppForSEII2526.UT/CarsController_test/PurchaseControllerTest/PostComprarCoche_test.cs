@@ -89,12 +89,12 @@ namespace AppForSEII2526.UT.PurchasesController_test
             );
 
             // Act
-            var result = await controller.Create_Purchase(compraDto);
+            var result = await controller.CreatePurchase(compraDto);
 
             // Assert
             // 1) Debe devolver CreatedAtAction
             var created = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal(nameof(PurchasesController.Get_Details_Purchase), created.ActionName);
+            Assert.Equal(nameof(PurchasesController.GetDetailsPurchase), created.ActionName);
 
             // 2) El cuerpo debe ser un ComprarForDetailDTO
             var actual = Assert.IsType<ComprarForDetailDTO>(created.Value);
@@ -136,7 +136,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task Create_Purchase_NoItems_BadRequest_test()
+        public async Task CreatePurchaseNoItemsBadRequest_test()
         {
             // Arrange
             var logger = new Mock<ILogger<PurchasesController>>().Object;
@@ -151,7 +151,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             );
 
             // Act
-            var result = await controller.Create_Purchase(compraDto);
+            var result = await controller.CreatePurchase(compraDto);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
@@ -187,7 +187,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             );
 
             // Act
-            var result = await controller.Create_Purchase(compraDto);
+            var result = await controller.CreatePurchase(compraDto);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
@@ -203,7 +203,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task Create_Purchase_NumeroDecoches_es2()
+        public async Task CreatePurchaseNumeroDecocheses2()
         {
             // Arrange
             var logger = new Mock<ILogger<PurchasesController>>().Object;
@@ -225,7 +225,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             );
 
             // Act
-            var result = await controller.Create_Purchase(compraDto);
+            var result = await controller.CreatePurchase(compraDto);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);

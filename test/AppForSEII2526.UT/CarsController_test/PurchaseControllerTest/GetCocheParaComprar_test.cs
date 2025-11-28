@@ -73,7 +73,7 @@ namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
         // ========= Tests para GetCars (por color) =========
 
         // Preparo los casos de prueba de éxito para GetCars usando MemberData.
-        public static IEnumerable<object[]> GetCars_OK_Cases()
+        public static IEnumerable<object[]> GetCarsOKCases()
         {
             // Construyo los DTOs esperados tal y como los proyecta el action GetCars (mismo orden de parámetros).
             var tesla = new CocheParaComprarDTO(1, "Model S", "Negro", "Eléctrico", "Tesla", 75000m);
@@ -95,10 +95,10 @@ namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
 
         // Test parametrizado para validar que GetCars devuelve 200 OK con la lista esperada.
         [Theory]
-        [MemberData(nameof(GetCars_OK_Cases))]
+        [MemberData(nameof(GetCarsOKCases))]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCars_OK_test(string? color, IList<CocheParaComprarDTO> expected)
+        public async Task GetCarsOKtest(string? color, IList<CocheParaComprarDTO> expected)
         {
             // Creo un logger simulado para el controlador.
             var logger = new Mock<ILogger<CarsControllers>>().Object;
@@ -124,7 +124,7 @@ namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCars_NotFound_test()
+        public async Task GetCarsNotFoundtest()
         {
             // Creo el logger simulado y el controlador.
             var logger = new Mock<ILogger<CarsControllers>>().Object;
