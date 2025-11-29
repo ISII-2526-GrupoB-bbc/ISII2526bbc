@@ -151,11 +151,29 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest("Error al obtener los coches disponibles.");
             }
         }
+
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IEnumerable<string>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<string>>> GetFuelTypes()
+        {
+            try
+            {
+                var fuelTypes = await _context.Cars
+                    .Select(c => c.FuelType)
+                    .Distinct()
+                    .ToListAsync();
+
+                return Ok(fuelTypes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Error en GetFuelTypes() - {ex.Message}");
+                return BadRequest("Error al obtener los tipos de combustible.");
+            }
+        }
+
     }
-
-
-
-
-
 }
 
