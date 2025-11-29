@@ -170,7 +170,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             var logger = new Mock<ILogger<RentalsController>>().Object;
             var controller = new RentalsController(_context, logger);
 
-            var result = await controller.Create_Rental(rentalDTO);
+            var result = await controller.CreateRental(rentalDTO);
 
             var badReq = Assert.IsType<BadRequestObjectResult>(result);
             var problem = Assert.IsType<ValidationProblemDetails>(badReq.Value);
@@ -235,7 +235,7 @@ namespace AppForSEII2526.UT.RentalsController_test
 
 
             // COMPARACION
-            var result = await controller.Create_Rental(rentalDTO);
+            var result = await controller.CreateRental(rentalDTO);
 
             var created = Assert.IsType<CreatedAtActionResult>(result);
             var actual = Assert.IsType<RentalDetailDTO>(created.Value);

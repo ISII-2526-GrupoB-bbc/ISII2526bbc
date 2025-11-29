@@ -28,7 +28,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
 
-        public async Task<ActionResult> Get_Details_Rental(int id)  //Se elige el alquiler por su ID
+        public async Task<ActionResult> GetDetailsRental(int id)  //Se elige el alquiler por su ID
         {
 
             //MODIFICACION EN EL EXAMEN: Si el id es menor que 0, devuelvo NotFound
@@ -83,7 +83,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
-        public async Task<ActionResult> Create_Rental(RentalForCreateDTO rentalForCreate)
+        public async Task<ActionResult> CreateRental(RentalForCreateDTO rentalForCreate)
         {
             //VALIDACIONES INICIALES
 

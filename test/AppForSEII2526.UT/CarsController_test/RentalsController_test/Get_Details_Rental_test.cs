@@ -101,7 +101,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
             var logger = new Mock<ILogger<RentalsController>>().Object;
             var controller = new RentalsController(_context, logger);
 
-            var result = await controller.Get_Details_Rental(1);
+            var result = await controller.GetDetailsRental(1);
 
             var ok = Assert.IsType<OkObjectResult>(result);
             var actual = Assert.IsType<RentalDetailDTO>(ok.Value);
@@ -137,7 +137,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
             var logger = new Mock<ILogger<RentalsController>>().Object;
             var controller = new RentalsController(_context, logger);
 
-            var result = await controller.Get_Details_Rental(999);
+            var result = await controller.GetDetailsRental(999);
 
             // NotFound
             var notFound = Assert.IsType<NotFoundResult>(result);
@@ -152,7 +152,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
             var logger = new Mock<ILogger<RentalsController>>().Object;
             var controller = new RentalsController(_context, logger);
 
-            var result = await controller.Get_Details_Rental(-1);
+            var result = await controller.GetDetailsRental(-1);
 
             // NotFound
             var notFoundNegativo = Assert.IsType<NotFoundObjectResult>(result);
