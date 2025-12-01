@@ -107,23 +107,19 @@ namespace AppForSEII2526.API.Controllers
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IEnumerable<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-
-        public async Task<ActionResult<IEnumerable<CocheParaAlquilarDTO>>> GetCars3(decimal? RentingPrice = null)
+        public async Task<ActionResult<IEnumerable<CocheParaAlquilarDTO>>> GetCarsRental(decimal? rentingPrice, string? modelName)
         {
-            _logger.LogInformation("Petición GET /api/Cars/GetCars3 iniciada.");    //Log de inicio de la petición
-
             try
             {
                 var query = _context.Cars.AsQueryable();
 
-                // Aplico filtro por RentingPrice (precio de alquiler)
-                if (RentingPrice.HasValue)
-                {
-                    _logger.LogDebug("Aplicando filtro de RentingPrice: {price}", RentingPrice.Value);  //Log para depurar el valor del filtro
-                    query = query.Where(c => c.RentingPrice == RentingPrice.Value);
-                }
-                //Si quiero que me de los coches con precio menor o igual, cambiar "==" por "<="
+                if (rentingPrice.HasValue)
+                    query = query.Where(c => c.RentingPrice == rentingPrice.Value);
+
+                if (!string.IsNullOrEmpty(modelName))
+                    query = query.Where(c => c.Model.Name.Contains(modelName));
 
                 var cars = await query
                     .Select(c => new CocheParaAlquilarDTO(
@@ -132,25 +128,24 @@ namespace AppForSEII2526.API.Controllers
                         c.FuelType,
                         c.Manufacturer,
                         c.RentingPrice,
-                        c.Color     
+                        c.Color
                     ))
                     .ToListAsync();
 
                 if (cars == null || !cars.Any())
                 {
-                    _logger.LogWarning("No se encontraron coches con RentingPrice = {price}", RentingPrice);
-                    return NotFound("No se encontraron coches con ese precio de alquiler.");
+                    return NotFound("No se encontraron coches con los filtros proporcionados.");
                 }
 
-                _logger.LogInformation("Se recuperaron {count} coches correctamente.", cars.Count);
                 return Ok(cars);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Error en GetCars3() - {ex.Message}");
-                return BadRequest("Error al obtener los coches disponibles.");
+                return BadRequest("Error al obtener los coches.");
             }
         }
+
+
 
 
         [HttpGet]
