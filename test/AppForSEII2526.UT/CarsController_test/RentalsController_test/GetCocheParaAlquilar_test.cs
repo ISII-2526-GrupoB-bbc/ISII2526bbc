@@ -93,7 +93,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
         //====== Test para getCars3 ======
 
         // Estos son los casos de prueba con éxito
-        public static IEnumerable<object[]> GetCars3_OK_Cases()  //Este metodo prepara los datos de entrada y salida esperados
+        public static IEnumerable<object[]> GetCarsRental_OK_Cases()  //Este metodo prepara los datos de entrada y salida esperados
         {
             // Construyo los DTOs esperados tal y como los proyecta el action GetCars (mismo orden de parámetros).
             var nissan = new CocheParaAlquilarDTO(1, "Qashqai", "Eléctrico", "Nissan", 35000, "Blanco");
@@ -103,7 +103,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 
             //Creo una lista con los coches esperados, ordenada por Id
             //Esta lista representa lo que debe devolver el controlador sin aplicar ningun filtro
-            var all = new List<CocheParaAlquilarDTO> { nissan, audi, tesla, ford }.OrderBy(d => d.Id).ToList(); 
+            var all = new List<CocheParaAlquilarDTO> { nissan, audi, tesla, ford }.OrderBy(c => c.Id).ToList(); 
 
             //Esta lista contiene solo el coche Ford, el unico con precio 25000
             //Esta lista es el resultado esperado de aplicar un filtro de 25000
@@ -111,8 +111,8 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 
             return new List<object[]>
             {
-                new object[] { null, all },         //Si no aplico ningun filtro (null), devuelvo todos (all)
-                new object[] { 25000m, only25000 }, //Si aplico filtro 25000, devuelve el Ford (only25000)
+                new object[] { null, null, all },         //Si no aplico ningun filtro (null), devuelvo todos (all)
+                new object[] { null, 25000m, only25000 }, //Si aplico filtro 25000, devuelve el Ford (only25000)
             };
         }
 
@@ -127,17 +127,17 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
             //Los datos de salida coinciden campo por campo con lo esperado
 
         [Theory]
-        [MemberData(nameof(GetCars3_OK_Cases))]
+        [MemberData(nameof(GetCarsRental_OK_Cases))]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
 
         //Este es el metodo del test
-        public async Task GetCars3_OK_test(decimal? rentingPrice, IList<CocheParaAlquilarDTO> expected)
+        public async Task GetCarsRental_OK_test(string? modelName, decimal? rentingPrice, IList<CocheParaAlquilarDTO> expected)
         {
             var logger = new Mock<ILogger<CarsControllers>>().Object;
             var controller = new CarsControllers(_context, logger);             //Se instancia el controlado real para simular una ejecución real
 
-            var result = await controller.GetCars3(rentingPrice);               //Llamo a GetCars3 con el parámetro de filtro -> result puede ser Ok, NotFound...
+            var result = await controller.GetCarsRental(rentingPrice, modelName);               //Llamo a GetCarsRental con el parámetro de filtro -> result puede ser Ok, NotFound...
 
             var ok = Assert.IsType<OkObjectResult>(result.Result);
             var actual = Assert.IsType<List<CocheParaAlquilarDTO>>(ok.Value);
@@ -153,15 +153,15 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCars3_NotFound_test()
+        public async Task GetCarsRental_NotFound_test()
         {
             var logger = new Mock<ILogger<CarsControllers>>().Object;
             var controller = new CarsControllers(_context, logger);
 
-            var result = await controller.GetCars3(99999m);
+            var result = await controller.GetCarsRental(99999m, "modelo_que_no_existe");
 
             var notFound = Assert.IsType<NotFoundObjectResult>(result.Result);
-            Assert.Equal("No se encontraron coches con ese precio de alquiler.", notFound.Value);
+            Assert.Equal("No se encontraron coches con los filtros proporcionados.", notFound.Value);
         }
     }
 }
