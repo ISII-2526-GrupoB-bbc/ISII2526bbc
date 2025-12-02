@@ -120,6 +120,45 @@ namespace AppForSEII2526.UT.CarsController_test.PurchaseControllerTest
             Assert.Equal(expected, actual);
         }
 
+        // Test específico para validar el nuevo filtro por modelo en GetCars.
+        [Fact]
+        public async Task GetCarsFilterByModelOKTest()
+        {
+            // Arrange
+            var logger = new Mock<ILogger<CarsControllers>>().Object;
+            var controller = new CarsControllers(_context, logger);
+
+            // Act
+            var actionResult = await controller.GetCars(null, "Model S");
+
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+            var cars = Assert.IsAssignableFrom<IEnumerable<CocheParaComprarDTO>>(ok.Value);
+
+            Assert.Single(cars);
+            Assert.Equal("Model S", cars.First().ModelName);
+        }
+
+
+        // Test específico para validar el filtro combinado por color y modelo en GetCars.
+        [Fact]
+        public async Task GetCarsFilterByColorAndModelOKTest()
+        {
+            var logger = new Mock<ILogger<CarsControllers>>().Object;
+            var controller = new CarsControllers(_context, logger);
+
+            var actionResult = await controller.GetCars("Rojo", "Mustang");
+
+            var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+            var cars = Assert.IsAssignableFrom<IEnumerable<CocheParaComprarDTO>>(ok.Value);
+
+            Assert.Single(cars);
+            Assert.Equal("Mustang", cars.First().ModelName);
+            Assert.Equal("Rojo", cars.First().Color);
+        }
+
+
+
         // Test para el caso en que no hay coincidencias y el endpoint debe devolver NotFound.
         [Fact]
         [Trait("Database", "WithoutFixture")]

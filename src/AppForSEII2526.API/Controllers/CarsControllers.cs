@@ -25,7 +25,7 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(IEnumerable<CocheParaComprarDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<CocheParaComprarDTO>>> GetCars(string? color = null)
+        public async Task<ActionResult<IEnumerable<CocheParaComprarDTO>>> GetCars(string? color = null,string? model=null)
         {
             _logger.LogInformation("Petición GET /api/Cars/GetCars iniciada.");
             try
@@ -39,7 +39,14 @@ namespace AppForSEII2526.API.Controllers
                     query = query.Where(c => c.Color.Contains(color));
                 }
 
-                    var cars = await query
+                // NUEVO → filtro por modelo si llega
+                if (!string.IsNullOrEmpty(model))
+                {
+                    _logger.LogDebug("Aplicando filtro de modelo: {model}", model);
+                    query = query.Where(c => c.Model.Name.Contains(model));
+                }
+
+                var cars = await query
                     .Select(c => new CocheParaComprarDTO(
                         c.Id,
                         c.Model.Name,
