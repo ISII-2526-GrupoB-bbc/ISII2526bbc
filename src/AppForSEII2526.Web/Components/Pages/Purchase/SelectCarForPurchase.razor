@@ -26,6 +26,14 @@
                     <input class="form-control"
                            placeholder="Filtrar por color"
                            @bind="colorFilter" />
+
+
+                </div>
+
+                <div class="col-4">
+                    <input class="form-control"
+                           placeholder="Filtrar por modelo"
+                           @bind="modelFilter" />
                 </div>
 
                 <div class="col">
@@ -120,6 +128,7 @@
 @code {
     private ICollection<CocheParaComprarDTO>? cars;
     private string colorFilter = "";
+    private string modelFilter = "";
     private string errors = "";
 
     private bool hideErrors => errors.Length == 0;
@@ -136,7 +145,7 @@
         try
         {
             errors = "";
-            cars = await apiclient.GetCarsAsync(color: colorFilter);
+            cars = await apiclient.GetCarsAsync(color: colorFilter, model: modelFilter);
         }
         catch (ApiException ex)
         {
