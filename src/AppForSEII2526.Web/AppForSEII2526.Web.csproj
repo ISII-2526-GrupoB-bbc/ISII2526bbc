@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="OpenAPIs\swagger.json" ClassName="AppForSEII2526APIClient" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger1.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
+    <OpenApiReference Include="OpenAPIs\swagger.json" ClassName="AppForSEII2526APIClient">
       <SourceUri>https://appforseii2526-bbc-d6gcgwgsfucrg4dv.switzerlandnorth-01.azurewebsites.net/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
