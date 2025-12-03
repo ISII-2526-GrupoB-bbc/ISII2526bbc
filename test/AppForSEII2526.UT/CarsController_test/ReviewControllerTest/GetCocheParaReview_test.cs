@@ -72,7 +72,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
         }
         // ========= Tests para GetCars (por FuelType) =========
         // Preparo los casos de prueba de éxito para GetCars usando MemberData.
-        public static IEnumerable<object[]> GetCars_OK_Cases()
+        public static IEnumerable<object[]> GetCarsOKCases()
         {
             var carDTOs = new List<CocheParaReviewDTO>() { 
             // Construyo los DTOs esperados tal y como los proyecta el action GetCars (mismo orden de parámetros).
@@ -99,7 +99,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
         }
         // Test parametrizado para validar que GetCars devuelve 200 OK con la lista esperada.
         [Theory]
-        [MemberData(nameof(GetCars_OK_Cases))]
+        [MemberData(nameof(GetCarsOKCases))]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
         public async Task GetCars_OK_test(string? filtroManufacturer, string? filtroFuelType, IList<CocheParaReviewDTO> expectedCars)
@@ -109,7 +109,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             ILogger<CarsControllers> logger = mock.Object;
             var controller = new CarsControllers(_context, logger);
             // Act
-            var result = await controller.GetCars2(filtroManufacturer, filtroFuelType); //filtro por el manufacturer y el fueltype
+            var result = await controller.GetCarsForReview(filtroManufacturer, filtroFuelType); //filtro por el manufacturer y el fueltype
             //Assert
             //we check that the response type is OK 
             var okResult = Assert.IsType<OkObjectResult>(result);

@@ -77,7 +77,7 @@ namespace AppForSEII2526.API.Controllers
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<CocheParaReviewDTO>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetCars2(string? filtroManufacturer, string? filtroFuelType)
+        public async Task<ActionResult> GetCarsForReview(string? filtroManufacturer, string? filtroFuelType)
         {
             var cars = await _context.Cars
                .Include(c => c.Model)
