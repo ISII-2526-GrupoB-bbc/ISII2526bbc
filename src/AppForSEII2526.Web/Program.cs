@@ -48,6 +48,7 @@ builder.Services.AddScoped<AppForSEII2526APIClient>(sp => new AppForSEII2526APIC
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
 builder.Services.AddScoped<RentalStateContainer>();
 builder.Services.AddScoped<PurchaseStateContainer>();
+builder.Services.AddScoped<ReviewStateContainer>();
 
 var app = builder.Build();
 
