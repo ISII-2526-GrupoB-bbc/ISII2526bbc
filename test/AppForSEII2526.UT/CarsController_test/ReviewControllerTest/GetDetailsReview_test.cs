@@ -11,9 +11,9 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
 {
     namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
     {
-        public class Get_Details_Review_test : AppForSEII25264SqliteUT
+        public class GetDetailsReview_test : AppForSEII25264SqliteUT
         {
-            public Get_Details_Review_test()
+            public GetDetailsReview_test()
             {
                 // ===== Seed de datos para la reseña de prueba =====
                 // USUARIO
@@ -122,7 +122,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 var controller = new ReviewsController(_context, logger);
                 // Act
                 // Llamo al método que quiero probar, pidiendo el detalle de la compra con id=1.
-                var result = await controller.Get_Details_Review(1);
+                var result = await controller.GetDetailsReview(1);
                 // Assert
                 // Compruebo que el resultado es un OkObjectResult (código 200).
                 var okReview = Assert.IsType<OkObjectResult>(result);
@@ -147,7 +147,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             [Fact]
             [Trait("Database", "WithoutFixture")]
             [Trait("LevelTesting", "Unit Testing")]
-            public async Task Get_Details_Review_NotFound_test()
+            public async Task GetDetailsReviewNotFound_test()
             {
                 // Arrange
                 // Igual que antes: logger simulado y controlador con el contexto de pruebas.
@@ -155,7 +155,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 var controller = new ReviewsController(_context, logger);
 
                 // Act: uso un id que NO está en el seed (999).
-                var result = await controller.Get_Details_Review(999);
+                var result = await controller.GetDetailsReview(999);
 
                 // Assert: el controlador debe devolver un NotFoundResult.
                 var notFound = Assert.IsType<NotFoundResult>(result);

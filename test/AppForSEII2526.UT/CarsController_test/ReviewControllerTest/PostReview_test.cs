@@ -96,7 +96,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             _context.SaveChanges();
         }
 
-            public static IEnumerable<object[]> TestCasesFor_CreateReviews()
+            public static IEnumerable<object[]> TestCasesForCreateReviews()
         {
             var reviewNoITem = new ReseñarForCreateDTO("Juan", "García", "juanUser", "España", "Novato", new List<ReseñarItemDTO>());
             var reviewItems = new List<ReseñarItemDTO>() { new ReseñarItemDTO("Model S", "Tesla", "Negro", 5, "Reseña para") };
@@ -121,8 +121,8 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
         [Theory]
         [Trait("LevelTesting", "Unit Testing")]
         [Trait("Database", "WithoutFixture")]
-        [MemberData(nameof(TestCasesFor_CreateReviews))]
-        public async Task CreateReview_Error_test(ReseñarForCreateDTO reviewDTO, string errorExpected)
+        [MemberData(nameof(TestCasesForCreateReviews))]
+        public async Task CreateReviewErrortest(ReseñarForCreateDTO reviewDTO, string errorExpected)
         {
             // Arrange
             var mock = new Mock<ILogger<ReviewsController>>();
@@ -131,7 +131,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             var controller = new ReviewsController(_context, logger);
 
             // Act
-            var result = await controller.Create_Review(reviewDTO);
+            var result = await controller.CreateReview(reviewDTO);
 
             //Assert
             //we check that the response type is BadRequest and obtain the error returned
@@ -147,7 +147,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
         [Fact]
         [Trait("LevelTesting", "Unit Testing")]
         [Trait("Database", "WithoutFixture")]
-        public async Task CreateReview_Success_test()
+        public async Task CreateReviewSuccesstest()
         {
             // Arrange
             var mock = new Mock<ILogger<ReviewsController>>();
@@ -173,7 +173,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
                 });
 
             // Act
-            var result = await controller.Create_Review(reviewDTO);
+            var result = await controller.CreateReview(reviewDTO);
 
             //Assert
             //we check that the response type is BadRequest and obtain the error returned

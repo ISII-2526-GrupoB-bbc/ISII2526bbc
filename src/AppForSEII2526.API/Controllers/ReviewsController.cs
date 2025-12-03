@@ -27,7 +27,7 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(ReseñarDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult> Get_Details_Review(int id)
+        public async Task<ActionResult> GetDetailsReview(int id)
         {
             if (_context.Reviews == null)
             {
@@ -60,7 +60,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(ReseñarDetailDTO), (int)HttpStatusCode.Created)] //devuelve OK cuando consigue meter en la base de datos el código
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)] //devuelve BadRequest cuando hay un error durante la comprobación de la petición
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)] //devuelve Conflict cuando hay un error al añadir a la base de datos
-        public async Task<ActionResult> Create_Review(ReseñarForCreateDTO reseñaForCreate)
+        public async Task<ActionResult> CreateReview(ReseñarForCreateDTO reseñaForCreate)
         {
             if (reseñaForCreate.ReviewItems.Count == 0) //compruebo que he seleccionado algún coche para comprar.
             {
