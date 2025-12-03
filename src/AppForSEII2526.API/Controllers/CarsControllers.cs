@@ -132,7 +132,7 @@ namespace AppForSEII2526.API.Controllers
 
 
 
-
+        // Devuelve la lista de fueltypes
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IEnumerable<string>), (int)HttpStatusCode.OK)]
@@ -153,6 +153,45 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest("Error al obtener los tipos de combustible.");
             }
         }
+
+        // Devuelve la lista de modelos
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IEnumerable<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<string>>> GetModels(string? modelName = null)
+        {
+            try
+            {
+                // Obtengo todos los nombres de modelos disponibles
+                var query = _context.Cars
+                                    .Include(c => c.Model)
+                                    .Select(c => c.Model.Name)
+                                    .Distinct()
+                                    .AsQueryable();
+
+                // Filtro opcional por nombre (si lo envías desde el cliente)
+                if (!string.IsNullOrEmpty(modelName))
+                {
+                    query = query.Where(m => m.Contains(modelName));
+                }
+
+                var models = await query.ToListAsync();
+
+                if (!models.Any())
+                {
+                    return NotFound("No se encontraron modelos.");
+                }
+
+                return Ok(models);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Error en GetModels() - {ex.Message}");
+                return BadRequest("Error al obtener los modelos disponibles.");
+            }
+        }
+
 
     }
 }
