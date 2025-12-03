@@ -97,7 +97,14 @@
         "operationId": "GetCars2",
         "parameters": [
           {
-            "name": "FuelType",
+            "name": "filtroManufacturer",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filtroFuelType",
             "in": "query",
             "schema": {
               "type": "string"
@@ -130,26 +137,6 @@
                   "items": {
                     "$ref": "#/components/schemas/CocheParaReviewDTO"
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -253,6 +240,45 @@
         }
       }
     },
+    "/api/CarsControllers/GetFuelTypes": {
+      "get": {
+        "tags": [
+          "CarsControllers"
+        ],
+        "operationId": "GetFuelTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/CarsControllers/GetModels": {
       "get": {
         "tags": [
@@ -261,7 +287,7 @@
         "operationId": "GetModels",
         "parameters": [
           {
-            "name": "model",
+            "name": "modelName",
             "in": "query",
             "schema": {
               "type": "string"
@@ -294,6 +320,26 @@
                   "items": {
                     "type": "string"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -837,43 +883,41 @@
         "additionalProperties": false
       },
       "CocheParaReviewDTO": {
-        "required": [
-          "carClass",
-          "color",
-          "fuelType",
-          "id",
-          "manufacturer",
-          "modelName"
-        ],
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int32"
           },
-          "modelName": {
-            "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
-          },
-          "color": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string"
-          },
-          "fuelType": {
+          "model": {
+            "maxLength": 20,
             "minLength": 1,
-            "type": "string"
-          },
-          "manufacturer": {
-            "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "carClass": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string"
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "manufacturer": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "fuelType": {
+            "maxLength": 15,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "color": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
