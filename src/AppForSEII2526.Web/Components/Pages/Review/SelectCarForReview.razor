@@ -1,0 +1,127 @@
+﻿@page "/review/select"
+
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<SelectCarForReview> logger
+@inject ReviewStateContainer reviewStateContainer
+@inject NavigationManager navigation
+
+<h3>Review</h3>
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Manufacturer</span>
+                        <input type="text" id="inputManufacturer" @bind=filtroManufacturer class="form-control" placeholder="Manufacturer" aria-label="Manufacturer" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">FuelType</span>
+                        <input type="text" id="inputFuelType" @bind=filtroFuelType class="form-control" placeholder="FuelType" aria-label="FuelType" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchCars id="searchCars">Search cars</button>
+                </div>
+            </div>
+            <div class="row">
+                @if (cars == null)
+                {
+                    <p>Loading cars....</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfCars">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Manufacturer</th>
+                                    <th>Color</th>
+                                    <th>Fuel Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var car in cars)
+                                {
+                                    <tr id="CarData_@car.Model">
+                                        <td>@car.Model</td>
+                                        <td>@car.Manufacturer</td>
+                                        <td>@car.Color</td>
+                                        <td>@car.FuelType</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="carToReview_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="col-2" hidden="@hideReviewCart">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (ReseñarItemDTO item in review.ReviewItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeCar_@item.Model" @onclick="@(() => RemoveReviewItem(item))">x @item.Model</button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseCarButton" @onclick=@ReviewCars>Review cars</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+private bool hideReviewCart { get { return review.ReviewItems.Count == 0; } }
+private ICollection<CocheParaReviewDTO> cars;
+private bool hideErrors { get { return errors.Length==0; } }
+private string errors = "";
+private string filtroManufacturer { get; set; }
+private string filtroFuelType { get; set; }
+
+                    private ReseñarForCreateDTO review => reviewStateContainer.Review;
+    private bool hiddenReviewCart = true;
+    private void AddCar(CocheParaReviewDTO car)
+    {
+        reviewStateContainer.AddCarToReview(car);
+    }
+    private void RemoveReviewItem(ReseñarItemDTO item)
+    {
+        reviewStateContainer.RemoveCarFromReview(item);
+        if (review.ReviewItems.Count == 0) hiddenReviewCart = true;
+    }
+    private void ReviewCars()
+    {
+        navigation.NavigateTo("/review/createreview");
+    }
+    public async void SearchCars()
+    {
+        try
+        {
+            cars = await apiclient.GetCars2Async(filtroManufacturer, filtroFuelType);
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+}
+        
