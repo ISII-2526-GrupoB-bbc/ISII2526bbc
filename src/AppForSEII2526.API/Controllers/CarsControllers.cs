@@ -76,39 +76,17 @@ namespace AppForSEII2526.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<CocheParaReviewDTO>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<CocheParaReviewDTO>>> GetCars2(string? FuelType = null)
+        [ProducesResponseType(typeof(IList<CocheParaReviewDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetCars2(string? filtroManufacturer, string? filtroFuelType)
         {
-            try
-            {
-                var query = _context.Cars.AsQueryable();
-
-                // Aplicar filtro SOLO por color (flujo alternativo)
-                if (!string.IsNullOrEmpty(FuelType))
-                    query = query.Where(c => c.FuelType.Contains(FuelType));
-
-                var cars = await query
-                    .Select(c => new CocheParaReviewDTO(
-                        c.Id,
-                        c.Model.Name,
-                        c.Color,
-                        c.CarClass,
-                        c.Manufacturer,
-                        c.FuelType
-                    ))
-                    .ToListAsync();
-
-                if (cars == null || !cars.Any())
-                    return NotFound("No se encontraron coches con ese tipo de combustible.");
-
-                return Ok(cars);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Error en GetCars() - {ex.Message}");
-                return BadRequest("Error al obtener los coches disponibles.");
-            }
+            var cars = await _context.Cars
+               .Include(c => c.Model)
+               .Where(c => (c.Manufacturer.Contains(filtroManufacturer) || filtroManufacturer == null) && (c.FuelType.Contains(filtroFuelType) || (filtroFuelType == null)))
+               .OrderBy(c => c.Id)
+               .Select(c => new CocheParaReviewDTO(c.Id, c.Model.Name, c.CarClass, c.Manufacturer, c.FuelType, c.Color))
+               .ToListAsync();
+            _logger.LogInformation($"CarsController || Coches para reseñar encontrados con los parametros {filtroManufacturer} y {filtroFuelType}");
+            return Ok(cars);
         }
 
         [HttpGet]

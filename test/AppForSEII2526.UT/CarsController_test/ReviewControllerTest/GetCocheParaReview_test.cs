@@ -23,7 +23,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             {
                 Id = 1,
                 CarClass = "Sedan",
-                FuelType = "Eléctrico",
+                FuelType = "Electrico",
                 Color = "Negro",
                 Description = "Coche premium eléctrico",
                 Manufacturer = "Tesla",
@@ -53,7 +53,7 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
             {
                 Id = 3,
                 CarClass = "SUV",
-                FuelType = "Híbrido",
+                FuelType = "Gasolina",
                 Color = "Blanco",
                 Description = "SUV familiar",
                 Manufacturer = "Toyota",
@@ -74,73 +74,49 @@ namespace AppForSEII2526.UT.CarsController_test.ReviewControllerTest
         // Preparo los casos de prueba de éxito para GetCars usando MemberData.
         public static IEnumerable<object[]> GetCars_OK_Cases()
         {
+            var carDTOs = new List<CocheParaReviewDTO>() { 
             // Construyo los DTOs esperados tal y como los proyecta el action GetCars (mismo orden de parámetros).
-            var tesla = new CocheParaReviewDTO(1, "Model S", "Negro", "Sedan", "Tesla", "Eléctrico");
-            var ford = new CocheParaReviewDTO(2, "Mustang", "Rojo", "Deportivo", "Ford", "Gasolina");
-            var toy = new CocheParaReviewDTO(3, "RAV4", "Blanco", "SUV", "Toyota", "Híbrido");
-            // Caso sin filtro: espero los tres, y ordeno por Id para comparar de forma determinista.
-            var all = new List<CocheParaReviewDTO> { tesla, ford, toy }.OrderBy(d => d.Id).ToList();
-            // Caso con filtro de color "Negro": sólo debería devolver el Tesla.
-            var onlyGasolina = new List<CocheParaReviewDTO> { ford };
-            // Devuelvo los dos casos: (color=null) y (color="Negro"), con sus listas esperadas.
-            return new List<object[]>
-            {
-                new object[] { null,    all },
-                new object[] { "Gasolina", onlyGasolina },
+            new CocheParaReviewDTO(1, "Model S", "Sedan", "Tesla", "Electrico", "Negro"),
+            new CocheParaReviewDTO(2, "Mustang", "Deportivo", "Ford", "Gasolina", "Rojo"),
+            new CocheParaReviewDTO(3, "RAV4", "SUV", "Toyota", "Gasolina", "Blanco"),
+
             };
+            var carDTOsTC1 = new List<CocheParaReviewDTO>() { carDTOs[0], carDTOs[1], carDTOs[2] }; //los resultados que espero obtener con las pruebas
+            var carDTOsTC2 = new List<CocheParaReviewDTO>() { carDTOs[0] };
+            var carDTOsTC3 = new List<CocheParaReviewDTO>() { carDTOs[1], carDTOs[2] };
+            var carDTOsTC4 = new List<CocheParaReviewDTO>() { carDTOs[1] };
+
+            var allTest = new List<object[]> //casos de prueba
+            {
+                new object[] { null, null, carDTOsTC1 },
+                new object[] { "Tesla", null, carDTOsTC2 },
+                new object[] { null, "Gasolina", carDTOsTC3 },
+                new object[] { "Ford", "Gasolina", carDTOsTC4 },
+
+            };
+
+            return allTest;
         }
         // Test parametrizado para validar que GetCars devuelve 200 OK con la lista esperada.
         [Theory]
         [MemberData(nameof(GetCars_OK_Cases))]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCars_OK_test(string? fueltype, IList<CocheParaReviewDTO> expected)
+        public async Task GetCars_OK_test(string? filtroManufacturer, string? filtroFuelType, IList<CocheParaReviewDTO> expectedCars)
         {
-            // Creo un logger simulado para el controlador.
-            var logger = new Mock<ILogger<CarsControllers>>().Object;
-            // Instancio el controlador con el contexto en memoria y el logger fake.
+            // Arrange
+            var mock = new Mock<ILogger<CarsControllers>>();
+            ILogger<CarsControllers> logger = mock.Object;
             var controller = new CarsControllers(_context, logger);
-
-            // Ejecuto el endpoint con el filtro de fueltype que toque en cada caso.
-            var result = await controller.GetCars2(fueltype);
-
-            // Verifico que el resultado sea 200 OK y que el Value sea la lista de DTOs.
-            var ok = Assert.IsType<OkObjectResult>(result.Result);
-            var actual = Assert.IsType<List<CocheParaReviewDTO>>(ok.Value);
-
-            // Ordeno por Id para comparar de forma estable (el action no impone un orden).
-            actual = actual.OrderBy(x => x.Id).ToList();
-            // Comparo tamaño de listas.
-            Assert.Equal(expected.Count, actual.Count);
-            // Comparo elemento a elemento todos los campos relevantes del DTO.
-            for (int i = 0; i < expected.Count; i++)
-            {
-                Assert.Equal(expected[i].Id, actual[i].Id);
-                Assert.Equal(expected[i].ModelName, actual[i].ModelName);
-                Assert.Equal(expected[i].Color, actual[i].Color);
-                Assert.Equal(expected[i].FuelType, actual[i].FuelType);
-                Assert.Equal(expected[i].Manufacturer, actual[i].Manufacturer);
-                Assert.Equal(expected[i].CarClass, actual[i].CarClass);
-            }
+            // Act
+            var result = await controller.GetCars2(filtroManufacturer, filtroFuelType); //filtro por el manufacturer y el fueltype
+            //Assert
+            //we check that the response type is OK 
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            //and obtain the list of cars
+            var carDTOsActual = Assert.IsType<List<CocheParaReviewDTO>>(okResult.Value);
+            Assert.Equal(expectedCars, carDTOsActual); //si lo esperado es igual a lo actual, me devuelve el OK
 
         }
-        // Test para el caso en que no hay coincidencias y el endpoint debe devolver NotFound.
-        [Fact]
-        [Trait("Database", "WithoutFixture")]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCars_NotFound_test()
-        {
-            // Creo el logger simulado y el controlador.
-            var logger = new Mock<ILogger<CarsControllers>>().Object;
-            var controller = new CarsControllers(_context, logger);
-
-            // Llamo al endpoint con un color inexistente en el seed.
-            var result = await controller.GetCars("Gasolina");
-
-            // Verifico que devuelve 404 NotFound y el mensaje definido en el controller.
-            var notFound = Assert.IsType<NotFoundObjectResult>(result.Result);
-            Assert.Equal("No se encontraron coches con ese color.", notFound.Value);
-        }
-
     }
 }
