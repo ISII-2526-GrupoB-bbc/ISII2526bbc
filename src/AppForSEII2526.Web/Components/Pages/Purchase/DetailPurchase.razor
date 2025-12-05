@@ -1,0 +1,129 @@
+﻿@page "/purchase/detailpurchase"
+
+@using AppForSEII2526.Web      
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient    // Inyecto cliente para llamar a la API
+
+@attribute [Authorize]     
+
+<h3>Detalle de compra</h3>
+
+@* Si NO he podido cargar la compra, muestro el error *@
+@if (purchase == null)
+{
+    <p>@error</p>
+}
+else
+{
+    @* === DATOS GENERALES DE LA COMPRA === *@
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Nombre y apellido</th>
+            <td id="NameSurname">@purchase.Name @purchase.Surname</td>
+        </tr>
+
+        <tr>
+            <th>Dirección</th>
+            <td id="Address">@purchase.Address</td>
+        </tr>
+
+        <tr>
+            <th>Método de pago</th>
+            <td id="PaymentMethod">@purchase.PaymentMethod</td>
+        </tr>
+
+        <tr>
+            <th>Fecha de compra</th>
+            @* Muestro la fecha  *@
+            <td id="PurchasingDate">@purchase.PurchasingDate.DateTime.ToString("dd/MM/yyyy HH:mm:ss")</td>
+        </tr>
+    </table>
+
+    <h4>Coches comprados</h4>
+
+    @* === TABLA DE COCHES COMPRADOS === *@
+    <table class="table" id="PurchasedCars">
+        <thead>
+            <tr>
+                <th>Modelo</th>
+                <th>Color</th>
+                <th>Descripción</th>
+                <th>Precio (€)</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @* Recorro cada coche comprado y lo pongo en la  tabla *@
+            @foreach (var item in purchase.CochesComprados)
+            {
+                <tr id="PurchaseItem_@item.Id">
+                    <td>@item.Model.Name</td>        @* El nombre del modelo *@
+                    <td>@item.Color</td>             @* Color *@
+                    <td>@item.Description</td>        @* Descripción añadida *@
+                    <td>@item.PurchasingPrice €</td>  @* Precio unitario *@
+                    <td>@item.Quantity</td>           @* Cantidad de ese coche *@
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                @* SUMATORIO: precio total de la compra *@
+                <th colspan="3" class="text-end">Precio total</th>
+                <td id="TotalPrice" colspan="2">
+                    @purchase.CochesComprados.Sum(i => i.PurchasingPrice * i.Quantity) €
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@code {
+    // Parámetro que recibo por QUERY STRING, ejemplo: /purchase/detailpurchase?PurchaseID=5
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int PurchaseID { get; set; }
+
+    private ComprarForDetailDTO? purchase;   // Aquí guardo la compra recibida desde la API
+    private string error = "";               // Si hay error, lo guardo aquí
+
+    // Estado de autenticación del usuario (para saber quién es)
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string userName = "";
+
+        // === SACO EL NOMBRE DEL USUARIO QUE ESTÁ LOGEADO ===
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            // Compruebo que el usuario esté logeado y tenga identidad
+            if (user != null && user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                userName = user.Identity.Name;   // Obtengo su username
+            }
+        }
+
+        try
+        {
+            // Llamo a la API para obtener el detalle de la compra
+            purchase = await apiclient.GetDetailsPurchaseAsync(PurchaseID);
+        }
+        catch (ApiException)
+        {
+            purchase = null;
+        }
+
+        // === VALIDACIÓN DE SEGURIDAD ===
+        // Solo permito ver la compra si el usuario logeado ES el propietario de la compra
+        if (purchase == null || purchase.Name != userName)
+        {
+            error = $"Error! No tienes permiso para ver la compra con id={PurchaseID} o no existe.";
+        }
+    }
+}
