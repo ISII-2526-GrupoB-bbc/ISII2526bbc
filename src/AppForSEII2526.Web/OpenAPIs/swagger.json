@@ -645,12 +645,13 @@
         }
       }
     },
-    "/api/Reviews/Get_Details_Review": {
+
+    "/api/Reviews/GetDetailsReview": {
       "get": {
         "tags": [
           "Reviews"
         ],
-        "operationId": "Get_Details_Review",
+        "operationId": "GetDetailsReview",
         "parameters": [
           {
             "name": "id",
@@ -710,7 +711,7 @@
         "tags": [
           "Reviews"
         ],
-        "operationId": "Create_Review",
+        "operationId": "CreateReview",
         "requestBody": {
           "content": {
             "application/json": {
