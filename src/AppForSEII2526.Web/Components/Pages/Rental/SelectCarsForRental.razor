@@ -1,56 +1,60 @@
 ﻿@page "/rental/selectcarsforrental"
 
+
+@using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
-@using AppForSEII2526.Web
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectCarsForRental> logger
 @inject RentalStateContainer rentalState
 @inject NavigationManager navigation
 
-@* @attribute [Authorize] *@
-<h3>SelectCarsForRental</h3>
+@*@attribute [Authorize]*@
+
+<h3>Select cars for Rental</h3>
 <div class="container-fluid">
-
-    @* APARTADO DE ERRORES *@
-
-    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">      
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @errors</p>
     </div>
-
-
     <div class="row">
-        <div class="col-8"> @* APARTADO DE FILTROS *@
+        <div class="col-8">
             <div class="row">
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Renting Price</span>
-                        <input type="text" id="inputRentingPrice" @bind=rentingPrice class="form-control" placeholder="Renting Price" aria-label="Renting Price" aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1">Model</span>
+                        <input type="text" id="modelname" @bind=modelname class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
                     </div>
                 </div>
-
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Model</span>
-                        <input type="text" id="inputModel" @bind=carModelSelected class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1">Renting Price</span>
+                        <input type="text" id="rentingprice" @bind=rentingprice class="form-control" placeholder="RentingPrice" aria-label="RentingPrice" aria-describedby="basic-addon1">
                     </div>
-                </div>
-
+                </div
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text">From</span>
                         <InputDate @bind-Value="@From" id="fromDate" />
                     </div>
                 </div>
-
                 <div class="col">
                     <span class="input-group-text">To</span>
                     <InputDate id="toDate" @bind-Value="@To" />
-
                 </div>
+                <div class="col">
+                    <span class="input-group-text">RentingDate</span>
+                    <InputDate id="RentingDate" @bind-Value="@Renting" />
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchCars id="searchCars">Search Cars</button>
+                </div>
+
+
+
+            </div>
             <div class="row">
-                @if (cars == null)              @* LISTA DE COCHES *@
+                @if (cars == null)
                 {
-                    <p>Loading movies....</p>
+                    <p>Loading cars....</p>
                 }
                 else
                 {
@@ -58,63 +62,59 @@
                         <table class="table table-condensed table-hover" id="TableOfCars">
                             <thead>
                                 <tr>
-                                    <th>Modelo</th>       @*VOY A USAR LOS CAMPOS DE CocheParaAlquilarDTO  *@
-                                    <th>Fabricante</th>
-                                    <th>Combustible</th>
+                                    <th>Model</th>
+                                    <th>Fuel Type</th>
+                                    <th>Manufacturer</th>
+                                    <th>Renting Price</th>
                                     <th>Color</th>
-                                    <th>Precio Alquiler (€)</th>
-                                    <th>Rent</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var car in cars)
                                 {
-                                    <tr id="CarData_@car.Id">
+                                    <tr id="CarData_@car.ModelName">
                                         <td>@car.ModelName</td>
-                                        <td>@car.Manufacturer</td>
                                         <td>@car.FuelType</td>
-                                        <td>@car.Color</td>
+                                        <td>@car.Manufacturer</td>
                                         <td>@car.RentingPrice</td>
+                                        <td>@car.Color</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="carToRent_@car.Id" @onclick="@(() => AddCar(car))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="carToRent_@car.ModelName" @onclick="@(() => AddCar(car))">Add</button>
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+
                 }
             </div>
         </div>
-        <div class="col-2" hidden="@hideRentingCart">   @* CARRITO DE LA COMPRA*@
+        <div class="col-2" hidden="@hideRentingCart">
             <div class="row">
-                <h3>Carrito de alquiler</h3>
+                <h3>Shopping Cart</h3>
             </div>
             @foreach (RentalItemDTO item in rental.RentalItems)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeCar_@item.ModelId" @onclick="@(() => RemoveRentalItem(item))">x @item.ModelName - @item.RentingPrice€</button>
+                    <button type="button" class="btn btn-light" id="removeCar_@item.ModelName" @onclick="@(() => RemoveRentalItem(item))">x @item.ModelName - @item.RentingPrice€</button>
                 </div>
             }
             <div class="row">
-                <button type="button" class="btn btn-primary" id="purchaseCarButton" @onclick=@RentCars>Rent movies</button>
+                <button type="button" class="btn btn-primary" id="rentCarButton" @onclick=@RentCars>Rent Cars</button>
             </div>
-        </div>
 
-    </div>
+        </div>
     </div>
 </div>
 
 @code {
-    private string carModelSelected = "All";
-    private ICollection<string>? modelNames = new List<string>();
-
     private bool hideRentingCart { get { return rental.RentalItems.Count == 0; } }
     private ICollection<CocheParaAlquilarDTO> cars;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
-    private double rentingPrice { get; set; }
-
+    private string modelname { get; set; }
+    private double? rentingprice { get; set; }
     private DateTime _from;
     private DateTime From
     {
@@ -123,11 +123,10 @@
         {
             if (_from != value)
             {
-                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                //the rentingcart is cleared to ensure that only cars available for the selected period are selected
                 _from = value;
-                rental.EndDate = DateTime.SpecifyKind(_from, DateTimeKind.Utc);
+                rental.StartDate = DateTime.SpecifyKind(_from, DateTimeKind.Utc);
                 rentalState.ClearRentingCart();
-
             }
         }
     }
@@ -140,11 +139,25 @@
         {
             if (_to != value)
             {
-                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                //the rentingcart is cleared to ensure that only cars available for the selected period are selected
                 _to = value;
                 rental.EndDate = DateTime.SpecifyKind(_to, DateTimeKind.Utc);
                 rentalState.ClearRentingCart();
-
+            }
+        }
+    }
+    private DateTime _renting;
+    private DateTime Renting
+    {
+        get { return _renting; }
+        set
+        {
+            if (_renting != value)
+            {
+                //the rentingcart is cleared to ensure that only cars available for the selected period are selected
+                _renting = value;
+                rental.EndDate = DateTime.SpecifyKind(_renting, DateTimeKind.Utc);
+                rentalState.ClearRentingCart();
             }
         }
     }
@@ -164,28 +177,23 @@
         if (rental.RentalItems.Count == 0) hiddenRentingCart = true;
     }
 
-
     public async void SearchCars()
     {
-        var model = carModelSelected == "All" ? null : carModelSelected;
-
         if (rental.StartDate > rental.EndDate)
         {
-            errors = "El alquiler debe finalizar después de empezar.";
+            errors = "Your rental must end after than its starts";
             return;
         }
 
         if (rental.StartDate < DateTime.Today || rental.EndDate < DateTime.Today)
         {
-            errors = "El periodo de alquiler debe ser posterior a hoy.";
+            errors = "Your rental period must be later";
             return;
         }
-
         try
         {
-            cars = await apiclient.GetCarsRentalAsync(rentingPrice, model); 
+            cars = await apiclient.GetCarsRentalAsync(rentingprice, modelname);
             errors = "";
-
         }
         catch (ApiException ex)
         {
@@ -195,36 +203,31 @@
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync() {
-
-        try {
-            modelNames = await apiclient.GetModelsAsync(null);
-        }
-        catch (ApiException ex) {
-            if (modelNames == null) modelNames = new List<string>() { "All", };
-            logger.LogError("Error! There was an error while connecting to the GetModelsAsync service");
-        }
-
+    protected override Task OnInitializedAsync()
+    {
         //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
-        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
         _from = (_from == new DateTime(1, 1, 1)) ?
             DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc)
             : _from;
         rental.StartDate = _from;
         //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
-        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
+
         _to = (_to == new DateTime(1, 1, 1)) ?
             DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Utc)
             : _to;
         rental.EndDate = _to;
 
+        _renting = (_renting == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Utc)
+            : _renting;
+        rental.RentingDate = _renting;
+
         SearchCars();
 
-       // return base.OnInitializedAsync();
+        return base.OnInitializedAsync();
     }
-
     private void RentCars()
     {
-        navigation.NavigateTo("/rentals/createrental");
+        navigation.NavigateTo("/rental/post");
     }
 }

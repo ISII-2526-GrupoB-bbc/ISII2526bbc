@@ -1,6 +1,6 @@
 ﻿@page "/purchase/selectcarforpurchase"
 
-@using AppForSEII2526.Web
+@using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectCarForPurchase> logger
 @inject PurchaseStateContainer purchaseState
@@ -137,6 +137,8 @@
     private ComprarForCreateDTO purchase => purchaseState.Purchase;
 
     private bool hideCart => purchase.CochesComprados.Count == 0;
+
+
 
 
     // BUSCAR COCHES

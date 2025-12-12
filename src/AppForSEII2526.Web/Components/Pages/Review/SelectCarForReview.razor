@@ -1,7 +1,7 @@
 ﻿@page "/review/select"
 
 @using Microsoft.AspNetCore.Authorization
-@using AppForSEII2526.Web
+@using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectCarForReview> logger
 @inject ReviewStateContainer reviewStateContainer
@@ -114,7 +114,7 @@ private string filtroFuelType { get; set; }
     {
         try
         {
-            cars = await apiclient.GetCars2Async(filtroManufacturer, filtroFuelType);
+            cars = await apiclient.GetCarsForReviewAsync(filtroManufacturer, filtroFuelType);
         }
         catch (ApiException ex)
         {
