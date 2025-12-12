@@ -1,6 +1,6 @@
 ﻿@page "/purchase/detailpurchase"
 
-@using AppForSEII2526.Web      
+@using AppForSEII2526.Web.API      
 @using Microsoft.AspNetCore.Authorization
 @inject AppForSEII2526APIClient apiclient    // Inyecto cliente para llamar a la API
 
@@ -54,7 +54,7 @@ else
         </thead>
 
         <tbody>
-            @* Recorro cada coche comprado y lo pongo en la  tabla *@
+    @* Recorro cada coche comprado y lo pongo en la  tabla *@
             @foreach (var item in purchase.CochesComprados)
             {
                 <tr id="PurchaseItem_@item.Id">

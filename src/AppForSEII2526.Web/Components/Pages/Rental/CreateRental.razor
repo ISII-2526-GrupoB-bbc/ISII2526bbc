@@ -3,7 +3,7 @@
 <h3>CreateRental</h3>
 
 @using AppForSEII2526.Web.Components.Shared
-@using AppForSEII2526.Web
+@using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager navigation
 @inject AppForSEII2526APIClient apiclient
@@ -97,7 +97,7 @@
     </div>
 </EditForm>
 
-    @*a modal popup dialog for checking if user wants to proceed to rent*@
+@*a modal popup dialog for checking if user wants to proceed to rent*@
     @if (DialogIsOpen)
     {
         <Dialog Caption="Rental cars"

@@ -91,108 +91,17 @@ namespace AppForSEII2526.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<CocheParaAlquilarDTO>>> GetCarsRental(decimal? rentingPrice, string? modelName)
+        [ProducesResponseType(typeof(IList<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetCarsRental(decimal? rentingprice, string? modelname)
         {
-            try
-            {
-                var query = _context.Cars.AsQueryable();
-
-                if (rentingPrice.HasValue)
-                    query = query.Where(c => c.RentingPrice == rentingPrice.Value);
-
-                if (!string.IsNullOrEmpty(modelName))
-                    query = query.Where(c => c.Model.Name.Contains(modelName));
-
-                var cars = await query
-                    .Select(c => new CocheParaAlquilarDTO(
-                        c.Id,
-                        c.Model.Name,
-                        c.FuelType,
-                        c.Manufacturer,
-                        c.RentingPrice,
-                        c.Color
-                    ))
-                    .ToListAsync();
-
-                if (cars == null || !cars.Any())
-                {
-                    return NotFound("No se encontraron coches con los filtros proporcionados.");
-                }
-
-                return Ok(cars);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Error al obtener los coches.");
-            }
+            var cars = await _context.Cars
+                .Include(c => c.Model)
+                .Where(c => (c.Model.Name.Contains(modelname) || modelname == null) && (c.RentingPrice < rentingprice || rentingprice == null))
+                .Select(c => new CocheParaAlquilarDTO(c.Id, c.Model.Name, c.FuelType, c.Manufacturer, c.RentingPrice, c.Color))
+                .ToListAsync();
+            _logger.LogInformation($"CarsController || Coches para alquiler encontrados con los parametros {modelname} y {rentingprice}");
+            return Ok(cars);
         }
-
-
-
-        // Devuelve la lista de fueltypes
-        [HttpGet]
-        [Route("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<string>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<string>>> GetFuelTypes()
-        {
-            try
-            {
-                var fuelTypes = await _context.Cars
-                    .Select(c => c.FuelType)
-                    .Distinct()
-                    .ToListAsync();
-
-                return Ok(fuelTypes);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Error en GetFuelTypes() - {ex.Message}");
-                return BadRequest("Error al obtener los tipos de combustible.");
-            }
-        }
-
-        // Devuelve la lista de modelos
-        [HttpGet]
-        [Route("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<string>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<string>>> GetModels(string? modelName = null)
-        {
-            try
-            {
-                // Obtengo todos los nombres de modelos disponibles
-                var query = _context.Cars
-                                    .Include(c => c.Model)
-                                    .Select(c => c.Model.Name)
-                                    .Distinct()
-                                    .AsQueryable();
-
-                // Filtro opcional por nombre (si lo envías desde el cliente)
-                if (!string.IsNullOrEmpty(modelName))
-                {
-                    query = query.Where(m => m.Contains(modelName));
-                }
-
-                var models = await query.ToListAsync();
-
-                if (!models.Any())
-                {
-                    return NotFound("No se encontraron modelos.");
-                }
-
-                return Ok(models);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Error en GetModels() - {ex.Message}");
-                return BadRequest("Error al obtener los modelos disponibles.");
-            }
-        }
-
-
     }
 }
 

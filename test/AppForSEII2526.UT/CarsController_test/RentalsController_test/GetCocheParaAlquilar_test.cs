@@ -139,7 +139,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 
             var result = await controller.GetCarsRental(rentingPrice, modelName);               //Llamo a GetCarsRental con el parámetro de filtro -> result puede ser Ok, NotFound...
 
-            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            var ok = Assert.IsType<OkObjectResult>(result);
             var actual = Assert.IsType<List<CocheParaAlquilarDTO>>(ok.Value);
 
             // Ordenamos por Id para comparación determinista
@@ -160,7 +160,7 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
 
             var result = await controller.GetCarsRental(99999m, "modelo_que_no_existe");
 
-            var notFound = Assert.IsType<NotFoundObjectResult>(result.Result);
+            var notFound = Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal("No se encontraron coches con los filtros proporcionados.", notFound.Value);
         }
     }
