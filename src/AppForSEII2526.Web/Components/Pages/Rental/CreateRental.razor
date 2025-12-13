@@ -1,4 +1,4 @@
-﻿@page "/rentals/createrental"
+﻿@page "/rental/post"
 
 <h3>CreateRental</h3>
 
@@ -10,7 +10,7 @@
 @inject ILogger<CreateRental> logger
 @inject RentalStateContainer rentalState
 
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 @* rental is the object that will be edited thanks to the form *@
 <EditForm Model="rental" OnValidSubmit="OpenDialog">
