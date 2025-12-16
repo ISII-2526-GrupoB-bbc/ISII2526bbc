@@ -7,12 +7,18 @@ using System.Drawing;
 namespace AppForSEII2526.API.DTOs.ReseñarDTOs
 {
     public class ReseñarDetailDTO
+
     {
+        public int Id { get; set; }
+
         [StringLength(20, ErrorMessage = "Name cannot be any longer than 20 characters, neither shorter than 2.", MinimumLength = 2)]
         public string Name { get; set; }
 
         [StringLength(100, ErrorMessage = "Surname cannot be any longer than 100 characters, neither shorter than 4.", MinimumLength = 4)]
         public string Surname { get; set; }
+
+        [StringLength(100, ErrorMessage = "UserName cannot be any longer than 100 characters, neither shorter than 4.", MinimumLength = 4)]
+        public string UserName { get; set; }
 
         [StringLength(30, ErrorMessage = "Country cannot be any longer than 30 characters, neither shorter than 3.", MinimumLength = 3)]
         public string Country { get; set; }
@@ -30,6 +36,17 @@ namespace AppForSEII2526.API.DTOs.ReseñarDTOs
         {
             Name = name;
             Surname = surname;
+            Country = country;
+            DriverType = driverType;
+            Created = created;
+            ReviewItems = reviewItems;
+        }
+        public ReseñarDetailDTO(int id,string name, string surname,string username, string country, string driverType, DateTime created, IList<ReseñarItemDTO> reviewItems)
+        {
+            Id = id;
+            Name = name;
+            Surname = surname;
+            UserName = username;
             Country = country;
             DriverType = driverType;
             Created = created;
