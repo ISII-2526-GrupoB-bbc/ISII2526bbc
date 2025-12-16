@@ -12,7 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger1.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
+    <None Include="OpenAPIs\swagger1.json" ClassName="AppForSEII2526APIClient" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\swagger2.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
       <SourceUri>https://localhost:7067/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
@@ -35,6 +39,10 @@
     </PackageReference>
     <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
     <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="OpenAPIs\index.html" ClassName="AppForSEII2526APIClient" />
   </ItemGroup>
 
 </Project>

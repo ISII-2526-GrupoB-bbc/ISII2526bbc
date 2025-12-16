@@ -79,7 +79,7 @@
                 </div>
             }
             <div class="row">
-                <button type="button" class="btn btn-primary" id="purchaseCarButton" @onclick=@ReviewCars>Review cars</button>
+                <button type="button" class="btn btn-primary" id="reviewCarButton" @onclick=@ReviewCars>Review cars</button>
             </div>
         </div>
 
@@ -95,7 +95,7 @@ private string errors = "";
 private string filtroManufacturer { get; set; }
 private string filtroFuelType { get; set; }
 
-                    private ReseñarForCreateDTO review => reviewStateContainer.Review;
+    private ReseñarForCreateDTO review => reviewStateContainer.Review;
     private bool hiddenReviewCart = true;
     private void AddCar(CocheParaReviewDTO car)
     {
@@ -122,6 +122,11 @@ private string filtroFuelType { get; set; }
             errors = "Error while connecting to the system";
         }
         StateHasChanged();
+    }
+    protected override Task OnInitializedAsync()
+    {
+        SearchCars();
+        return base.OnInitializedAsync();
     }
 }
         
