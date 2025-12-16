@@ -1,4 +1,6 @@
 ﻿using AppForSEII2526.API.Models;
+using AppForSEII2526.Models;
+using Humanizer.Localisation;
 
 namespace AppForSEII2526.API.Data
 {
@@ -101,5 +103,57 @@ namespace AppForSEII2526.API.Data
             }
 
         }
+
+        /*
+        public static void SeedModelsAndCars(ApplicationDbContext dbcontext)
+        {
+            string[] modelnames = ["Model S", "R8", "Mustang"];
+            List<Model> models = [];
+            Car car;
+            foreach (string modelname in modelnames)
+            {
+                var model = dbcontext.Model.FirstOrDefault(m => m.Name == modelname);
+                if (model == null)
+                    models.Add(new Model(modelname));
+                else
+                    models.Add(model);
+            }
+            if (dbcontext.Cars.FirstOrDefault(c => c.RentingPrice == 45000) == null)
+            {
+                car = new Car("The lord of the rings", models[0], new DateTime(2011, 10, 20), 10.0m, 5, 1.0m, 2);
+                car = new Car("The last of us", models[0], new DateTime(2023, 3, 15), 10.0m, 5, 1.0m, 2);
+                dbcontext.Cars.Add(car);
+
+            }
+
+            if (dbcontext.Cars.FirstOrDefault(c => c.RentingPrice == 35000) == null)
+            {
+                car = new Car("The mechanic orange", models[1], new DateTime(1988, 02, 23), 15.0m, 10, 2.0m, 10);
+                car = new Car("The man in the high castle", models[1], new DateTime(2015, 01, 15), 15.0m, 10, 3.0m, 10);
+                dbcontext.Cars.Add(car);
+            }
+
+            //it saves the modification of dbcontext to the database
+            dbcontext.SaveChanges();
+
+            //alternatively you may have used a raw SQL
+            //dbcontext.Database.ExecuteSqlRaw("INSERT INTO [Movies] ([Id], [Title], [GenreId], [ReleaseDate], [PriceForPurchase], [QuantityForPurchase], [PriceForRenting], [QuantityForRenting]) VALUES (1, N'The lord of the rings', 1, N'2011-10-20 00:00:00', 10, 1000, 1, 100)");
+            //dbcontext.Database.ExecuteSqlRaw("INSERT INTO [Movies] ([Id], [Title], [GenreId], [ReleaseDate], [PriceForPurchase], [QuantityForPurchase], [PriceForRenting], [QuantityForRenting]) VALUES (2, N'The flying castle', 2, N'2007-04-04 00:00:00', 20, 1000, 3, 10)");
+
+
+            //Since EFCORE7, you can perform bulk updates with linq.
+            dbcontext.Cars.ExecuteUpdate(s => s.SetProperty(m => m.QuantityForPurchasing, 10));
+
+            //other example using existing information: add 100 to the QuantityForPurchase of each Movie
+            //dbcontext.Movies.ExecuteUpdate(s => s.SetProperty(m => m.QuantityForPurchase, m=>m.QuantityForPurchase+100));
+
+            //You can alternatively use raw SQL to perform the operation where performance is sensitive:
+            //dbcontext.Database.ExecuteSqlRaw("UPDATE [Movies] SET [QuantityForPurchase] = 100");
+
+            dbcontext.SaveChanges();
+
+
+        }
+        */
     }
 }
