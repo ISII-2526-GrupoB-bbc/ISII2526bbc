@@ -1,4 +1,4 @@
-﻿@page "/review/detail"
+﻿@page "/review/details"
 @using Microsoft.AspNetCore.Authorization
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
@@ -95,7 +95,7 @@ else
         {
             review = null;
         }
-        if ((review == null) || (review.Name != userName))
+        if ((review == null) || (review.UserName != userName))
         {
             error = $"Error! You are not authorized to see this rental or there is not a rental with id={ReviewID}";
         }
