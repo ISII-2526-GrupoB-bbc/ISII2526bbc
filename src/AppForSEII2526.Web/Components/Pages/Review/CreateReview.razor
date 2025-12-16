@@ -1,0 +1,183 @@
+﻿@page "/review/createreview"
+@using AppForSEII2526.Web.Components.Shared
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CreateReview> logger
+@inject ReviewStateContainer reviewState
+@inject NavigationManager navigation
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<h3>Create Review</h3>
+
+<EditForm Model="review" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="row alert alert-danger" />
+    </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="review.Name" class="form-control" id="Name" />
+                <label for="Name">Name </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="review.Surname" class="form-control" id="Surname" />
+                <label for="Surname">Surname </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="review.Country" class="form-control" id="Country" />
+                <label for="Country">Country </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="review.DriverType" class="form-control" id="DriverType" />
+                <label for="DriverType">DriverType</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md">
+        <div class="form-floating">
+            @*this button will be used to ask the user if he want to proceed to review the cars*@
+            <button class="btn btn-primary" type="submit" id="Submit">
+                Review your cars
+            </button>
+        </div>
+    </div>
+
+    <h4>Review Detail</h4>
+    <p>
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyReviewItems" id="ModifyCar">
+            Modify cars
+        </button>
+    </p>
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfReviewItems">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>FuelType</th>
+                    <th>Manufacturer</th>
+                    <th>Color</th>
+                    <th>Description</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in review.ReviewItems)
+                {
+                    <tr id="CarData_@item.Model">
+                        <td>@item.Model</td>
+                        <td>@item.FuelType</td>
+                        <td>@item.Manufacturer</td>
+                        <td>@item.Color</td>
+                        <td>
+                            <InputText @bind-Value="item.Description" class="form-control" id="@($"description_{item.Description}")" />
+                        </td>
+                        <td>
+                            <InputNumber @bind-Value="item.Rating" class="form-control" id="@($"rating_{item.Rating}")" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+
+@if (DialogIsOpen)
+{
+    <DialogReview Caption="Review Cars"
+                  Message="¿Do you want to review the selected cars?"
+                  OnClose="@OnDialogClose"
+                  Type=DialogReview.Category.SaveNot>
+    </DialogReview>
+}
+
+
+
+@code {
+
+    private ReseñarForCreateDTO review => reviewState.Review;
+    private bool DialogIsOpen;
+    private object? errors;
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+
+    private void ModifyReviewItems()
+    {
+        navigation.NavigateTo("/review/select");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    review.UserName = user.Identity.Name;
+                }
+            }
+            review.Name = review.Name == null ? "" : review.Name;
+            review.Surname = review.Surname == null ? "" : review.Surname;
+            review.UserName = review.UserName == null ? "" : review.UserName;
+
+        }
+    }
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    private void OpenDialog()
+    {
+        DialogIsOpen = true;
+    }
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            if (review.ReviewItems.Count > 0)
+            {
+                try
+                {
+                    var reviewed = await apiclient.CreateReviewAsync(review);
+                    reviewState.ReviewProcessed();
+                    navigation.NavigateTo($"/review/details/?ReviewID={reviewed.Id}");
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
+
+
+}
