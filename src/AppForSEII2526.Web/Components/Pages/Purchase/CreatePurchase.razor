@@ -17,7 +17,7 @@
 <EditForm Model="purchase" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger" />
+        <ValidationSummary id="ValidationSummary" class="row alert alert-danger" />
     </div>
 
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -122,8 +122,8 @@
     private ComprarForCreateDTO purchase => purchaseState.Purchase;
 
     // Calcula el precio total de la compra
-    private double TotalCost =>
-        purchase.CochesComprados.Sum(ci => ci.PurchasingPrice * ci.Quantity);
+    private decimal TotalCost =>
+        (decimal) purchase.CochesComprados.Sum(ci => ci.PurchasingPrice * ci.Quantity);
 
     private void ModifyPurchaseItems()
     {
