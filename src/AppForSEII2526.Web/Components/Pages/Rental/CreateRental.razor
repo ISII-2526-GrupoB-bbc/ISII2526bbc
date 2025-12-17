@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        @*
+        
         <div class="col-md">
             <div class="form-floating mb-3">
                 <InputText @bind-Value="rental.UserName"
@@ -44,7 +44,7 @@
                 <label for="UserName">User Name</label>
             </div>
         </div>
-        *@
+        
 
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -53,6 +53,7 @@
             </div>
         </div>
     </div>
+
     <div class="row g-2">
         <div class="col-md">
             <div class="form-floating">
@@ -149,42 +150,54 @@
 
     private async Task OnDialogClose(bool isOk)
     {
-
-        DialogIsOpen = false;
-        if (isOk)
+        if (!isOk)
         {
-            if (rental.RentalItems.Count > 0)
+            DialogIsOpen = false;
+            return;
+        }
+
+        if (rental.RentalItems.Count == 0)
+        {
+            messageError = "You must select at least one car";
+            DialogIsOpen = false;
+            return;
+        }
+
+        try
+        {
+            // IMPORTANTE: cerrar el diálogo ANTES de await
+            DialogIsOpen = false;
+
+            var rented = await apiclient.CreateRentalAsync(rental);
+
+            // Limpiamos el estado ANTES de navegar
+            rentalState.RentalProcessed();
+
+            // NAVEGAMOS Y TERMINAMOS
+            navigation.NavigateTo($"/rental/detailrental/?RentalID={rented.Id}", true);
+            return; // ⬅️ CLAVE: no tocar nada más
+        }
+        catch (ApiException<ValidationProblemDetails> ex)
+        {
+            messageError = "";
+            if (ex.Result?.Errors?.Values != null)
             {
-                try
-                {
-                    var rented = await apiclient.CreateRentalAsync(rental);
-                    rentalState.RentalProcessed();
-                    navigation.NavigateTo($"/rental/detailrental/?RentalID={rented.Id}");
-                }
-                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
-                {
-
-                    if (apiexceptionvalidation.Result.Errors.Values != null)
-                    {
-                        messageError = "";
-                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
-                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
-                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
-                    }
-                }
-                catch (ApiException apiexception)
-                {
-                    //we need to inform user that there was some other error while processing the request
-                    messageError = "Error while processing your request, please try again later!";
-
-                }
-
+                foreach (var errors in ex.Result.Errors.Values)
+                    messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
             }
+        }
+        catch
+        {
+            messageError = "Error while processing your request, please try again later!";
         }
     }
 
+
+
     protected override async Task OnInitializedAsync()
     {
+
+        rental.RentingDate = DateTime.Now;
 
         if (authenticationState is not null)
         {

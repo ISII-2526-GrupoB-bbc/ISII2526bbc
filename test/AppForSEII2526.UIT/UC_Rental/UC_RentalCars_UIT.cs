@@ -162,6 +162,7 @@ namespace AppForSEII2526.UIT.UC_Rental {
             Assert.True(listcars.CheckShoppingCart(carModel1));
         }
 
+        /*
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_11_AF4_RentButtonNotAvailable()
@@ -181,18 +182,33 @@ namespace AppForSEII2526.UIT.UC_Rental {
             //Assert            
             Assert.True(listcars.IsShoppingCartEmpty(), "Rent button should be disabled");
         }
+        */
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_11_AF4_RentButtonNotAvailable()
+        {
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
 
+            InitialStepsForRentalCars();
+
+            listcars.FilterCars("", "", from, to);
+            listcars.SelectCars(new List<string> { carModel1 });
+            listcars.ModifyRentingCart(carModel1);
+
+            Assert.True(listcars.IsShoppingCartEmpty(), "Rent button should be disabled");
+        }
 
 
         // PRUEBAS DE RELLENAR CAMPOS DEL POST
 
         [Theory]
-        [InlineData("", "Martinez", "Calle de la Universidad 1, Albacete, 02006, España", "The CustomerName field is required")]
-        [InlineData("G", "Martinez", "Calle de la Universidad 1, Albacete, 02006, España", "The field CustomerName must be a string with a minimum length of 2 and a maximum length of 50.")]
-        [InlineData("Gaspar", "Martrinez", "", "The DeliveryCarDealer field is required.")]
-        [InlineData("Gaspar", "Martinez", "Calle", "The field DeliveryCarDealer must be a string with a minimum length of 10 and a maximum length of 150.")]
+        [InlineData("gaspar123", "", "Martinez", "Calle de la Universidad 1, Albacete, 02006, España", "The CustomerName field is required")]
+        [InlineData("gaspar123", "G", "Martinez", "Calle de la Universidad 1, Albacete, 02006, España", "The field CustomerName must be a string with a minimum length of 2 and a maximum length of 50.")]
+        [InlineData("gaspar123", "Gaspar", "Martrinez", "", "The DeliveryCarDealer field is required.")]
+        [InlineData("gaspar123", "Gaspar", "Martinez", "Calle", "The field DeliveryCarDealer must be a string with a minimum length of 10 and a maximum length of 150.")]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_12_13_14_15_AF5_testingErrorsMandatorydata(string name, string surname, string deliveryAddress,
+        public void UC2_12_13_14_15_AF5_testingErrorsMandatorydata(string username, string name, string surname, string deliveryAddress,
             string expectedMessageError)
         {
             //Arrange
@@ -209,7 +225,7 @@ namespace AppForSEII2526.UIT.UC_Rental {
             listcars.FilterCars("", "", from, to);
             listcars.SelectCars(new List<string> { carModel1 });
             listcars.RentCars();
-            createrental.FillInRentalInfo(name, surname, deliveryAddress, "CreditCard");
+            createrental.FillInRentalInfo(username, name, surname, deliveryAddress, "CreditCard");
             createrental.PressRentYourCars();
 
             //Assert
@@ -249,9 +265,9 @@ namespace AppForSEII2526.UIT.UC_Rental {
         }
 
         [Theory]
-        [InlineData("elenanavarro", "Elena", "Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard")]
-        [InlineData("elenanavarro", "Elena", "Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "PayPal")]
-        [InlineData("elenanavarro", "Elena", "Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "Cash")]
+        [InlineData("elena@uclm.es", "Elena", "Navarro Martínez", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard")]
+        [InlineData("elena@uclm.es", "Elena", "Navarro Martrínez", "Calle de la Universidad 1, Albacete, 02006, España", "PayPal")]
+        [InlineData("elena@uclm.es", "Elena", "Navarro Martínez", "Calle de la Universidad 1, Albacete, 02006, España", "Cash")]
 
 
         [Trait("LevelTesting", "Funcional Testing")]
@@ -274,7 +290,7 @@ namespace AppForSEII2526.UIT.UC_Rental {
             listcars.SelectCars(new List<string> { carModel1 });
             listcars.RentCars();
 
-            createrental.FillInRentalInfo(name, surname, deliveryAddress, paymentMethod);
+            createrental.FillInRentalInfo(username, name, surname, deliveryAddress, paymentMethod);
             //createrental.FillInRentalDescription(carDescription1, carId1);
             createrental.PressRentYourCars();
             createrental.PressOkModalDialog();
