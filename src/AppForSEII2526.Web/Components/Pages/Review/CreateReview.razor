@@ -14,7 +14,7 @@
 <EditForm Model="review" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger" />
+        <ValidationSummary class="row alert alert-danger" id="ValidationSummary" />
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @messageError</p>
@@ -57,7 +57,7 @@
 
     <h4>Review Detail</h4>
     <p>
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyReviewItems" id="ModifyCar">
+        <button class="btn btn-outline-primary" type="button" @onclick="ModifyReviewItems" id="ModifyCar">
             Modify cars
         </button>
     </p>
@@ -74,33 +74,42 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in review.ReviewItems)
-                {
-                    <tr id="CarData_@item.Model">
-                        <td>@item.Model</td>
-                        <td>@item.FuelType</td>
-                        <td>@item.Manufacturer</td>
-                        <td>@item.Color</td>
-                        <td>
-                            <InputText @bind-Value="item.Description" class="form-control" id="@($"description_{item.Description}")" />
-                        </td>
-                        <td>
-                            <InputNumber @bind-Value="item.Rating" class="form-control" id="@($"rating_{item.Rating}")" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
+    @foreach (var item in review.ReviewItems)
+    {
+        @{
+            var safeModel = item.Model.Replace(" ", "_");
+        }
+
+        <tr id="@($"CarData_{safeModel}")">
+            <td>@item.Model</td>
+            <td>@item.FuelType</td>
+            <td>@item.Manufacturer</td>
+            <td>@item.Color</td>
+            <td>
+                <InputText @bind-Value="item.Description"
+                           class="form-control"
+                           id="@($"description_{safeModel}")" />
+            </td>
+            <td>
+                <InputNumber @bind-Value="item.Rating"
+                             class="form-control"
+                             id="@($"rating_{safeModel}")" />
+            </td>
+        </tr>
+    }
+</tbody>
+
         </table>
     </div>
 </EditForm>
 
 @if (DialogIsOpen)
 {
-    <DialogReview Caption="Review Cars"
-                  Message="¿Do you want to review the selected cars?"
-                  OnClose="@OnDialogClose"
-                  Type=DialogReview.Category.SaveNot>
-    </DialogReview>
+    <Dialog Caption="Review cars"
+            Message="Do you want to proceed to rent the selected cars?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
 }
 
 
@@ -112,6 +121,7 @@
     private object? errors;
     private string messageError = "";
     private bool hideErrors { get { return messageError.Length == 0; } }
+    private bool reviewButtonDisabled;
 
     private void ModifyReviewItems()
     {

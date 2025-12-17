@@ -36,17 +36,22 @@ namespace AppForSEII2526.UIT.CU_Review
         private const string driverType = "Experto";
 
         //Datos de la Reseña
-        private const string description = "Excelente coche, muy cómodo y potente.";
+        private const string description = "Reseña para.";
         private const int rating = 5;
 
         //Page Object
         private SelectCarsForReview_PO selectCarsForReview_PO;
-       
+        private CreateReview_PO createReview_PO;
+        private DetailReview_PO detailReview_PO;
+
 
         public CU_ReviewCars_UIT(ITestOutputHelper output) : base(output)
         {
             Initial_step_opening_the_web_page();
             selectCarsForReview_PO = new SelectCarsForReview_PO(_driver, _output);
+            createReview_PO = new CreateReview_PO(_driver, _output);
+            detailReview_PO = new DetailReview_PO(_driver, _output);
+
         }
 
         private void Precondition_perform_login()
@@ -84,7 +89,7 @@ namespace AppForSEII2526.UIT.CU_Review
         [InlineData(carModel1,carClass1, carManufacturer1, carFuelType1, carColor1, "Audi", "")]
         [InlineData(carModel2,carClass2, carManufacturer2, carFuelType2, carColor2, "", "Eléctrico")]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC4_AF0_UC4_2_3_filtering(string carModel,string carClass ,string carManufacturer, string carFuelType, string carColor, string filterManufacturer, string filterFuelType)
+        public void UC4_2_3_filtrar(string carModel,string carClass ,string carManufacturer, string carFuelType, string carColor, string filterManufacturer, string filterFuelType)
         {
             //Arrange
             InitialStepsForReviewCars();
@@ -101,7 +106,7 @@ namespace AppForSEII2526.UIT.CU_Review
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC4_AF1_UC4_4_ReviewNotAvailable()
+        public void UC4_4_ReviewNoDisponible()
         {
             //Arrange
             InitialStepsForReviewCars();
@@ -112,6 +117,58 @@ namespace AppForSEII2526.UIT.CU_Review
             //Assert
 
             Assert.True(selectCarsForReview_PO.ReviewNotAvailable());
+        }
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC4_5_BorrarCochesSeleccionados()
+        {
+            //Arrange
+            InitialStepsForReviewCars();
+
+            //Act
+            selectCarsForReview_PO.AddCarToReviewCart(carModel1);
+            selectCarsForReview_PO.AddCarToReviewCart(carModel2);
+            selectCarsForReview_PO.ReviewCars();
+
+            createReview_PO.FillInReviewInfo(name, surname, country, driverType);
+
+            createReview_PO.PressModifyCars();
+
+            selectCarsForReview_PO.RemoveCarFromReviewCart(carModel2);
+
+            selectCarsForReview_PO.ReviewCars();
+
+            var expectedReviewItems = new List<string[]> {
+                new string[] { carModel1, carFuelType1, carManufacturer1, carColor1 }
+            };
+
+            Assert.True(createReview_PO.CheckListOfReviewItems(expectedReviewItems));
+        }
+        
+       
+        [Theory]
+        [InlineData("", surname, country, driverType, description, rating, "The field Name must be a string with a minimum length of 2 and a maximum length of 20.")]
+        [InlineData(name, surname, " ", driverType, description, rating, "The field Country must be a string with a minimum length of 3 and a maximum length of 30.")]
+        [InlineData(name, surname, country, " ", description, rating, "The field DriverType must be a string with a minimum length of 3 and a maximum length of 30.")]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC4_AF3_UC4_6_7_8_Testing_Errors_Mandatory_Data(string name, string surname, string country, string driverType, string description, int rating, string expectedMessageError)
+        {
+            //Arrange
+            InitialStepsForReviewCars();
+
+            //Act
+            selectCarsForReview_PO.AddCarToReviewCart(carModel1);
+            selectCarsForReview_PO.ReviewCars();
+
+            createReview_PO.FillInReviewInfo(name, surname, country, driverType);
+
+            // Si el ID es correcto (1) y el page object espera visibilidad, esto funcionará
+            createReview_PO.FillInCarDetails(description, rating, carModel1);
+
+            createReview_PO.PressReviewYourCars();
+
+            //Assert
+            Assert.True(createReview_PO.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
         }
     }
 
