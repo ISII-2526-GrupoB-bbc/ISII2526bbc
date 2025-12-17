@@ -107,7 +107,9 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
             // VALIDAR USUSARIO
-            var user = _context.ApplicationUsers.FirstOrDefault(u => u.UserName == rentalForCreate.CustomerName);
+            var user = _context.ApplicationUsers
+                .FirstOrDefault(u => u.UserName == rentalForCreate.UserName);
+
             if (user == null)
             {
                 var problemDetails = new ValidationProblemDetails();
@@ -140,7 +142,7 @@ namespace AppForSEII2526.API.Controllers
             // CREAR ENTIDAD RENTAL
             var rental = new Rental(
                 rentalForCreate.DeliveryCarDealer, 
-                rentalForCreate.RentingDate, 
+                rentalForCreate.RentingDate = DateTime.Now, 
                 rentalForCreate.EndDate, 
                 rentalForCreate.PaymentMethod, 
                 rentalForCreate.StartDate, 

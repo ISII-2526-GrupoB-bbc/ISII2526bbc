@@ -13,8 +13,8 @@ namespace AppForSEII2526.UIT.UC_Rental
         private By _surnameBy = By.Id("Surname");
         private By _deliveryDealerBy = By.Id("DCDealer");
         private By _paymentMethodBy = By.Id("PaymentMethod");
-
         private By _userNameBy = By.Id("UserName");
+
         private IWebElement _userName() => _driver.FindElement(_userNameBy);
 
 
@@ -24,7 +24,7 @@ namespace AppForSEII2526.UIT.UC_Rental
         {
         }
 
-        public void FillInRentalInfo(string name, string surname, string deliveryDealer, string paymentMethod)
+        public void FillInRentalInfo(string username, string name, string surname, string deliveryDealer, string paymentMethod)
         {
             // Esperamos a que el formulario esté visible
             WaitForBeingVisible(_nameBy);
@@ -32,6 +32,10 @@ namespace AppForSEII2526.UIT.UC_Rental
             // Name
             _driver.FindElement(_nameBy).Clear();
             _driver.FindElement(_nameBy).SendKeys(name);
+
+            // Username
+            _driver.FindElement(_userNameBy).Clear();
+            _driver.FindElement(_userNameBy).SendKeys(username);
 
             // Surname
             _driver.FindElement(_surnameBy).Clear();

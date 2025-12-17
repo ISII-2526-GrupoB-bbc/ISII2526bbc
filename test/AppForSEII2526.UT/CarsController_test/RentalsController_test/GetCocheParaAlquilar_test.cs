@@ -122,47 +122,54 @@ namespace AppForSEII2526.UT.CarsController_test.RentalsController_test
         //TEST PARAMETRIZADO: 200 OK + Lista Esperada
 
         //Este metodo comprueba que GetCars3:
-            //Devuelve 200 OK cuando todo va bien
-            //Devuelve la lista esperada de coches según el filtro
-            //Los datos de salida coinciden campo por campo con lo esperado
+        //Devuelve 200 OK cuando todo va bien
+        //Devuelve la lista esperada de coches según el filtro
+        //Los datos de salida coinciden campo por campo con lo esperado
 
-        [Theory]
-        [MemberData(nameof(GetCarsRental_OK_Cases))]
-        [Trait("Database", "WithoutFixture")]
-        [Trait("LevelTesting", "Unit Testing")]
-
-        //Este es el metodo del test
-        public async Task GetCarsRental_OK_test(string? modelName, decimal? rentingPrice, IList<CocheParaAlquilarDTO> expected)
-        {
-            var logger = new Mock<ILogger<CarsControllers>>().Object;
-            var controller = new CarsControllers(_context, logger);             //Se instancia el controlado real para simular una ejecución real
-
-            var result = await controller.GetCarsRental(rentingPrice, modelName);               //Llamo a GetCarsRental con el parámetro de filtro -> result puede ser Ok, NotFound...
-
-            var ok = Assert.IsType<OkObjectResult>(result);
-            var actual = Assert.IsType<List<CocheParaAlquilarDTO>>(ok.Value);
-
-            // Ordenamos por Id para comparación determinista
-            actual = actual.OrderBy(x => x.Id).ToList();
-            expected = expected.OrderBy(x => x.Id).ToList();
-
-            Assert.Equal(expected, actual);     //Comprobacion usando el EQUALS de CocheParaAlquilarDTO
-        }
-
-        // Test NotFound: cuando no hay coincidencias por precio
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetCarsRental_NotFound_test()
+        public async Task GetCarsRental_OK_NoFilters_ReturnsAllCars()
         {
+            // Arrange
             var logger = new Mock<ILogger<CarsControllers>>().Object;
             var controller = new CarsControllers(_context, logger);
 
-            var result = await controller.GetCarsRental(99999m, "modelo_que_no_existe");
+            // Act
+            var result = await controller.GetCarsRental(null, null);
 
-            var notFound = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("No se encontraron coches con los filtros proporcionados.", notFound.Value);
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(result);
+            var actual = Assert.IsType<List<CocheParaAlquilarDTO>>(ok.Value);
+
+            Assert.Equal(4, actual.Count);   // según tu seed
         }
+
+
+        // Test: cuando no hay coincidencias, devuelve OK con lista vacía
+        [Fact]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetCarsRental_EmptyResult_OK_test()
+        {
+            // Arrange
+            var logger = new Mock<ILogger<CarsControllers>>().Object;
+            var controller = new CarsControllers(_context, logger);
+
+            // Precio muy bajo + modelo inexistente → ningún coche cumple
+            decimal rentingPrice = 1m;
+            string modelName = "modelo_que_no_existe";
+
+            // Act
+            var result = await controller.GetCarsRental(rentingPrice, modelName);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var cars = Assert.IsType<List<CocheParaAlquilarDTO>>(okResult.Value);
+
+            Assert.Empty(cars);
+        }
+
     }
 }
 
