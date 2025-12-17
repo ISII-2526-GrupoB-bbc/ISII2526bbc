@@ -298,11 +298,30 @@ namespace AppForSEII2526.UIT.UC_Rental {
 
             //Assert
             //the expected error is shown in the view
-            Assert.True(detailRental.CheckRentalDetail(name, deliveryAddress, paymentMethod, DateTime.Now, from, to, carRentingPrice1 + " €"),
-                "Error: detail rental is not as expected");
+            Assert.True(
+            detailRental.CheckRentalDetail(
+                paymentMethod,
+                from,
+                to,
+                carRentingPrice1 + " €"),
+            "Error: detail rental is not as expected"
+            );
+
+
+
+
 
             var expectedRentalItems = new List<string[]>
-                    { new string[] { carModel1, carRentingPrice1 + " €" }, };
+            {
+                new string[]
+                {
+                    carModel1,          // Model
+                    carManufacturer1,   // Manufacturer (ej: "Audi")
+                    carRentingPrice1 + " €",
+                    "1"                 // Quantity
+                }
+};
+
 
             Assert.True(detailRental.CheckListOfCars(expectedRentalItems),
                 "Error: rental items are not as expected");

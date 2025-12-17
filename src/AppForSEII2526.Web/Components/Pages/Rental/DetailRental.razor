@@ -6,7 +6,7 @@
 
 <h3>DetailRental</h3>
 
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 @if (rental == null)
 {
@@ -17,7 +17,7 @@ else
     <table class="table table-borderless table-sm">
         <tr>
             <th>Username</th>
-            <td id="NameSurname">@rental.CustomerName </td>
+            <td id="UserName">@rental.CustomerName </td>
         </tr>
         <tr>
             <th>Direccion</th>
