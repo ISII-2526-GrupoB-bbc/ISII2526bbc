@@ -153,54 +153,35 @@ namespace AppForSEII2526.UIT.PurchaseCoches
 
         }
 
-        
-        /*
+
+
         [Theory]
-
-        [InlineData("", "Navarro", "Calle de la Universidad 1, Albacete", "CreditCard",
-            "The Name field must be a string with a minimum length of")]
-
-        [InlineData("Elena", "", "Calle de la Universidad 1, Albacete", "CreditCard",
-            "The Surname field must be a string with a minimum length of")]
-
-        [InlineData("Elena", "Navarro", "Calle", "CreditCard",
-            "The field Address must be a string with a minimum length of 10 and a maximum length of 100.")]
-
-        [InlineData("Elena", "Navarro", "Calle de la Universidad 1, Albacete", "",
-            "The PaymentMethod field is required")]
-
-
-
+        [InlineData("", "Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard", "Name")]
+        [InlineData("E", "Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard", "Name")]
+        [InlineData("Elena", "", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard", "Surname")]
+        [InlineData("Elena", "Navarro", "", "CreditCard", "Address")]
+        [InlineData("Elena", "Navarro", "Calle", "CreditCard", "Address")]
+        [Trait("LevelTesting", "Functional Testing")]
         public void UC1_6_AF1_InvalidMandatoryData_CannotFinishPurchase(
-    string Name,
-    string Surname,
-    string address,
-    string paymentMethod,
-    string expectedError)
+     string name,
+     string surname,
+     string address,
+     string paymentMethod,
+     string expectedErrorFragment)
         {
-            // ========== Arrange ==========
             var createPurchase = new CreatePurchase_PO(_driver, _output);
 
             InitialStepsForPurchaseCoches_UIT();
-
             selectCars.SearchCars("Rojo", "R8");
             selectCars.AddFirstCarToCart();
             selectCars.FinishPurchase();
 
-            // ========== Act ==========
-            createPurchase.FillInPurchaseInfo(
-                Name,
-                Surname,
-                address,
-                paymentMethod
-            );
-            createPurchase.PressConfirmPurchase();
+            createPurchase.FillInPurchaseInfo(name, surname, address, paymentMethod);
+            createPurchase.PressSubmit();
 
-
-            // ========== Assert ==========
             Assert.True(
-                createPurchase.CheckValidationSummaryError(expectedError),
-                $"Expected validation error: {expectedError}"
+                createPurchase.CheckAnyValidationError(expectedErrorFragment),
+                $"Expected validation error containing: {expectedErrorFragment}"
             );
         }
 

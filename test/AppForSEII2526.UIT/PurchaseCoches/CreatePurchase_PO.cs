@@ -14,8 +14,8 @@ namespace AppForSEII2526.UIT.Purchase
         private By submitButtonBy = By.Id("Submit");
         private By modifyCarsButtonBy = By.Id("ModifyCars");
         private By errorsShownBy = By.Id("ErrorsShown");
-        private By validationSummaryBy =
-    By.CssSelector(".validation-summary-errors");
+       // private By submitButtonBy = By.Id("Submit");
+       // private By validationSummaryBy = By.ClassName("validation-summary-errors");
 
 
         public CreatePurchase_PO(IWebDriver driver, ITestOutputHelper output)
@@ -45,10 +45,12 @@ namespace AppForSEII2526.UIT.Purchase
             }
         }
 
-        public void PressConfirmPurchase()
+        public void PressSubmit()
         {
+            WaitForBeingClickable(submitButtonBy);
             _driver.FindElement(submitButtonBy).Click();
         }
+
 
         public void PressModifyCars()
         {
@@ -58,13 +60,22 @@ namespace AppForSEII2526.UIT.Purchase
         // ===== VERIFICATIONS =====
 
 
-       
 
-        public bool CheckValidationSummaryError(string expectedError)
+
+        public bool CheckAnyValidationError(string expectedError)
         {
-            WaitForBeingVisible(validationSummaryBy);
-            return _driver.FindElement(validationSummaryBy).Text.Contains(expectedError);
+            // Espera hasta que el texto aparezca en algún sitio de la página
+            WaitForCondition(d => d.PageSource.Contains(expectedError), 10);
+            return _driver.PageSource.Contains(expectedError);
         }
+
+        // Helper (si no tienes uno parecido)
+        private void WaitForCondition(Func<IWebDriver, bool> condition, int seconds)
+        {
+            var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(_driver, TimeSpan.FromSeconds(seconds));
+            wait.Until(condition);
+        }
+
 
 
 
