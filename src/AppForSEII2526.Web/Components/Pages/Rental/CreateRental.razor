@@ -34,6 +34,18 @@
                 <label for="Name">Surname </label>
             </div>
         </div>
+
+        @*
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="rental.UserName"
+                           class="form-control"
+                           id="UserName" />
+                <label for="UserName">User Name</label>
+            </div>
+        </div>
+        *@
+
         <div class="col-md">
             <div class="form-floating mb-3">
                 <InputText @bind-Value="rental.DeliveryCarDealer" class="form-control" id="DCDealer" />
@@ -67,9 +79,7 @@
     <p><b>Date from:</b> @rental.StartDate.ToString("dd/MM/yyyy") <b>to:</b> @rental.EndDate.ToString("dd/MM/yyyy")</p>
     <p>
         <b>Total price:</b> @TotalCost €
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyMovies">
-            Modify movies
-        </button>
+        
     </p>
 
     <div class="mh-100 table-responsive">
@@ -96,6 +106,9 @@
         </table>
     </div>
 </EditForm>
+    <button class="btn btn-outline-primary" type="button" @onclick="ModifyRentalItems" id="ModifyCars">
+        Modify cars
+    </button>
 
 @*a modal popup dialog for checking if user wants to proceed to rent*@
     @if (DialogIsOpen)
@@ -124,7 +137,7 @@
     }
     private void ModifyRentalItems()
     {
-        navigation.NavigateTo("/rental/selectmoviesforrental");
+        navigation.NavigateTo("/rental/selectcarsforrental");
     }
 
     private RentalForCreateDTO rental => rentalState.Rental;

@@ -40,29 +40,21 @@ namespace AppForSEII2526.UIT.UC_Rental {
         {
             WaitForBeingVisible(inputRentingPrice);
 
+            // Renting price
+            carRentingPrice().Clear();
+            if (!string.IsNullOrEmpty(rentingPriceFilter))
+                carRentingPrice().SendKeys(rentingPriceFilter);
 
-            carRentingPrice().SendKeys(rentingPriceFilter);
-
-
-            if (modelSelected == "") modelSelected = "All";
-
-
-
-            // CHATGPT: ESPERA CLAVE
-            WaitForBeingVisible(inputStartDate);
-            WaitForBeingVisible(inputEndDate);
-            /*
-            //if no model is selected then all the models are applicable
-            
-            //create select element object 
-            SelectElement selectElement = new SelectElement(_carModel());
-            //select Action from the dropdown menu
-            selectElement.SelectByText(modelSelected);
-            */
+            // Model (ES INPUT, NO SELECT)
+            var modelInput = _carModel();
+            modelInput.Clear();
+            if (!string.IsNullOrEmpty(modelSelected))
+                modelInput.SendKeys(modelSelected);
 
             InputDateInDatePicker(inputStartDate, from);
             InputDateInDatePicker(inputEndDate, to);
 
+            _searchCarsButton().Click();
             _searchCarsButton().Click();
             //we wait for 2 seconds (2000 milliseconds) till the table is reloaded as we have to wait for the API service to be called
             System.Threading.Thread.Sleep(2000);
