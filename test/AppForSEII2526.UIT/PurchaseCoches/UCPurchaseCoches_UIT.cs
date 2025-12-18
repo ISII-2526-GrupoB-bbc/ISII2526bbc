@@ -1,6 +1,7 @@
 ﻿using AppForMovies.UIT.Shared;
 using AppForSEII2526.UIT.Purchase;
 using OpenQA.Selenium;
+using System.Drawing;
 using System.Xml.Linq;
 using Xunit;
 using Xunit.Abstractions;
@@ -152,6 +153,47 @@ namespace AppForSEII2526.UIT.PurchaseCoches
 
 
         }
+
+
+        [Theory]
+        [InlineData("","Model S")]
+        [InlineData("Rojo","")]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1_ExamenAF1(string color, string model)
+        {
+            // ========== Arrange ==========
+            InitialStepsForPurchaseCoches_UIT();
+
+            // ========== Act ==========
+            // Filtrar y añadir coche
+            selectCars.SearchCars(color, "");
+            selectCars.AddFirstCarToCart();
+
+            //Filtra por modelo
+            selectCars.SearchCars("", model); 
+            selectCars.AddFirstCarToCart();
+
+
+
+            // ========== Assert ==========
+            
+            // Assert
+            Assert.True(selectCars.CarsTableIsDisplayed(),
+                "La tabla de coches debería mostrarse");
+
+            Assert.True(selectCars.TableContains(model),
+                $"La tabla debería contener el modelo {model}");
+
+            Assert.True(selectCars.TableContains(color),
+                $"La tabla debería contener el color {color}");
+
+
+
+
+        }
+
+
+
 
 
 
