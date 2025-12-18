@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AppForSEII2526.UIT.UC_Rental {
     public class UC_RentalCars_UIT : UC_UIT {
@@ -320,13 +321,89 @@ namespace AppForSEII2526.UIT.UC_Rental {
                     carRentingPrice1 + " €",
                     "1"                 // Quantity
                 }
-};
+            };
 
 
             Assert.True(detailRental.CheckListOfCars(expectedRentalItems),
                 "Error: rental items are not as expected");
 
         }
+
+
+
+        // ===================== EXAMEN 3ER SPRINT GASPAR =================
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void FlujoExamen_Gaspar()
+        {
+
+            //Arrange
+
+            var createrental = new CreateRental_PO(_driver, _output);
+            var detailRental = new DetailRental_PO(_driver, _output);
+
+            var from = DateTime.Today.AddDays(1);
+            var to = DateTime.Today.AddDays(2);
+
+
+            //Act
+
+            InitialStepsForRentalCars();
+
+                // 1. Filtrar por modelo y añadir uno de los coches
+            listcars.FilterCars("", carModel1, from, to);                                       //Filtro por R8
+            listcars.SelectCars(new List<string> { carModel1 });                                //Cojo el R8
+
+                // 2. Filtrar por precio y añadir otro coche distinto al anterior
+            listcars.CambiarFiltroPrecioModelo("30000", "");                                    //Filtro por precio (Mustang)      ESTE METODO ES NUEVO
+            listcars.SelectCars(new List<string> { carModel2 });                                //Cojo el Mustang
+
+            Thread.Sleep(1000);
+
+            
+                // 3. Eliminar el primer coche añadido
+            listcars.ModifyRentingCart(carModel1);                                              //Borro el R8
+
+            Thread.Sleep(1000);
+
+                // 4. Continuar con el flujo básico
+            listcars.RentCars();
+
+            createrental.FillInRentalInfo("elena@uclm.es", "Elena", "Navarro Martínez", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard");
+            Thread.Sleep(1000);
+
+            createrental.PressRentYourCars();
+            createrental.PressOkModalDialog();
+
+            Thread.Sleep(2000);
+
+            //Assert
+
+            Assert.True(
+            detailRental.CheckRentalDetail(
+                "CreditCard",
+                from,
+                to,
+                carRentingPrice2 + " €"),
+            "Error: detail rental is not as expected"
+            );
+
+            var expectedRentalItems = new List<string[]>
+            {
+                new string[]
+                {
+                    carModel2,          
+                    carManufacturer2,   
+                    carRentingPrice2 + " €",
+                    "1"                
+                }
+            };
+
+            Assert.True(detailRental.CheckListOfCars(expectedRentalItems),
+                "Error: rental items are not as expected");
+        }
+
 
     }
 }
