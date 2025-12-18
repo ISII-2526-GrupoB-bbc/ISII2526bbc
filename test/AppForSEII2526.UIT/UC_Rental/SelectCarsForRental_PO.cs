@@ -36,6 +36,34 @@ namespace AppForSEII2526.UIT.UC_Rental {
 
         }
 
+        // =========== METODO NUEVO PARA EL EXAMEN =================================================
+
+        public void CambiarFiltroPrecioModelo(string rentingPriceFilter, string modelSelected)
+        {
+            WaitForBeingVisible(inputRentingPrice);
+
+            // Renting price
+            carRentingPrice().Clear();
+            if (!string.IsNullOrEmpty(rentingPriceFilter))
+                carRentingPrice().SendKeys(rentingPriceFilter);
+
+            // Model (ES INPUT, NO SELECT)
+            var modelInput = _carModel();
+            modelInput.Clear();
+            if (!string.IsNullOrEmpty(modelSelected))
+                modelInput.SendKeys(modelSelected);
+
+            _searchCarsButton().Click();
+            _searchCarsButton().Click();
+            //we wait for 2 seconds (2000 milliseconds) till the table is reloaded as we have to wait for the API service to be called
+            System.Threading.Thread.Sleep(2000);
+
+        }
+
+        // ===================================================================================
+
+
+
         public void FilterCars(string rentingPriceFilter, string modelSelected, DateTime from, DateTime to)
         {
             WaitForBeingVisible(inputRentingPrice);
