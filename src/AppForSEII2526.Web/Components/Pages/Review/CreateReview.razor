@@ -78,32 +78,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in review.ReviewItems)
-                {
-                    var safeModel = item.Model.Replace(" ", "_");
+    @*@foreach (var item in review.ReviewItems)
+    {
+        @{
+            var safeModel = item.Model.Replace(" ", "_");
+        }
 
-                    <tr id="@($"CarData_{safeModel}")">
-                        <td>@item.Model</td>
-                        <td>@item.FuelType</td>
-                        <td>@item.Manufacturer</td>
-                        <td>@item.Color</td>
-
-                        <td>
-                            <InputText @bind-Value="item.Description"
-                                       class="form-control"
-                                       id="@($"description_{safeModel}")" />
-                        </td>
-
-                        <td>
-                            <InputNumber @bind-Value="item.Rating"
-                                         class="form-control"
-                                         id="@($"rating_{safeModel}")"
-                                         min="1"
-                                         max="5" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
+        <tr id="@($"CarData_{safeModel}")">
+            <td>@item.Model</td>
+            <td>@item.FuelType</td>
+            <td>@item.Manufacturer</td>
+            <td>@item.Color</td>
+            <td>
+                <InputText @bind-Value="item.Description"
+                           class="form-control"
+                           id="@($"description_{safeModel}")" />
+            </td>
+            <td>
+                <InputNumber @bind-Value="item.Rating"
+                             class="form-control"
+                             id="@($"rating_{safeModel}")" />
+            </td>
+        </tr>
+        *@
+    }
+</tbody>
 
         </table>
     </div>
