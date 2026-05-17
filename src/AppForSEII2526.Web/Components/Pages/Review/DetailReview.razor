@@ -95,9 +95,10 @@ else
         {
             review = null;
         }
-        if ((review == null) || (review.UserName != userName))
+        if (review == null)
         {
-            error = $"Error! You are not authorized to see this rental or there is not a rental with id={ReviewID}";
+            error = $"Error! No existe una reseña con id={ReviewID}";
         }
+        
     }
 }

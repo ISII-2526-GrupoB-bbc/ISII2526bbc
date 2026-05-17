@@ -40,8 +40,12 @@
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="review.DriverType" class="form-control" id="DriverType" />
-                <label for="DriverType">DriverType</label>
+                <InputSelect @bind-Value="review.DriverType" class="form-control" id="DriverType">
+                    <option value="">Seleccione tipo de conductor</option>
+                    <option value="Novato">Novato</option>
+                    <option value="Experto">Experto</option>
+                </InputSelect>
+                <label for="DriverType">Tipo de conductor</label>
             </div>
         </div>
     </div>
@@ -167,22 +171,30 @@
             {
                 try
                 {
+                    review.UserName = string.IsNullOrWhiteSpace(review.Name)
+                        ? "Invitado"
+                        : review.Name;
+
                     var reviewed = await apiclient.CreateReviewAsync(review);
                     reviewState.ReviewProcessed();
                     navigation.NavigateTo($"/review/details/?ReviewID={reviewed.Id}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
-
-                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    if (apiexceptionvalidation.Result?.Errors?.Values != null)
                     {
                         messageError = "";
+
                         foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
-                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                        {
                             messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                        }
                     }
                 }
-
+                catch (ApiException apiException)
+                {
+                    messageError = apiException.Response ?? apiException.Message;
+                }
             }
         }
     }

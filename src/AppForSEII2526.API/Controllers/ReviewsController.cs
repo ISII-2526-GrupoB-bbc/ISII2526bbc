@@ -36,14 +36,27 @@ namespace AppForSEII2526.API.Controllers
             }
 
             var review = await _context.Reviews
-             .Where(p => p.Id == id)
-                 .Include(p => p.ApplicationUser) //join table ApplicationUser
-                 .Include(p => p.ReviewItems) //join table ReviewItem
-                    .ThenInclude(pi => pi.Car) //then join table Car
-                        .ThenInclude(c => c.Model) //then join table Model     
-             .Select(p => new ReseñarDetailDTO(p.ApplicationUser.Name, p.ApplicationUser.Surname, p.Country, p.DriverType, p.Created, p.ReviewItems
-                        .Select(pi => new ReseñarItemDTO(pi.Car.Model.Name, pi.Car.Manufacturer, pi.Car.Color, pi.Rating, pi.Description)).ToList<ReseñarItemDTO>()))
-             .FirstOrDefaultAsync();
+    .Where(p => p.Id == id)
+    .Include(p => p.ReviewItems)
+        .ThenInclude(pi => pi.Car)
+        .ThenInclude(c => c.Model)
+    .Select(p => new ReseñarDetailDTO(
+        p.Id,
+        p.UserName,
+        "",
+        p.UserName,
+        p.Country,
+        p.DriverType,
+        p.Created,
+        p.ReviewItems
+            .Select(pi => new ReseñarItemDTO(
+                pi.Car.Model.Name,
+                pi.Car.Manufacturer,
+                pi.Car.Color,
+                pi.Rating,
+                pi.Description))
+            .ToList()))
+    .FirstOrDefaultAsync();
 
             if (review == null) //Si el id de la review no existe lanzo un error
             {
@@ -83,13 +96,6 @@ namespace AppForSEII2526.API.Controllers
 
             }
 
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reseñaForCreate.UserName); //compruebo que el usuario que compra existe en la base de datos
-            if (user == null)  //si el usuario no existe lanzo un error
-            {
-                ModelState.AddModelError("ReviewApplicationUser", "Error! UserName is not registered");
-                _logger.LogError($"ReviewsController || Error! UserName is not registered'");
-            }
-
             if (ModelState.ErrorCount > 0) //si tengo algún error acumulado, devuelve BadRequest
             {
                 return BadRequest(new ValidationProblemDetails(ModelState));
@@ -114,8 +120,9 @@ namespace AppForSEII2526.API.Controllers
                 Created = DateTime.Now,
                 DriverType = reseñaForCreate.DriverType,
                 ReviewItems = new List<ReviewItem>(),
-                ApplicationUser = user,
-                UserName = user.UserName,
+                UserName = string.IsNullOrWhiteSpace(reseñaForCreate.UserName)
+                ? "Invitado"
+        :       reseñaForCreate.UserName,
             };
 
             foreach (var item in reseñaForCreate.ReviewItems)
@@ -157,9 +164,19 @@ namespace AppForSEII2526.API.Controllers
                 return Conflict("Error" + ex.Message);
             }
 
-            var reviewDetail = new ReseñarDetailDTO(review.ApplicationUser.Name,review.ApplicationUser.Surname,review.Country, review.DriverType,review.Created, reseñaForCreate.ReviewItems);
+            var reviewDetail = new ReseñarDetailDTO(
+    review.Id,
+    review.UserName,
+    "",
+    review.UserName,
+    review.Country,
+    review.DriverType,
+    review.Created,
+    reseñaForCreate.ReviewItems
+);
 
-            return CreatedAtAction("Get_Details_Review", new { id = review.Id }, reviewDetail);
+            return CreatedAtAction(nameof(GetDetailsReview), new { id = review.Id }, reviewDetail);
+
         }
     }
 }
