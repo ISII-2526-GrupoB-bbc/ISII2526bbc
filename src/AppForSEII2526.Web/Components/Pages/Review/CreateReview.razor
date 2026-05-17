@@ -53,7 +53,7 @@
     <div class="col-md">
         <div class="form-floating">
             @*this button will be used to ask the user if he want to proceed to review the cars*@
-            <button class="btn btn-primary" type="submit" id="Submit">
+            <button id="ReviewYourCarsButton" class="btn btn-primary" @onclick="OpenDialog">
                 Review your cars
             </button>
         </div>
@@ -112,7 +112,7 @@
 @if (DialogIsOpen)
 {
     <Dialog Caption="Review cars"
-            Message="Do you want to proceed to rent the selected cars?"
+            Message="Do you want to proceed to re the selected cars?"
             OnClose="@OnDialogClose"
             Type=Dialog.Category.SaveNot>
     </Dialog>
@@ -178,7 +178,13 @@
 
                     var reviewed = await apiclient.CreateReviewAsync(review);
                     reviewState.ReviewProcessed();
-                    navigation.NavigateTo($"/review/details/?ReviewID={reviewed.Id}");
+                    if (reviewed.Id <= 0)
+                    {
+                        messageError = $"La reseña se ha creado, pero el Id devuelto no es válido: {reviewed.Id}";
+                        return;
+                    }
+
+                    navigation.NavigateTo($"/review/details?ReviewID={reviewed.Id}", forceLoad: true);
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {

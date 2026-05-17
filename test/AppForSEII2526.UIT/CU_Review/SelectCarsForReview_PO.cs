@@ -87,18 +87,13 @@ namespace AppForSEII2526.UIT.CU_Review
 
         public bool ReviewNotAvailable()
         {
-            // Lógica robusta:
-            // El botón puede no existir (NoSuchElement) o estar oculto (Displayed = false)
             try
             {
-                var button = _driver.FindElement(buttonReviewCars);
-                // Si lo encuentra, devolvemos true (No Disponible) solo si NO está visible.
-                return !button.Displayed;
+                var button = _driver.FindElement(By.Id("reviewCarButton"));
+                return !button.Displayed || !button.Enabled;
             }
             catch (NoSuchElementException)
             {
-                // Si entra aquí, es que el botón no existe en el DOM.
-                // Por tanto, la revisión NO está disponible. El test pasa.
                 return true;
             }
         }

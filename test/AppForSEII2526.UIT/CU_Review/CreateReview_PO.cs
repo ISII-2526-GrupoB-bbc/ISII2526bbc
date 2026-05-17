@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using AppForSEII2526.UIT.Shared;
 using Xunit.Abstractions;
-
+using OpenQA.Selenium.Support.UI;
 namespace AppForSEII2526.UIT.CU_Review
 {
     public class CreateReview_PO : PageObject
@@ -18,7 +18,7 @@ namespace AppForSEII2526.UIT.CU_Review
         private By _driverTypeBy = By.Id("DriverType");
 
         // Selectores de botones
-        private By _reviewCarsBtnBy = By.Id("Submit");
+        private By _reviewCarsBtnBy = By.Id("ReviewYourCarsButton");
         private By _modifyCarsBtnBy = By.Id("ModifyCar");
         private By _tableReviewItemsBy = By.Id("TableOfReviewItems");
 
@@ -36,13 +36,20 @@ namespace AppForSEII2526.UIT.CU_Review
         // Rellena la información del conductor
         public void FillInReviewInfo(string name, string surname, string country, string driverType)
         {
-            // Esperamos a que el primer campo sea visible para asegurar que la página cargó
-            WaitForBeingVisible(_nameBy);
+            _driver.FindElement(By.Id("Name")).Clear();
+            _driver.FindElement(By.Id("Name")).SendKeys(name);
 
-            _name().SendKeys(name);
-            _surname().SendKeys(surname);
-            _country().SendKeys(country);
-            _driverType().SendKeys(driverType);
+            _driver.FindElement(By.Id("Surname")).Clear();
+            _driver.FindElement(By.Id("Surname")).SendKeys(surname);
+
+            _driver.FindElement(By.Id("Country")).Clear();
+            _driver.FindElement(By.Id("Country")).SendKeys(country);
+
+            if (!string.IsNullOrWhiteSpace(driverType))
+            {
+                var selectDriverType = new SelectElement(_driver.FindElement(By.Id("DriverType")));
+                selectDriverType.SelectByText(driverType.Trim());
+            }
         }
 
         // Rellena la descripción y el rating del coche en la tabla
@@ -64,8 +71,8 @@ namespace AppForSEII2526.UIT.CU_Review
             rate.SendKeys(rating.ToString());
             rate.SendKeys(Keys.Tab); // <-- dispara validación
         }
-        
 
+        
 
         // Botón "Review your cars" (Confirmar)
         public void PressReviewYourCars()

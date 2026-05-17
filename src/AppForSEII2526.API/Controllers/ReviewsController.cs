@@ -86,6 +86,10 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("DriverType", "Error! DriverType must be 'Novato' or 'Experto'");
                 _logger.LogError($"ReviewsController || Error! DriverType must be 'Novato' or 'Experto'");
             }
+            if (string.IsNullOrWhiteSpace(reseñaForCreate.DriverType))
+            {
+                ModelState.AddModelError("DriverType", "The DriverType field is required.");
+            }
             foreach (var item in reseñaForCreate.ReviewItems)
             {
                 if (item.Description != null && !item.Description.StartsWith("Reseña para"))

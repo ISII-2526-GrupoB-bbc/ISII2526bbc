@@ -83,41 +83,107 @@ namespace AppForSEII2526.UIT.CU_Review
                 _driver.Navigate().GoToUrl(new Uri(_driver.Url).GetLeftPart(UriPartial.Authority) + "/review/select");
             }
         }
-
-
-        [Theory]
-        [InlineData(carModel1,carClass1, carManufacturer1, carFuelType1, carColor1, "Audi", "")]
-        [InlineData(carModel2,carClass2, carManufacturer2, carFuelType2, carColor2, "", "Eléctrico")]
+        [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC4_2_3_filtrar(string carModel,string carClass ,string carManufacturer, string carFuelType, string carColor, string filterManufacturer, string filterFuelType)
+        public void UC4_1_ReviewCorrecta()
         {
-            //Arrange
+            // Arrange
             InitialStepsForReviewCars();
-            var expectedCars = new List<string[]> {
-                new string[] { carModel,carClass,carManufacturer, carColor, carFuelType, "Add" }
-            };
 
-            //Act
-            selectCarsForReview_PO.SearchCars(filterManufacturer, filterFuelType);
+            // Act
+            selectCarsForReview_PO.AddCarToReviewCart(carModel2);
+            selectCarsForReview_PO.ReviewCars();
 
-            //Assert
+            createReview_PO.FillInReviewInfo(name, surname, country, driverType);
+            createReview_PO.FillInCarDetails(description, rating, carModel2);
+            createReview_PO.PressReviewYourCars();
+
+            var expectedReviewItems = new List<string[]>
+    {
+        new string[]
+        {
+            carModel2,
+            carFuelType2,
+            carManufacturer2,
+            carColor2,
+            rating.ToString(),
+            description
+        }
+    };
+
+            // Assert
+            Assert.True(detailReview_PO.CheckReviewDetail($"{name} {surname}", country, driverType, DateTime.Now));
+            Assert.True(detailReview_PO.CheckListOfReview(expectedReviewItems));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC4_2_FiltroPorFabricante()
+        {
+            // Arrange
+            InitialStepsForReviewCars();
+
+            var expectedCars = new List<string[]>
+    {
+        new string[]
+        {
+            carModel2,
+            carClass2,
+            carManufacturer2,
+            carColor2,
+            carFuelType2,
+            "Add"
+        }
+    };
+
+            // Act
+            selectCarsForReview_PO.SearchCars("Tesla", "");
+
+            // Assert
             Assert.True(selectCarsForReview_PO.CheckListOfCars(expectedCars));
         }
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC4_4_ReviewNoDisponible()
+        public void UC4_3_FiltroPorCombustible()
         {
-            //Arrange
+            // Arrange
             InitialStepsForReviewCars();
-            //Act
-            selectCarsForReview_PO.AddCarToReviewCart(carModel1);
-            selectCarsForReview_PO.RemoveCarFromReviewCart(carModel1);
 
-            //Assert
+            var expectedCars = new List<string[]>
+    {
+        new string[]
+        {
+            carModel1,
+            carClass1,
+            carManufacturer1,
+            carColor1,
+            carFuelType1,
+            "Add"
+        }
+    };
 
+            // Act
+            selectCarsForReview_PO.SearchCars("", "Gasolina");
+
+            // Assert
+            Assert.True(selectCarsForReview_PO.CheckListOfCars(expectedCars));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC4_4_BotonDeshabilitadoSinCocheSeleccionado()
+        {
+            // Arrange
+            InitialStepsForReviewCars();
+
+            // Act
+            // No seleccionamos ningún coche
+
+            // Assert
             Assert.True(selectCarsForReview_PO.ReviewNotAvailable());
         }
+
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC4_5_BorrarCochesSeleccionados()
@@ -144,31 +210,40 @@ namespace AppForSEII2526.UIT.CU_Review
 
             Assert.True(createReview_PO.CheckListOfReviewItems(expectedReviewItems));
         }
-        
-       
+
+
         [Theory]
         [InlineData("", surname, country, driverType, description, rating, "The field Name must be a string with a minimum length of 2 and a maximum length of 20.")]
         [InlineData(name, surname, " ", driverType, description, rating, "The field Country must be a string with a minimum length of 3 and a maximum length of 30.")]
-        [InlineData(name, surname, country, " ", description, rating, "The field DriverType must be a string with a minimum length of 3 and a maximum length of 30.")]
+        [InlineData(name, surname, country, "", description, rating, "The DriverType field is required.")]
+        [InlineData(name, surname, country, driverType, description, 0, "The field Rating must be between 1 and 5.")]
+
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC4_AF3_UC4_6_7_8_Testing_Errors_Mandatory_Data(string name, string surname, string country, string driverType, string description, int rating, string expectedMessageError)
+        public void UC4_AF3_UC4_6_7_8_9_Testing_Errors_Mandatory_Data(
+        string name,
+        string surname,
+        string country,
+        string driverType,
+        string description,
+        int rating,
+        string expectedMessageError)
         {
-            //Arrange
+            // Arrange
             InitialStepsForReviewCars();
 
-            //Act
+            // Act
             selectCarsForReview_PO.AddCarToReviewCart(carModel1);
             selectCarsForReview_PO.ReviewCars();
 
             createReview_PO.FillInReviewInfo(name, surname, country, driverType);
-
-            // Si el ID es correcto (1) y el page object espera visibilidad, esto funcionará
             createReview_PO.FillInCarDetails(description, rating, carModel1);
-
             createReview_PO.PressReviewYourCars();
 
-            //Assert
-            Assert.True(createReview_PO.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
+            // Assert
+            Assert.True(
+                createReview_PO.CheckValidationError(expectedMessageError),
+                $"Expected error: {expectedMessageError}"
+            );
         }
     }
 

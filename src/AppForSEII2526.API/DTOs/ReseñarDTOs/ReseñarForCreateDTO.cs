@@ -15,8 +15,9 @@ namespace AppForSEII2526.API.DTOs.ReseñarDTOs
         [StringLength(30, ErrorMessage = "Country cannot be any longer than 30 characters, neither shorter than 3.", MinimumLength = 3)]
         public string Country { get; set; }
 
-        [StringLength(30, ErrorMessage = "DriverType cannot be any longer than 30 characters, neither shorter than 3.", MinimumLength = 3)]
-        public string DriverType { get; set; }
+        [Required(ErrorMessage = "The DriverType field is required.")]
+        [StringLength(30, MinimumLength = 3)]
+        public string DriverType { get; set; } = string.Empty;
 
         public IList<ReseñarItemDTO> ReviewItems { get; set; }
 
@@ -27,7 +28,7 @@ namespace AppForSEII2526.API.DTOs.ReseñarDTOs
             Surname = surname;
             UserName = userName ?? throw new ArgumentNullException(nameof(UserName));
             Country = country ?? throw new ArgumentNullException(nameof(Country));
-            DriverType = driverType ?? throw new ArgumentNullException(nameof(DriverType));
+            DriverType = driverType ?? string.Empty;
             ReviewItems = reviewItems ?? throw new ArgumentNullException(nameof(ReviewItems));
         }
 
